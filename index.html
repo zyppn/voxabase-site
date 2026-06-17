@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VoxaBase — MicroSaaS Platform</title>
+  <title>VoxaBase — Client Deliverables Portal</title>
+  <meta name="description" content="The professional home for your client deliverables. Upload files, share links, and get paid — all in one branded portal." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
@@ -34,7 +35,6 @@
       overflow-x: hidden;
     }
 
-    /* ── NOISE TEXTURE OVERLAY ── */
     body::before {
       content: '';
       position: fixed;
@@ -53,29 +53,17 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 18px 48px;
+      padding: 14px 48px;
       border-bottom: 1px solid var(--border);
-      background: rgba(9,9,9,0.85);
+      background: rgba(9,9,9,0.88);
       backdrop-filter: blur(20px);
     }
 
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
+    .nav-logo img {
+      height: 36px;
+      width: auto;
+      display: block;
     }
-
-    .nav-logo svg { width: 36px; height: 36px; }
-
-    .logo-wordmark {
-      font-family: var(--font-head);
-      font-size: 1.25rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-    }
-    .logo-wordmark span:first-child { color: var(--white); }
-    .logo-wordmark span:last-child  { color: var(--grey-hi); }
 
     .nav-links {
       display: flex;
@@ -95,7 +83,7 @@
     .nav-links a:hover { color: var(--white); }
 
     .nav-cta {
-      background: var(--purple-hi);
+      background: var(--purple-hi) !important;
       color: var(--white) !important;
       padding: 8px 20px;
       border-radius: 6px;
@@ -120,7 +108,6 @@
       overflow: hidden;
     }
 
-    /* Radial purple glow behind hero */
     .hero::after {
       content: '';
       position: absolute;
@@ -133,7 +120,6 @@
       pointer-events: none;
     }
 
-    /* Hex grid ambient background */
     .hex-grid {
       position: absolute;
       inset: 0;
@@ -175,26 +161,24 @@
 
     .hero-headline {
       font-family: var(--font-head);
-      font-size: clamp(3rem, 7vw, 6.5rem);
+      font-size: clamp(2.8rem, 6.5vw, 6rem);
       font-weight: 700;
       line-height: 1.0;
       letter-spacing: -0.04em;
       position: relative;
       z-index: 2;
-      max-width: 900px;
+      max-width: 920px;
     }
 
-    .hero-headline .hl-white { color: var(--white); }
-    .hero-headline .hl-grey  { color: var(--grey-hi); }
-    .hero-headline .hl-purple {
-      color: var(--purple-hi);
-    }
+    .hl-white  { color: var(--white); }
+    .hl-grey   { color: var(--grey-hi); }
+    .hl-purple { color: var(--purple-hi); }
 
     .hero-sub {
       margin-top: 28px;
       font-size: 1.15rem;
       color: var(--grey-mid);
-      max-width: 540px;
+      max-width: 560px;
       line-height: 1.65;
       font-weight: 400;
       position: relative;
@@ -248,11 +232,38 @@
       transform: translateY(-2px);
     }
 
-    /* Floating stat badges */
+    /* Portal URL preview */
+    .portal-preview {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 20px;
+      margin-top: 48px;
+      position: relative;
+      z-index: 2;
+      font-size: 0.85rem;
+    }
+
+    .portal-preview-label { color: var(--grey-mid); }
+    .portal-preview-url {
+      color: var(--purple-hi);
+      font-family: monospace;
+      font-weight: 600;
+    }
+    .portal-preview-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #4ade80;
+      animation: pulse 2s infinite;
+    }
+
     .hero-stats {
       display: flex;
       gap: 32px;
-      margin-top: 72px;
+      margin-top: 48px;
       position: relative;
       z-index: 2;
       flex-wrap: wrap;
@@ -302,7 +313,7 @@
     .marquee-track {
       display: inline-flex;
       gap: 64px;
-      animation: marquee 24s linear infinite;
+      animation: marquee 28s linear infinite;
     }
 
     @keyframes marquee {
@@ -328,7 +339,7 @@
       opacity: 0.6;
     }
 
-    /* ── SECTION SHARED ── */
+    /* ── SECTIONS ── */
     section { position: relative; }
 
     .section-inner {
@@ -366,9 +377,7 @@
     }
 
     /* ── HOW IT WORKS ── */
-    .how {
-      padding: 120px 0;
-    }
+    .how { padding: 120px 0; }
 
     .how-header {
       display: flex;
@@ -392,7 +401,6 @@
       overflow: hidden;
       transition: background 0.2s;
     }
-
     .step:hover { background: #161619; }
 
     .step::before {
@@ -488,10 +496,8 @@
       line-height: 1.7;
     }
 
-    /* ── DASHBOARD PREVIEW ── */
-    .preview {
-      padding: 120px 0;
-    }
+    /* ── PORTAL PREVIEW ── */
+    .preview { padding: 120px 0; }
 
     .preview-layout {
       display: grid;
@@ -499,8 +505,6 @@
       gap: 80px;
       align-items: center;
     }
-
-    .preview-copy .section-desc { max-width: 400px; }
 
     .preview-bullets {
       list-style: none;
@@ -527,15 +531,15 @@
       margin-top: 7px;
     }
 
-    /* Fake dashboard UI */
-    .dashboard-frame {
+    /* Fake portal UI */
+    .portal-frame {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
       overflow: hidden;
     }
 
-    .dash-topbar {
+    .portal-topbar {
       background: #0d0d10;
       border-bottom: 1px solid var(--border);
       padding: 12px 20px;
@@ -544,125 +548,180 @@
       gap: 8px;
     }
 
-    .dash-dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-    }
-    .d1 { background: #ff5f57; }
-    .d2 { background: #febc2e; }
-    .d3 { background: #28c840; }
+    .portal-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .pd1 { background: #ff5f57; }
+    .pd2 { background: #febc2e; }
+    .pd3 { background: #28c840; }
 
-    .dash-url {
+    .portal-url {
       flex: 1;
       margin-left: 12px;
       background: var(--border);
       border-radius: 4px;
       padding: 4px 12px;
       font-size: 0.7rem;
-      color: var(--grey-mid);
+      color: var(--purple-hi);
       font-family: monospace;
     }
 
-    .dash-body {
-      display: grid;
-      grid-template-columns: 160px 1fr;
-    }
+    .portal-body { padding: 28px; }
 
-    .dash-sidebar {
-      background: #0d0d10;
-      border-right: 1px solid var(--border);
-      padding: 20px 0;
-    }
-
-    .dash-nav-item {
-      padding: 9px 20px;
-      font-size: 0.75rem;
-      color: var(--grey-mid);
+    .portal-header-row {
       display: flex;
       align-items: center;
-      gap: 10px;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
     }
 
-    .dash-nav-item.active {
-      color: var(--purple-hi);
-      background: rgba(139,60,247,0.08);
-      border-right: 2px solid var(--purple-hi);
-    }
-
-    .dash-nav-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: currentColor;
-      flex-shrink: 0;
-    }
-
-    .dash-main { padding: 20px; }
-
-    .dash-cards {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .dash-card {
-      background: #0d0d10;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 14px 16px;
-    }
-
-    .dash-card-label {
-      font-size: 0.65rem;
-      color: var(--grey-mid);
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      margin-bottom: 6px;
-    }
-
-    .dash-card-val {
+    .portal-client-name {
       font-family: var(--font-head);
-      font-size: 1.4rem;
+      font-size: 1.1rem;
       font-weight: 700;
       color: var(--white);
     }
 
-    .dash-card-val.green { color: #4ade80; }
-    .dash-card-val.purple { color: var(--purple-hi); }
+    .portal-client-sub {
+      font-size: 0.7rem;
+      color: var(--grey-mid);
+      margin-top: 2px;
+    }
 
-    .dash-chart {
+    .portal-badge {
+      background: rgba(74,222,128,0.1);
+      border: 1px solid rgba(74,222,128,0.3);
+      color: #4ade80;
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 100px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .portal-files {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .portal-file {
       background: #0d0d10;
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 14px 16px;
-    }
-
-    .dash-chart-label {
-      font-size: 0.65rem;
-      color: var(--grey-mid);
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      margin-bottom: 12px;
-    }
-
-    .chart-bars {
+      padding: 12px 16px;
       display: flex;
-      align-items: flex-end;
-      gap: 6px;
-      height: 60px;
+      align-items: center;
+      gap: 14px;
     }
 
-    .bar {
-      flex: 1;
-      border-radius: 3px 3px 0 0;
+    .file-icon {
+      width: 32px; height: 32px;
       background: var(--purple-bg);
-      border: 1px solid rgba(139,60,247,0.2);
-      transition: background 0.2s;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+      font-weight: 800;
+      color: var(--purple-hi);
+      letter-spacing: 0.05em;
+      flex-shrink: 0;
     }
-    .bar.active {
+
+    .file-info { flex: 1; }
+
+    .file-name {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .file-meta {
+      font-size: 0.68rem;
+      color: var(--grey-mid);
+      margin-top: 2px;
+    }
+
+    .file-dl {
+      font-size: 0.7rem;
+      color: var(--purple-hi);
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .portal-pay-btn {
+      width: 100%;
       background: var(--purple-hi);
-      border-color: var(--purple-hi);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      font-family: var(--font-head);
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(139,60,247,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials { padding: 120px 0; }
+    .test-header { margin-bottom: 64px; }
+
+    .test-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+
+    .testimonial {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 36px 32px;
+      transition: border-color 0.2s;
+    }
+    .testimonial:hover { border-color: rgba(139,60,247,0.3); }
+
+    .test-stars { display: flex; gap: 4px; margin-bottom: 20px; }
+
+    .star {
+      width: 12px; height: 12px;
+      background: var(--purple-hi);
+      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    }
+
+    .test-quote {
+      font-size: 0.9rem;
+      color: var(--grey-hi);
+      line-height: 1.7;
+      margin-bottom: 28px;
+      font-style: italic;
+    }
+
+    .test-author { display: flex; align-items: center; gap: 12px; }
+
+    .test-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--purple-bg);
+      border: 1px solid rgba(139,60,247,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-head);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--purple-hi);
+    }
+
+    .test-name { font-size: 0.85rem; font-weight: 600; color: var(--white); }
+    .test-role { font-size: 0.75rem; color: var(--grey-mid); }
 
     /* ── PRICING ── */
     .pricing {
@@ -671,15 +730,9 @@
       border-top: 1px solid var(--border);
     }
 
-    .pricing-header {
-      text-align: center;
-      margin-bottom: 64px;
-    }
-
+    .pricing-header { text-align: center; margin-bottom: 64px; }
     .pricing-header .section-label,
     .pricing-header .section-title { text-align: center; }
-
-    .pricing-header .section-title { margin: 0 auto; }
     .pricing-header .section-desc { margin: 16px auto 0; text-align: center; }
 
     .pricing-grid {
@@ -689,15 +742,11 @@
       background: var(--border);
     }
 
-    .plan {
-      background: var(--surface);
-      padding: 44px 36px;
-    }
+    .plan { background: var(--surface); padding: 44px 36px; }
 
     .plan.featured {
       background: var(--black);
       border-top: 2px solid var(--purple-hi);
-      position: relative;
     }
 
     .plan-badge {
@@ -740,17 +789,8 @@
       letter-spacing: 0;
     }
 
-    .plan-period {
-      font-size: 0.8rem;
-      color: var(--grey-mid);
-      margin-bottom: 36px;
-    }
-
-    .plan-divider {
-      height: 1px;
-      background: var(--border);
-      margin-bottom: 32px;
-    }
+    .plan-period { font-size: 0.8rem; color: var(--grey-mid); margin-bottom: 36px; }
+    .plan-divider { height: 1px; background: var(--border); margin-bottom: 32px; }
 
     .plan-features {
       list-style: none;
@@ -793,80 +833,7 @@
       padding: 12px;
     }
 
-    /* ── TESTIMONIALS ── */
-    .testimonials {
-      padding: 120px 0;
-    }
-
-    .test-header { margin-bottom: 64px; }
-
-    .test-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
-    }
-
-    .testimonial {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 36px 32px;
-      transition: border-color 0.2s;
-    }
-
-    .testimonial:hover { border-color: rgba(139,60,247,0.3); }
-
-    .test-stars {
-      display: flex;
-      gap: 4px;
-      margin-bottom: 20px;
-    }
-
-    .star {
-      width: 12px; height: 12px;
-      background: var(--purple-hi);
-      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-    }
-
-    .test-quote {
-      font-size: 0.9rem;
-      color: var(--grey-hi);
-      line-height: 1.7;
-      margin-bottom: 28px;
-      font-style: italic;
-    }
-
-    .test-author {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .test-avatar {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      background: var(--purple-bg);
-      border: 1px solid rgba(139,60,247,0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-head);
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--purple-hi);
-    }
-
-    .test-name {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--white);
-    }
-
-    .test-role {
-      font-size: 0.75rem;
-      color: var(--grey-mid);
-    }
-
-    /* ── CTA BANNER ── */
+    /* ── CTA ── */
     .cta-banner {
       padding: 120px 0;
       background: var(--surface);
@@ -885,10 +852,7 @@
       margin-bottom: 20px;
     }
 
-    .cta-inner .section-desc {
-      margin: 0 auto 48px;
-      text-align: center;
-    }
+    .cta-inner .section-desc { margin: 0 auto 48px; text-align: center; }
 
     .cta-actions {
       display: flex;
@@ -912,17 +876,15 @@
       margin-bottom: 64px;
     }
 
-    .footer-brand .logo-wordmark {
-      display: block;
-      margin-bottom: 16px;
-    }
-
     .footer-brand p {
       font-size: 0.85rem;
       color: var(--grey-mid);
       line-height: 1.65;
       max-width: 260px;
+      margin-top: 16px;
     }
+
+    .footer-logo { height: 28px; width: auto; }
 
     .footer-col-title {
       font-size: 0.7rem;
@@ -933,12 +895,7 @@
       margin-bottom: 20px;
     }
 
-    .footer-links {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
 
     .footer-links a {
       font-size: 0.85rem;
@@ -958,15 +915,9 @@
       gap: 16px;
     }
 
-    .footer-bottom p {
-      font-size: 0.8rem;
-      color: var(--grey-mid);
-    }
+    .footer-bottom p { font-size: 0.8rem; color: var(--grey-mid); }
 
-    .footer-bottom-links {
-      display: flex;
-      gap: 24px;
-    }
+    .footer-bottom-links { display: flex; gap: 24px; }
 
     .footer-bottom-links a {
       font-size: 0.8rem;
@@ -981,16 +932,11 @@
       nav { padding: 16px 24px; }
       .nav-links { display: none; }
       .section-inner { padding: 0 24px; }
-
       .how-steps,
       .features-grid,
       .pricing-grid,
       .test-grid { grid-template-columns: 1fr; }
-
       .preview-layout { grid-template-columns: 1fr; }
-      .dash-body { grid-template-columns: 1fr; }
-      .dash-sidebar { display: none; }
-
       .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
       footer { padding: 48px 24px 32px; }
     }
@@ -1005,22 +951,13 @@
 <!-- ── NAV ── -->
 <nav>
   <a href="#" class="nav-logo">
-    <!-- Hexagon logo recreation -->
-    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="20,2 35,10 35,30 20,38 5,30 5,10" fill="#3a1a7a" />
-      <polygon points="20,6 31,12.5 31,27.5 20,34 9,27.5 9,12.5" fill="none" stroke="#8b3cf7" stroke-width="2.5" />
-      <polygon points="20,12 27,16.5 27,25.5 20,30 13,25.5 13,16.5" fill="#8b3cf7" />
-    </svg>
-    <span class="logo-wordmark">
-      <span>Voxa</span><span>Base</span>
-    </span>
+    <img src="vblogo.png" alt="VoxaBase" />
   </a>
   <ul class="nav-links">
     <li><a href="#how">How it works</a></li>
     <li><a href="#features">Features</a></li>
     <li><a href="#pricing">Pricing</a></li>
-    <li><a href="#">Docs</a></li>
-    <li><a href="#" class="nav-cta">Get started</a></li>
+    <li><a href="#waitlist" class="nav-cta">Join waitlist</a></li>
   </ul>
 </nav>
 
@@ -1028,41 +965,47 @@
 <section class="hero">
   <div class="hex-grid"></div>
 
-  <div class="hero-eyebrow">MicroSaaS Platform</div>
+  <div class="hero-eyebrow">Client Deliverables Portal</div>
 
   <h1 class="hero-headline">
-    <span class="hl-white">Ship your SaaS</span><br/>
-    <span class="hl-grey">in days, </span><span class="hl-purple">not months.</span>
+    <span class="hl-white">The professional home</span><br/>
+    <span class="hl-grey">for your </span><span class="hl-purple">client work.</span>
   </h1>
 
   <p class="hero-sub">
-    VoxaBase gives indie founders everything to go from idea to paying customers — auth, billing, storage, and APIs — all wired up and ready to deploy.
+    Upload files, share a branded link, and collect payment — all in one place. No more emailing attachments. No more chasing invoices.
   </p>
 
   <div class="hero-actions">
-    <a href="#" class="btn-primary">Start building free →</a>
+    <a href="#waitlist" class="btn-primary">Join the waitlist →</a>
     <a href="#how" class="btn-ghost">See how it works</a>
+  </div>
+
+  <div class="portal-preview">
+    <span class="portal-preview-dot"></span>
+    <span class="portal-preview-label">Your client sees:</span>
+    <span class="portal-preview-url">voxabase.com/acme-corp</span>
   </div>
 
   <div class="hero-stats">
     <div class="stat">
-      <span class="stat-num">4,200+</span>
-      <span class="stat-label">Founders using</span>
+      <span class="stat-num">2 min</span>
+      <span class="stat-label">To create a portal</span>
     </div>
     <div class="stat-divider"></div>
     <div class="stat">
       <span class="stat-num">$0</span>
-      <span class="stat-label">To start</span>
+      <span class="stat-label">To get started</span>
     </div>
     <div class="stat-divider"></div>
     <div class="stat">
-      <span class="stat-num">2 days</span>
-      <span class="stat-label">Avg to launch</span>
+      <span class="stat-num">100%</span>
+      <span class="stat-label">Branded to you</span>
     </div>
     <div class="stat-divider"></div>
     <div class="stat">
-      <span class="stat-num">99.9%</span>
-      <span class="stat-label">Uptime SLA</span>
+      <span class="stat-num">1 link</span>
+      <span class="stat-label">For everything</span>
     </div>
   </div>
 </section>
@@ -1070,26 +1013,24 @@
 <!-- ── MARQUEE ── -->
 <div class="marquee-wrap" aria-hidden="true">
   <div class="marquee-track">
-    <span class="marquee-item"><span class="marquee-dot"></span>Stripe Billing</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>JWT Auth</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Postgres</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Edge Functions</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>File Storage</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Webhooks</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Analytics</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Email Delivery</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>REST & GraphQL</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Team Roles</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Stripe Billing</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>JWT Auth</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Postgres</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Edge Functions</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>File Storage</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Webhooks</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Analytics</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Email Delivery</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>REST & GraphQL</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Team Roles</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>File Delivery</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Branded Portals</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Invoice Collection</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Stripe Payments</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>No Email Attachments</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Instant Sharing</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>PDF & Image Support</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Client Download Links</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>One-Click Payment</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>File Delivery</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Branded Portals</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Invoice Collection</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Stripe Payments</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>No Email Attachments</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Instant Sharing</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>PDF & Image Support</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Client Download Links</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>One-Click Payment</span>
   </div>
 </div>
 
@@ -1099,26 +1040,26 @@
     <div class="how-header">
       <div>
         <p class="section-label">How it works</p>
-        <h2 class="section-title">From zero to <span class="muted">live product</span><br/>in three steps.</h2>
+        <h2 class="section-title">Three steps from<br/><span class="muted">upload to paid.</span></h2>
       </div>
-      <p style="color: var(--grey-mid); font-size: 0.9rem; line-height: 1.7; max-width: 300px;">No boilerplate. No config hell. VoxaBase handles the plumbing so you stay focused on the product.</p>
+      <p style="color: var(--grey-mid); font-size: 0.9rem; line-height: 1.7; max-width: 300px;">Stop sending files through email. Give every client a clean, professional portal that makes you look like a studio — not a freelancer.</p>
     </div>
 
     <div class="how-steps">
       <div class="step">
         <div class="step-num">01</div>
-        <div class="step-title">Create your project</div>
-        <p class="step-body">Spin up a new VoxaBase project in under 60 seconds. Pick a name, choose your region, and your backend is live.</p>
+        <div class="step-title">Create a client portal</div>
+        <p class="step-body">Log in, click "New Portal," and type your client's name. VoxaBase generates a clean, branded link in seconds — like <strong style="color:var(--grey-hi)">voxabase.com/acme-corp</strong>.</p>
       </div>
       <div class="step">
         <div class="step-num">02</div>
-        <div class="step-title">Connect your frontend</div>
-        <p class="step-body">Drop in the VoxaBase SDK and call our APIs. Auth, database queries, file uploads — all typed, all documented.</p>
+        <div class="step-title">Upload your deliverables</div>
+        <p class="step-body">Drag in your PDFs, images, videos, or any file. They appear instantly in the portal, ready for your client to view and download — no login required on their end.</p>
       </div>
       <div class="step">
         <div class="step-num">03</div>
-        <div class="step-title">Charge your customers</div>
-        <p class="step-body">Set up plans and pricing in the dashboard. Stripe is wired up — subscriptions, trials, and metered billing work out of the box.</p>
+        <div class="step-title">Send the link and get paid</div>
+        <p class="step-body">Share the link. Your client sees their files and a "Pay Invoice" button. They pay via Stripe — you get notified and the money hits your account. Done.</p>
       </div>
     </div>
   </div>
@@ -1129,124 +1070,120 @@
   <div class="section-inner">
     <div class="features-header">
       <p class="section-label">Features</p>
-      <h2 class="section-title">Every layer, <span class="muted">already built.</span></h2>
-      <p class="section-desc">Stop stitching together services. VoxaBase is a single platform that replaces six tools most MicroSaaS products need.</p>
+      <h2 class="section-title">Everything in <span class="muted">one link.</span></h2>
+      <p class="section-desc">VoxaBase replaces the scattered mess of Google Drive links, PayPal invoices, and email threads with a single, professional portal.</p>
     </div>
 
     <div class="features-grid">
       <div class="feat">
         <div class="feat-icon">
-          <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="7" r="4"/></svg>
-        </div>
-        <div class="feat-title">Auth & Identity</div>
-        <p class="feat-body">Email/password, magic links, Google OAuth, and SSO — all returning JWTs your frontend can verify instantly.</p>
-      </div>
-      <div class="feat">
-        <div class="feat-icon">
-          <svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>
-        </div>
-        <div class="feat-title">Postgres Database</div>
-        <p class="feat-body">A fully managed Postgres instance with a real-time listener and row-level security built in. Query it directly or via REST.</p>
-      </div>
-      <div class="feat">
-        <div class="feat-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-        </div>
-        <div class="feat-title">Edge Functions</div>
-        <p class="feat-body">Write serverless functions in TypeScript that run at the edge, globally. No cold starts. Deploy in seconds with the CLI.</p>
-      </div>
-      <div class="feat">
-        <div class="feat-icon">
           <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         </div>
-        <div class="feat-title">File Storage</div>
-        <p class="feat-body">S3-compatible object storage with public and private buckets, signed URLs, and image transformations on the fly.</p>
+        <div class="feat-title">File Delivery</div>
+        <p class="feat-body">Upload any file type — PDFs, images, videos, zips. Clients get a clean download button, no account needed.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        </div>
+        <div class="feat-title">Branded Portal</div>
+        <p class="feat-body">Every portal carries your business name. Clients land on a page that looks like it was built by a professional studio.</p>
       </div>
       <div class="feat">
         <div class="feat-icon">
           <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
         </div>
-        <div class="feat-title">Billing & Subscriptions</div>
-        <p class="feat-body">Stripe integration that takes 10 minutes to set up. Manage plans, trial periods, and invoices straight from the dashboard.</p>
+        <div class="feat-title">Invoice & Payment</div>
+        <p class="feat-body">Add an invoice to any portal. Clients pay via Stripe directly on the page. No more chasing payments over email.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+        </div>
+        <div class="feat-title">Shareable Link</div>
+        <p class="feat-body">One link per client. Send it over email, Slack, or text. It works everywhere and never expires unless you want it to.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+        </div>
+        <div class="feat-title">Revision Rounds</div>
+        <p class="feat-body">Upload updated files to the same portal. Clients always see the latest version without you resending a thing.</p>
       </div>
       <div class="feat">
         <div class="feat-icon">
           <svg viewBox="0 0 24 24"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
         </div>
-        <div class="feat-title">Built-in Analytics</div>
-        <p class="feat-body">Track signups, MRR, churn, and active users out of the box. No Mixpanel. No Amplitude. No extra budget.</p>
+        <div class="feat-title">Activity Tracking</div>
+        <p class="feat-body">See when your client viewed the portal and downloaded their files. Know exactly where things stand without asking.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── PREVIEW ── -->
+<!-- ── PORTAL PREVIEW ── -->
 <section class="preview">
   <div class="section-inner">
     <div class="preview-layout">
       <div class="preview-copy">
-        <p class="section-label">The dashboard</p>
-        <h2 class="section-title">Your whole<br/><span class="muted">operation, one tab.</span></h2>
-        <p class="section-desc">Monitor every corner of your SaaS without leaving the VoxaBase dashboard.</p>
+        <p class="section-label">The client experience</p>
+        <h2 class="section-title">What your<br/><span class="muted">client sees.</span></h2>
+        <p class="section-desc">A clean, professional page with their files and a way to pay you — no login, no friction, no confusion.</p>
         <ul class="preview-bullets">
-          <li><span class="bullet-dot"></span>Live MRR and subscriber count updated in real-time</li>
-          <li><span class="bullet-dot"></span>Database table editor with filtering and row actions</li>
-          <li><span class="bullet-dot"></span>Function logs with error traces and cold start metrics</li>
-          <li><span class="bullet-dot"></span>Invite teammates and set role permissions</li>
+          <li><span class="bullet-dot"></span>Branded with your business name and project title</li>
+          <li><span class="bullet-dot"></span>All deliverables listed with one-click download</li>
+          <li><span class="bullet-dot"></span>Invoice amount and "Pay Now" button front and center</li>
+          <li><span class="bullet-dot"></span>Works on any device, no app or account needed</li>
         </ul>
       </div>
 
-      <!-- Fake dashboard -->
-      <div class="dashboard-frame">
-        <div class="dash-topbar">
-          <div class="dash-dot d1"></div>
-          <div class="dash-dot d2"></div>
-          <div class="dash-dot d3"></div>
-          <div class="dash-url">app.voxabase.io/dashboard</div>
+      <!-- Fake portal UI -->
+      <div class="portal-frame">
+        <div class="portal-topbar">
+          <div class="portal-dot pd1"></div>
+          <div class="portal-dot pd2"></div>
+          <div class="portal-dot pd3"></div>
+          <div class="portal-url">voxabase.com/acme-corp</div>
         </div>
-        <div class="dash-body">
-          <div class="dash-sidebar">
-            <div class="dash-nav-item active"><span class="dash-nav-dot"></span>Overview</div>
-            <div class="dash-nav-item"><span class="dash-nav-dot"></span>Database</div>
-            <div class="dash-nav-item"><span class="dash-nav-dot"></span>Auth</div>
-            <div class="dash-nav-item"><span class="dash-nav-dot"></span>Storage</div>
-            <div class="dash-nav-item"><span class="dash-nav-dot"></span>Functions</div>
-            <div class="dash-nav-item"><span class="dash-nav-dot"></span>Billing</div>
-            <div class="dash-nav-item"><span class="dash-nav-dot"></span>Settings</div>
-          </div>
-          <div class="dash-main">
-            <div class="dash-cards">
-              <div class="dash-card">
-                <div class="dash-card-label">MRR</div>
-                <div class="dash-card-val green">$4,820</div>
-              </div>
-              <div class="dash-card">
-                <div class="dash-card-label">Active Users</div>
-                <div class="dash-card-val purple">312</div>
-              </div>
-              <div class="dash-card">
-                <div class="dash-card-label">New Today</div>
-                <div class="dash-card-val">+18</div>
-              </div>
-              <div class="dash-card">
-                <div class="dash-card-label">Churn Rate</div>
-                <div class="dash-card-val">1.4%</div>
-              </div>
+        <div class="portal-body">
+          <div class="portal-header-row">
+            <div>
+              <div class="portal-client-name">ACME Corp — Brand Refresh</div>
+              <div class="portal-client-sub">Delivered by Studio Novo · 3 files</div>
             </div>
-            <div class="dash-chart">
-              <div class="dash-chart-label">Revenue — last 8 weeks</div>
-              <div class="chart-bars">
-                <div class="bar" style="height:28%"></div>
-                <div class="bar" style="height:38%"></div>
-                <div class="bar" style="height:44%"></div>
-                <div class="bar" style="height:52%"></div>
-                <div class="bar" style="height:60%"></div>
-                <div class="bar" style="height:68%"></div>
-                <div class="bar" style="height:82%"></div>
-                <div class="bar active" style="height:100%"></div>
+            <div class="portal-badge">Ready to download</div>
+          </div>
+
+          <div class="portal-files">
+            <div class="portal-file">
+              <div class="file-icon">PDF</div>
+              <div class="file-info">
+                <div class="file-name">Brand_Guidelines_v2.pdf</div>
+                <div class="file-meta">4.2 MB · Updated today</div>
               </div>
+              <div class="file-dl">↓ Download</div>
+            </div>
+            <div class="portal-file">
+              <div class="file-icon">PNG</div>
+              <div class="file-info">
+                <div class="file-name">Logo_Package_Final.zip</div>
+                <div class="file-meta">18.6 MB · All formats included</div>
+              </div>
+              <div class="file-dl">↓ Download</div>
+            </div>
+            <div class="portal-file">
+              <div class="file-icon">MP4</div>
+              <div class="file-info">
+                <div class="file-name">Brand_Intro_Animation.mp4</div>
+                <div class="file-meta">92.1 MB · 1080p</div>
+              </div>
+              <div class="file-dl">↓ Download</div>
             </div>
           </div>
+
+          <button class="portal-pay-btn">
+            💳 Pay Invoice — $2,400.00
+          </button>
         </div>
       </div>
     </div>
@@ -1254,23 +1191,23 @@
 </section>
 
 <!-- ── TESTIMONIALS ── -->
-<section class="testimonials">
+<section class="testimonials" style="background: var(--surface); border-top: 1px solid var(--border);">
   <div class="section-inner">
     <div class="test-header">
-      <p class="section-label">What founders say</p>
-      <h2 class="section-title">Built for people who <span class="muted">move fast.</span></h2>
+      <p class="section-label">Who it's for</p>
+      <h2 class="section-title">Built for freelancers <span class="muted">who value their time.</span></h2>
     </div>
     <div class="test-grid">
       <div class="testimonial">
         <div class="test-stars">
           <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
         </div>
-        <p class="test-quote">"I launched my first paying product in 48 hours. VoxaBase handled auth, Stripe, and my database. I just had to build the part that made it actually useful."</p>
+        <p class="test-quote">"I used to send five emails just to deliver a logo. Now I drop everything in a portal and send one link. My clients actually think I'm more professional."</p>
         <div class="test-author">
-          <div class="test-avatar">MR</div>
+          <div class="test-avatar">SK</div>
           <div>
-            <div class="test-name">Marcus R.</div>
-            <div class="test-role">Founder, Notespark</div>
+            <div class="test-name">Sara K.</div>
+            <div class="test-role">Freelance Brand Designer</div>
           </div>
         </div>
       </div>
@@ -1278,12 +1215,12 @@
         <div class="test-stars">
           <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
         </div>
-        <p class="test-quote">"I used to spend two weeks setting up billing every new project. Now I connect Stripe in the dashboard in ten minutes and get back to building."</p>
+        <p class="test-quote">"Chasing invoices was eating hours every month. Now the payment button is right next to the files. I got paid the same day I delivered on my last three projects."</p>
         <div class="test-author">
-          <div class="test-avatar">AL</div>
+          <div class="test-avatar">JM</div>
           <div>
-            <div class="test-name">Aisha L.</div>
-            <div class="test-role">Solo dev, Feedloop</div>
+            <div class="test-name">James M.</div>
+            <div class="test-role">Video Editor & Producer</div>
           </div>
         </div>
       </div>
@@ -1291,12 +1228,12 @@
         <div class="test-stars">
           <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
         </div>
-        <p class="test-quote">"The analytics dashboard alone is worth it. I cancelled three SaaS subscriptions after switching. Everything I need is already in VoxaBase."</p>
+        <p class="test-quote">"My agency delivers 15–20 projects a month. Keeping track of what went where was a nightmare. VoxaBase gives every client their own space and I can see who's actually looked at their files."</p>
         <div class="test-author">
-          <div class="test-avatar">TW</div>
+          <div class="test-avatar">RL</div>
           <div>
-            <div class="test-name">Tom W.</div>
-            <div class="test-role">Indie hacker, Patchwork</div>
+            <div class="test-name">Rachel L.</div>
+            <div class="test-role">Digital Marketing Agency Owner</div>
           </div>
         </div>
       </div>
@@ -1309,8 +1246,8 @@
   <div class="section-inner">
     <div class="pricing-header">
       <p class="section-label">Pricing</p>
-      <h2 class="section-title">Pay when you <span class="muted">start earning.</span></h2>
-      <p class="section-desc">Free until you're making money. Then a flat rate that doesn't punish growth.</p>
+      <h2 class="section-title">Simple pricing, <span class="muted">no surprises.</span></h2>
+      <p class="section-desc">Free to start. Upgrade when your client list grows.</p>
     </div>
 
     <div class="pricing-grid">
@@ -1320,60 +1257,60 @@
         <div class="plan-period">Free forever</div>
         <div class="plan-divider"></div>
         <ul class="plan-features">
-          <li>1 project</li>
-          <li>500 MB database</li>
+          <li>3 active client portals</li>
           <li>1 GB file storage</li>
-          <li>500 monthly active users</li>
-          <li class="unavail">Billing integration</li>
-          <li class="unavail">Custom domains</li>
+          <li>Shareable portal links</li>
+          <li>File download tracking</li>
+          <li class="unavail">Payment collection</li>
+          <li class="unavail">Custom branding</li>
         </ul>
-        <a href="#" class="btn-ghost">Start free</a>
+        <a href="#waitlist" class="btn-ghost">Join waitlist</a>
       </div>
 
       <div class="plan featured">
         <div class="plan-badge">Most popular</div>
-        <div class="plan-name">Builder</div>
-        <div class="plan-price">$29<span>/mo</span></div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">$15<span>/mo</span></div>
         <div class="plan-period">Billed monthly</div>
         <div class="plan-divider"></div>
         <ul class="plan-features">
-          <li>5 projects</li>
-          <li>10 GB database</li>
-          <li>50 GB file storage</li>
-          <li>10,000 monthly active users</li>
-          <li>Stripe billing wired up</li>
-          <li>Custom domains</li>
+          <li>Unlimited client portals</li>
+          <li>25 GB file storage</li>
+          <li>Stripe payment collection</li>
+          <li>Custom branding & colors</li>
+          <li>Activity notifications</li>
+          <li>Priority support</li>
         </ul>
-        <a href="#" class="btn-primary">Get started →</a>
+        <a href="#waitlist" class="btn-primary">Join waitlist →</a>
       </div>
 
       <div class="plan">
-        <div class="plan-name">Scale</div>
-        <div class="plan-price">$99<span>/mo</span></div>
+        <div class="plan-name">Agency</div>
+        <div class="plan-price">$49<span>/mo</span></div>
         <div class="plan-period">Billed monthly</div>
         <div class="plan-divider"></div>
         <ul class="plan-features">
-          <li>Unlimited projects</li>
-          <li>100 GB database</li>
-          <li>500 GB file storage</li>
-          <li>Unlimited active users</li>
-          <li>Stripe + advanced billing</li>
-          <li>Priority support + SLA</li>
+          <li>Everything in Pro</li>
+          <li>250 GB file storage</li>
+          <li>Team member seats</li>
+          <li>White-label portal domain</li>
+          <li>Client approval workflows</li>
+          <li>Dedicated support</li>
         </ul>
-        <a href="#" class="btn-ghost">Talk to us</a>
+        <a href="#waitlist" class="btn-ghost">Join waitlist</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── CTA BANNER ── -->
-<section class="cta-banner">
+<!-- ── WAITLIST CTA ── -->
+<section class="cta-banner" id="waitlist">
   <div class="cta-inner">
-    <h2 class="section-title">Your SaaS idea<br/><span class="muted">deserves a real shot.</span></h2>
-    <p class="section-desc">Stop letting setup time talk you out of shipping. Start with VoxaBase today — no credit card, no commitments.</p>
+    <h2 class="section-title">Stop losing clients <span class="muted">to messy delivery.</span></h2>
+    <p class="section-desc">Join the waitlist and be first to know when VoxaBase launches. Early members get 50% off Pro — for life.</p>
     <div class="cta-actions">
-      <a href="#" class="btn-primary">Create your free project →</a>
-      <a href="#" class="btn-ghost">Read the docs</a>
+      <a href="#waitlist" class="btn-primary">Get early access →</a>
+      <a href="#how" class="btn-ghost">Learn more</a>
     </div>
   </div>
 </section>
@@ -1382,36 +1319,27 @@
 <footer>
   <div class="footer-top">
     <div class="footer-brand">
-      <a href="#" class="nav-logo" style="margin-bottom: 16px; display: inline-flex;">
-        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
-          <polygon points="20,2 35,10 35,30 20,38 5,30 5,10" fill="#3a1a7a" />
-          <polygon points="20,6 31,12.5 31,27.5 20,34 9,27.5 9,12.5" fill="none" stroke="#8b3cf7" stroke-width="2.5" />
-          <polygon points="20,12 27,16.5 27,25.5 20,30 13,25.5 13,16.5" fill="#8b3cf7" />
-        </svg>
-        <span class="logo-wordmark" style="font-size: 1rem; margin-left: 10px;">
-          <span>Voxa</span><span>Base</span>
-        </span>
-      </a>
-      <p>The MicroSaaS platform for indie founders who want to ship, not configure.</p>
+      <img src="vblogo.png" alt="VoxaBase" class="footer-logo" />
+      <p>The professional home for your client deliverables. Upload, share, and get paid — all in one branded portal.</p>
     </div>
 
     <div>
       <div class="footer-col-title">Product</div>
       <ul class="footer-links">
-        <li><a href="#">Features</a></li>
-        <li><a href="#">Pricing</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#pricing">Pricing</a></li>
         <li><a href="#">Changelog</a></li>
         <li><a href="#">Roadmap</a></li>
       </ul>
     </div>
 
     <div>
-      <div class="footer-col-title">Developers</div>
+      <div class="footer-col-title">Use Cases</div>
       <ul class="footer-links">
-        <li><a href="#">Documentation</a></li>
-        <li><a href="#">API Reference</a></li>
-        <li><a href="#">SDKs</a></li>
-        <li><a href="#">Status</a></li>
+        <li><a href="#">Designers</a></li>
+        <li><a href="#">Video Editors</a></li>
+        <li><a href="#">Marketing Agencies</a></li>
+        <li><a href="#">Web Developers</a></li>
       </ul>
     </div>
 
@@ -1420,8 +1348,8 @@
       <ul class="footer-links">
         <li><a href="#">About</a></li>
         <li><a href="#">Blog</a></li>
-        <li><a href="#">Careers</a></li>
         <li><a href="#">Contact</a></li>
+        <li><a href="#waitlist">Early Access</a></li>
       </ul>
     </div>
   </div>
