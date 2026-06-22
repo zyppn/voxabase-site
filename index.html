@@ -933,9 +933,81 @@
     .footer-bottom-links a:hover { color: var(--white); }
 
     /* ── RESPONSIVE ── */
+    /* ── MOBILE NAV ── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--grey-hi);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 65px;
+      left: 0; right: 0;
+      background: rgba(9,9,9,0.97);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 24px 24px 32px;
+      z-index: 99;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      color: var(--grey-hi);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .mobile-menu a:last-child {
+      border-bottom: none;
+      color: var(--purple-hi);
+      font-weight: 600;
+    }
+
+    /* ── TRUST BADGES ── */
+    .trust-strip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-top: 32px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      color: var(--grey-mid);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+    .trust-icon {
+      color: var(--purple-hi);
+      font-size: 0.85rem;
+    }
+
     @media (max-width: 900px) {
       nav { padding: 16px 24px; }
       .nav-links { display: none; }
+      .hamburger { display: flex; }
       .section-inner { padding: 0 24px; }
       .how-steps,
       .features-grid,
@@ -949,6 +1021,23 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     }
+
+    /* ── CTA GLOW ── */
+    .cta-banner {
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-banner::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(ellipse at center, rgba(139,60,247,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
@@ -959,12 +1048,32 @@
     <img src="vblogo.png" alt="VoxaBase" />
   </a>
   <ul class="nav-links">
-    <li><a href="#how">How It Works</a></li>
+    <li><a href="#how">How it works</a></li>
     <li><a href="#features">Features</a></li>
     <li><a href="#pricing">Pricing</a></li>
-    <li><a href="#waitlist" class="nav-cta">Join Waitlist</a></li>
+    <li><a href="#waitlist" class="nav-cta">Join waitlist</a></li>
   </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#how" onclick="closeMobileMenu()">How it works</a>
+  <a href="#features" onclick="closeMobileMenu()">Features</a>
+  <a href="#pricing" onclick="closeMobileMenu()">Pricing</a>
+  <a href="#waitlist" onclick="closeMobileMenu()">Join waitlist →</a>
+</div>
+
+<script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.getElementById('mobile-menu').classList.toggle('open');
+  });
+  function closeMobileMenu() {
+    document.getElementById('mobile-menu').classList.remove('open');
+  }
+</script>
 
 <!-- ── HERO ── -->
 <section class="hero">
@@ -1044,7 +1153,7 @@
   <div class="section-inner">
     <div class="how-header">
       <div>
-        <p class="section-label">How It Works</p>
+        <p class="section-label">How it works</p>
         <h2 class="section-title">Three steps from<br/><span class="muted">upload to paid.</span></h2>
       </div>
       <p style="color: var(--grey-mid); font-size: 0.9rem; line-height: 1.7; max-width: 300px;">The average freelancer loses 3–5 hours a month to file re-sends, invoice follow-ups, and "which version was final?" messages. VoxaBase eliminates all of it.</p>
@@ -1302,7 +1411,7 @@
           <li class="unavail">Payment collection</li>
           <li class="unavail">Custom branding</li>
         </ul>
-        <a href="#waitlist" class="btn-ghost">Join Waitlist</a>
+        <a href="#waitlist" class="btn-ghost">Join waitlist</a>
       </div>
 
       <div class="plan featured">
@@ -1319,7 +1428,7 @@
           <li>Activity notifications</li>
           <li>Priority support</li>
         </ul>
-        <a href="#waitlist" class="btn-primary">Join Waitlist →</a>
+        <a href="#waitlist" class="btn-primary">Join waitlist →</a>
       </div>
 
       <div class="plan">
@@ -1335,7 +1444,7 @@
           <li>Client approval workflows</li>
           <li>Dedicated support</li>
         </ul>
-        <a href="#waitlist" class="btn-ghost">Join Waitlist</a>
+        <a href="#waitlist" class="btn-ghost">Join waitlist</a>
       </div>
     </div>
   </div>
@@ -1524,6 +1633,13 @@
       <button class="newsletter-back-button" type="button" style="color:#6b7280;font-size:14px;font-family:Inter,sans-serif;margin:10px auto;text-align:center;display:none;background:transparent;border:none;cursor:pointer;">&larr; Back</button>
     </div>
 
+    <div class="trust-strip">
+      <div class="trust-item"><span class="trust-icon">🔒</span> 256-bit encryption</div>
+      <div class="trust-item"><span class="trust-icon">💳</span> Payments by Stripe</div>
+      <div class="trust-item"><span class="trust-icon">✓</span> No credit card required</div>
+      <div class="trust-item"><span class="trust-icon">✗</span> Cancel anytime</div>
+    </div>
+
     <script>
     function submitHandler(event) {
       event.preventDefault();
@@ -1639,9 +1755,12 @@
   <div class="footer-bottom">
     <p>© 2026 VoxaBase. All rights reserved.</p>
     <div class="footer-bottom-links">
+      <a href="https://x.com/VoxaBase" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        @VoxaBase
+      </a>
       <a href="#">Privacy</a>
       <a href="#">Terms</a>
-      <a href="#">Cookies</a>
     </div>
   </div>
 </footer>
