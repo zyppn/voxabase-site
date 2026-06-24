@@ -4,40 +4,47 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>VoxaBase — Client Deliverables Portal</title>
-  <meta name="description" content="The professional home for your client deliverables. Upload files, share links, and get paid — all in one branded portal." />
+  <meta name="description" content="Deliver client work like a studio. Upload files, share one branded link, and collect payment — all in one portal." />
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
   <link rel="manifest" href="site.webmanifest" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --black:     #090909;
-      --surface:   #111114;
-      --border:    #1e1e24;
+      --black:     #08080a;
+      --surface:   #101013;
+      --surface-2: #16161a;
+      --border:    #1f1f26;
+      --border-2:  #2a2a33;
       --purple-hi: #8b3cf7;
       --purple-lo: #5b1fbd;
       --purple-bg: #1a0d30;
       --white:     #ffffff;
-      --grey-hi:   #c4c4cc;
-      --grey-mid:  #7a7a8a;
-      --grey-lo:   #3a3a4a;
+      --grey-hi:   #cdcdd6;
+      --grey-mid:  #7c7c8c;
+      --grey-lo:   #3a3a48;
+      --green:     #4ade80;
       --font-head: 'Space Grotesk', sans-serif;
       --font-body: 'Inter', sans-serif;
+      --accent:    #8b3cf7;
     }
 
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 
     body {
       background: var(--black);
       color: var(--white);
       font-family: var(--font-body);
       -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
       overflow-x: hidden;
+      line-height: 1.5;
     }
 
     body::before {
@@ -45,10 +52,12 @@
       position: fixed;
       inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-      opacity: 0.025;
+      opacity: 0.022;
       pointer-events: none;
       z-index: 1000;
     }
+
+    ::selection { background: rgba(139,60,247,0.3); color: #fff; }
 
     /* ── NAV ── */
     nav {
@@ -58,13 +67,18 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 48px;
-      border-bottom: 1px solid var(--border);
-      background: rgba(9,9,9,0.88);
-      backdrop-filter: blur(20px);
+      padding: 16px 48px;
+      border-bottom: 1px solid transparent;
+      background: rgba(8,8,10,0);
+      transition: background 0.3s, border-color 0.3s, backdrop-filter 0.3s;
+    }
+    nav.scrolled {
+      background: rgba(8,8,10,0.82);
+      backdrop-filter: blur(20px) saturate(140%);
+      border-bottom-color: var(--border);
     }
 
-    .nav-logo img { height: 36px; width: auto; display: block; }
+    .nav-logo img { height: 34px; width: auto; display: block; }
 
     .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
 
@@ -81,518 +95,660 @@
     .nav-cta {
       background: var(--purple-hi) !important;
       color: var(--white) !important;
-      padding: 8px 20px;
-      border-radius: 6px;
+      padding: 9px 20px;
+      border-radius: 8px;
       font-weight: 600 !important;
-      transition: background 0.2s, transform 0.15s !important;
+      box-shadow: 0 0 0 1px rgba(139,60,247,0.4), 0 8px 24px -8px rgba(139,60,247,0.6);
+      transition: transform 0.15s, box-shadow 0.2s, background 0.2s !important;
     }
-    .nav-cta:hover { background: #9d55f8 !important; transform: translateY(-1px); }
+    .nav-cta:hover {
+      background: #9d55f8 !important;
+      transform: translateY(-1px);
+      box-shadow: 0 0 0 1px rgba(139,60,247,0.5), 0 12px 30px -8px rgba(139,60,247,0.7);
+    }
 
     /* ── HERO ── */
     .hero {
       position: relative;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 140px 24px 100px;
+      padding: 180px 24px 80px;
       overflow: hidden;
+    }
+
+    .hero-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1.05fr;
+      gap: 64px;
+      align-items: center;
     }
 
     .hero::after {
       content: '';
       position: absolute;
-      top: -10%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 800px;
-      height: 600px;
-      background: radial-gradient(ellipse at center, rgba(139,60,247,0.18) 0%, transparent 70%);
+      top: -20%;
+      right: -5%;
+      width: 760px;
+      height: 760px;
+      background: radial-gradient(ellipse at center, rgba(139,60,247,0.16) 0%, transparent 65%);
       pointer-events: none;
+      z-index: 0;
     }
 
     .hex-grid {
       position: absolute;
       inset: 0;
-      opacity: 0.06;
+      opacity: 0.05;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='52'%3E%3Cpolygon points='30,2 58,17 58,47 30,62 2,47 2,17' fill='none' stroke='%238b3cf7' stroke-width='1'/%3E%3C/svg%3E");
       background-size: 60px 52px;
+      mask-image: linear-gradient(to bottom, black, transparent 70%);
+      -webkit-mask-image: linear-gradient(to bottom, black, transparent 70%);
     }
+
+    .hero-copy { position: relative; z-index: 2; }
 
     .hero-eyebrow {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: rgba(139,60,247,0.12);
-      border: 1px solid rgba(139,60,247,0.3);
+      background: rgba(139,60,247,0.1);
+      border: 1px solid rgba(139,60,247,0.28);
       color: var(--purple-hi);
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 600;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      padding: 6px 16px;
+      padding: 6px 14px;
       border-radius: 100px;
-      margin-bottom: 32px;
-      position: relative;
-      z-index: 2;
+      margin-bottom: 28px;
     }
-
     .hero-eyebrow::before {
       content: '';
       width: 6px; height: 6px;
       border-radius: 50%;
-      background: var(--purple-hi);
-      animation: pulse 2s infinite;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: pulse 2.2s infinite;
     }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50%       { opacity: 0.4; transform: scale(0.8); }
-    }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
 
     .hero-headline {
       font-family: var(--font-head);
-      font-size: clamp(2.8rem, 6.5vw, 6rem);
+      font-size: clamp(2.6rem, 4.6vw, 4.4rem);
       font-weight: 700;
-      line-height: 1.0;
-      letter-spacing: -0.04em;
-      position: relative;
-      z-index: 2;
-      max-width: 920px;
+      line-height: 1.02;
+      letter-spacing: -0.035em;
+    }
+    .hl-grey   { color: var(--grey-hi); }
+    .hl-purple {
+      background: linear-gradient(120deg, #a96bff, #8b3cf7 60%, #6a28d6);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    .hl-white  { color: var(--white); }
-    .hl-grey   { color: var(--grey-hi); }
-    .hl-purple { color: var(--purple-hi); }
-
     .hero-sub {
-      margin-top: 28px;
-      font-size: 1.15rem;
+      margin-top: 24px;
+      font-size: 1.12rem;
       color: var(--grey-mid);
-      max-width: 560px;
-      line-height: 1.65;
-      font-weight: 400;
-      position: relative;
-      z-index: 2;
+      max-width: 480px;
+      line-height: 1.6;
     }
 
     .hero-actions {
       display: flex;
-      gap: 16px;
-      margin-top: 48px;
-      position: relative;
-      z-index: 2;
+      gap: 14px;
+      margin-top: 36px;
       flex-wrap: wrap;
-      justify-content: center;
     }
 
     .btn-primary {
       background: var(--purple-hi);
       color: var(--white);
-      padding: 14px 32px;
-      border-radius: 8px;
+      padding: 14px 28px;
+      border-radius: 9px;
       font-weight: 600;
       font-size: 0.95rem;
       text-decoration: none;
       border: none;
       cursor: pointer;
       transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-      box-shadow: 0 0 30px rgba(139,60,247,0.35);
+      box-shadow: 0 0 0 1px rgba(139,60,247,0.4), 0 14px 40px -12px rgba(139,60,247,0.7);
     }
     .btn-primary:hover {
       background: #9d55f8;
       transform: translateY(-2px);
-      box-shadow: 0 0 45px rgba(139,60,247,0.5);
+      box-shadow: 0 0 0 1px rgba(139,60,247,0.5), 0 18px 46px -12px rgba(139,60,247,0.85);
     }
 
     .btn-ghost {
       background: transparent;
       color: var(--grey-hi);
-      padding: 14px 32px;
-      border-radius: 8px;
+      padding: 14px 28px;
+      border-radius: 9px;
       font-weight: 500;
       font-size: 0.95rem;
       text-decoration: none;
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-2);
       cursor: pointer;
-      transition: border-color 0.2s, color 0.2s, transform 0.15s;
+      transition: border-color 0.2s, color 0.2s, transform 0.15s, background 0.2s;
     }
-    .btn-ghost:hover { border-color: var(--grey-lo); color: var(--white); transform: translateY(-2px); }
+    .btn-ghost:hover { border-color: var(--grey-lo); color: var(--white); background: var(--surface); transform: translateY(-2px); }
 
-    .portal-preview {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 20px;
-      margin-top: 48px;
-      position: relative;
-      z-index: 2;
-      font-size: 0.85rem;
-    }
-
-    .portal-preview-label { color: var(--grey-mid); }
-    .portal-preview-url { color: var(--purple-hi); font-family: monospace; font-weight: 600; }
-    .portal-preview-dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; animation: pulse 2s infinite; }
-
-    .hero-stats {
+    .hero-meta {
+      margin-top: 40px;
       display: flex;
-      gap: 32px;
-      margin-top: 48px;
-      position: relative;
-      z-index: 2;
+      align-items: center;
+      gap: 22px;
       flex-wrap: wrap;
-      justify-content: center;
+      color: var(--grey-mid);
+      font-size: 0.82rem;
     }
+    .hero-meta-item { display: flex; align-items: center; gap: 7px; }
+    .hero-meta-item svg { width: 15px; height: 15px; color: var(--purple-hi); flex-shrink: 0; }
 
-    .stat { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-    .stat-num { font-family: var(--font-head); font-size: 1.75rem; font-weight: 700; color: var(--white); letter-spacing: -0.03em; }
-    .stat-label { font-size: 0.75rem; color: var(--grey-mid); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 500; }
-    .stat-divider { width: 1px; background: var(--border); align-self: stretch; margin: 4px 0; }
+    /* ── INTERACTIVE PORTAL DEMO ── */
+    .demo-wrap { position: relative; z-index: 2; }
 
-    /* ── MARQUEE ── */
-    .marquee-wrap {
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      padding: 18px 0;
-      overflow: hidden;
-      white-space: nowrap;
+    .portal-frame {
       background: var(--surface);
+      border: 1px solid var(--border-2);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 40px 80px -30px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.02) inset;
+      transition: box-shadow 0.4s;
     }
 
-    .marquee-track { display: inline-flex; gap: 64px; animation: marquee 28s linear infinite; }
+    .portal-topbar {
+      background: #0b0b0e;
+      border-bottom: 1px solid var(--border);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .portal-dot { width: 11px; height: 11px; border-radius: 50%; }
+    .pd1 { background: #ff5f57; } .pd2 { background: #febc2e; } .pd3 { background: #28c840; }
+    .portal-url {
+      flex: 1;
+      margin-left: 12px;
+      background: var(--border);
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 0.7rem;
+      color: var(--accent);
+      font-family: 'Space Grotesk', monospace;
+      transition: color 0.5s;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
-    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .portal-body { padding: 26px; }
 
-    .marquee-item {
-      display: inline-flex;
+    .portal-brandbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+    }
+    .portal-brand-logo {
+      display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 0.8rem;
+      font-family: var(--font-head);
+      font-weight: 700;
+      font-size: 1.02rem;
+      color: var(--white);
+      transition: color 0.4s;
+    }
+    .portal-brand-mark {
+      width: 30px; height: 30px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--accent);
+      transition: background 0.5s, border-radius 0.5s;
+      flex-shrink: 0;
+    }
+    .portal-brand-mark svg { width: 16px; height: 16px; color: #fff; }
+    .portal-delivered {
+      font-size: 0.62rem;
       font-weight: 600;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--grey-lo);
+      color: var(--accent);
+      transition: color 0.5s;
     }
 
-    .marquee-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--purple-hi); opacity: 0.6; }
+    .portal-project { margin-bottom: 20px; }
+    .portal-project-name {
+      font-family: var(--font-head);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 3px;
+    }
+    .portal-project-sub { font-size: 0.74rem; color: var(--grey-mid); }
+
+    .portal-files { display: flex; flex-direction: column; gap: 9px; margin-bottom: 18px; }
+    .portal-file {
+      background: #0b0b0e;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 14px;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      transform: translateX(0);
+      transition: transform 0.4s, border-color 0.3s;
+    }
+    .portal-file:hover { border-color: var(--border-2); }
+    .file-icon {
+      width: 32px; height: 32px;
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.56rem; font-weight: 800;
+      letter-spacing: 0.04em;
+      flex-shrink: 0;
+      background: color-mix(in srgb, var(--accent) 18%, transparent);
+      color: var(--accent);
+      transition: background 0.5s, color 0.5s;
+    }
+    .file-info { flex: 1; min-width: 0; }
+    .file-name { font-size: 0.78rem; font-weight: 600; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .file-meta { font-size: 0.66rem; color: var(--grey-mid); margin-top: 1px; }
+    .file-dl {
+      font-size: 0.68rem; font-weight: 600;
+      color: var(--accent);
+      transition: color 0.5s;
+      white-space: nowrap;
+      display: flex; align-items: center; gap: 4px;
+    }
+
+    .portal-pay-btn {
+      width: 100%;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 13px;
+      font-family: var(--font-head);
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: background 0.5s, box-shadow 0.5s, transform 0.15s;
+      box-shadow: 0 10px 30px -10px color-mix(in srgb, var(--accent) 60%, transparent);
+    }
+    .portal-pay-btn:hover { transform: translateY(-1px); }
+    .portal-pay-btn svg { width: 15px; height: 15px; }
+
+    /* Brand switcher controls */
+    .brand-switcher {
+      margin-top: 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .brand-switcher-label {
+      font-size: 0.72rem;
+      color: var(--grey-mid);
+      font-weight: 500;
+    }
+    .brand-chips { display: flex; gap: 8px; }
+    .brand-chip {
+      width: 30px; height: 30px;
+      border-radius: 9px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform 0.18s, border-color 0.18s;
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .brand-chip:hover { transform: scale(1.12); }
+    .brand-chip.active { border-color: var(--white); transform: scale(1.12); }
+    .brand-chip svg { width: 15px; height: 15px; color: #fff; }
+
+    /* ── MARQUEE ── */
+    .marquee-wrap {
+      margin-top: 100px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+      overflow: hidden;
+      white-space: nowrap;
+      background: var(--surface);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+      mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    }
+    .marquee-track { display: inline-flex; gap: 56px; animation: marquee 30s linear infinite; }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .marquee-item {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.07em; text-transform: uppercase;
+      color: var(--grey-lo);
+    }
+    .marquee-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--purple-hi); opacity: 0.55; }
 
     /* ── SECTIONS ── */
     section { position: relative; }
-
     .section-inner { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
-
     .section-label {
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--purple-hi);
-      margin-bottom: 16px;
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--purple-hi); margin-bottom: 14px;
     }
-
     .section-title {
       font-family: var(--font-head);
-      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      line-height: 1.1;
-      color: var(--white);
+      font-size: clamp(1.9rem, 3.4vw, 2.7rem);
+      font-weight: 700; letter-spacing: -0.03em;
+      line-height: 1.08; color: var(--white);
     }
-
     .section-title .muted { color: var(--grey-hi); }
+    .section-desc { margin-top: 16px; color: var(--grey-mid); font-size: 1rem; line-height: 1.65; max-width: 520px; }
 
-    .section-desc { margin-top: 16px; color: var(--grey-mid); font-size: 1rem; line-height: 1.7; max-width: 520px; }
-
-    /* ── HOW IT WORKS ── */
+    /* ── HOW ── */
     .how { padding: 120px 0; }
-
     .how-header {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 40px;
-      flex-wrap: wrap;
-      margin-bottom: 80px;
+      display: flex; align-items: flex-end; justify-content: space-between;
+      gap: 40px; flex-wrap: wrap; margin-bottom: 64px;
     }
-
-    .how-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
-
-    .step { background: var(--surface); padding: 44px 36px; position: relative; overflow: hidden; transition: background 0.2s; }
-    .step:hover { background: #161619; }
-
+    .how-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .step {
+      background: linear-gradient(180deg, var(--surface) 0%, rgba(16,16,19,0.6) 100%);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 34px 30px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .step:hover { border-color: var(--border-2); transform: translateY(-3px); }
     .step::before {
       content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--purple-hi), var(--purple-lo));
-      opacity: 0;
-      transition: opacity 0.3s;
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--purple-hi), transparent);
+      opacity: 0; transition: opacity 0.3s;
     }
     .step:hover::before { opacity: 1; }
-
-    .step-num { font-family: var(--font-head); font-size: 3.5rem; font-weight: 800; color: var(--border); line-height: 1; margin-bottom: 28px; letter-spacing: -0.05em; }
-    .step-title { font-family: var(--font-head); font-size: 1.15rem; font-weight: 600; color: var(--white); margin-bottom: 12px; }
-    .step-body { font-size: 0.875rem; color: var(--grey-mid); line-height: 1.7; }
+    .step-num {
+      font-family: var(--font-head); font-size: 0.8rem; font-weight: 700;
+      color: var(--purple-hi); letter-spacing: 0.1em; margin-bottom: 20px;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .step-num::before { content: ''; width: 22px; height: 1px; background: var(--purple-hi); opacity: 0.5; }
+    .step-title { font-family: var(--font-head); font-size: 1.1rem; font-weight: 600; color: var(--white); margin-bottom: 10px; }
+    .step-body { font-size: 0.86rem; color: var(--grey-mid); line-height: 1.65; }
 
     /* ── FEATURES ── */
     .features { padding: 120px 0; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-    .features-header { margin-bottom: 64px; }
-
-    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
-
-    .feat { background: var(--surface); padding: 40px 32px; transition: background 0.2s; }
-    .feat:hover { background: #161619; }
-
+    .features-header { margin-bottom: 56px; }
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .feat {
+      background: var(--black);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 28px;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .feat:hover { border-color: var(--border-2); transform: translateY(-3px); }
     .feat-icon {
       width: 44px; height: 44px;
       background: var(--purple-bg);
-      border: 1px solid rgba(139,60,247,0.3);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 24px;
+      border: 1px solid rgba(139,60,247,0.28);
+      border-radius: 11px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 22px;
     }
-
     .feat-icon svg { width: 20px; height: 20px; stroke: var(--purple-hi); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-    .feat-title { font-family: var(--font-head); font-size: 1rem; font-weight: 600; color: var(--white); margin-bottom: 10px; }
-    .feat-body { font-size: 0.85rem; color: var(--grey-mid); line-height: 1.7; }
+    .feat-title { font-family: var(--font-head); font-size: 1rem; font-weight: 600; color: var(--white); margin-bottom: 9px; }
+    .feat-body { font-size: 0.85rem; color: var(--grey-mid); line-height: 1.65; }
 
-    /* ── PORTAL PREVIEW ── */
-    .preview { padding: 120px 0; }
-
-    .preview-layout { display: grid; grid-template-columns: 1fr 1.6fr; gap: 80px; align-items: center; }
-
-    .preview-bullets { list-style: none; margin-top: 36px; display: flex; flex-direction: column; gap: 16px; }
-
-    .preview-bullets li { display: flex; align-items: flex-start; gap: 12px; font-size: 0.875rem; color: var(--grey-mid); line-height: 1.6; }
-
-    .bullet-dot { flex-shrink: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--purple-hi); margin-top: 7px; }
-
-    .portal-frame { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-
-    .portal-topbar { background: #0d0d10; border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; align-items: center; gap: 8px; }
-
-    .portal-dot { width: 10px; height: 10px; border-radius: 50%; }
-    .pd1 { background: #ff5f57; } .pd2 { background: #febc2e; } .pd3 { background: #28c840; }
-
-    .portal-url { flex: 1; margin-left: 12px; background: var(--border); border-radius: 4px; padding: 4px 12px; font-size: 0.7rem; color: var(--purple-hi); font-family: monospace; }
-
-    .portal-body { padding: 28px; }
-
-    .portal-header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
-
-    .portal-client-name { font-family: var(--font-head); font-size: 1.1rem; font-weight: 700; color: var(--white); }
-    .portal-client-sub { font-size: 0.7rem; color: var(--grey-mid); margin-top: 2px; }
-
-    .portal-badge { background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.3); color: #4ade80; font-size: 0.65rem; font-weight: 600; padding: 4px 10px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.07em; }
-
-    .portal-files { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-
-    .portal-file { background: #0d0d10; border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; display: flex; align-items: center; gap: 14px; }
-
-    .file-icon { width: 32px; height: 32px; background: var(--purple-bg); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: 800; color: var(--purple-hi); letter-spacing: 0.05em; flex-shrink: 0; }
-
-    .file-info { flex: 1; }
-    .file-name { font-size: 0.8rem; font-weight: 600; color: var(--white); }
-    .file-meta { font-size: 0.68rem; color: var(--grey-mid); margin-top: 2px; }
-    .file-dl { font-size: 0.7rem; color: var(--purple-hi); font-weight: 600; cursor: pointer; }
-
-    .portal-pay-btn { width: 100%; background: var(--purple-hi); color: var(--white); border: none; border-radius: 8px; padding: 12px; font-family: var(--font-head); font-size: 0.9rem; font-weight: 700; cursor: pointer; box-shadow: 0 0 20px rgba(139,60,247,0.3); display: flex; align-items: center; justify-content: center; gap: 8px; }
+    /* ── WHO ── */
+    .who { padding: 120px 0; background: var(--surface); border-top: 1px solid var(--border); }
+    .who-header { margin-bottom: 56px; }
+    .founder-note {
+      margin-top: 56px; padding: 36px;
+      background: linear-gradient(135deg, var(--purple-bg) 0%, var(--black) 70%);
+      border: 1px solid rgba(139,60,247,0.2);
+      border-radius: 16px;
+      display: flex; gap: 22px; align-items: flex-start; flex-wrap: wrap;
+    }
+    .founder-avatar {
+      width: 50px; height: 50px; border-radius: 50%;
+      background: var(--purple-hi);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-head); font-size: 1.1rem; font-weight: 700; color: #fff;
+      flex-shrink: 0;
+    }
 
     /* ── PRICING ── */
-    .pricing { padding: 120px 0; background: var(--surface); border-top: 1px solid var(--border); }
-    .pricing-header { text-align: center; margin-bottom: 64px; }
+    .pricing { padding: 120px 0; }
+    .pricing-header { text-align: center; margin-bottom: 56px; }
     .pricing-header .section-label, .pricing-header .section-title { text-align: center; }
     .pricing-header .section-desc { margin: 16px auto 0; text-align: center; }
-
-    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--border); }
-
-    .plan { background: var(--surface); padding: 44px 36px; }
-    .plan.featured { background: var(--black); border-top: 2px solid var(--purple-hi); }
-
-    .plan-badge { display: inline-block; background: var(--purple-hi); color: var(--white); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 10px; border-radius: 100px; margin-bottom: 20px; }
-
-    .plan-name { font-family: var(--font-head); font-size: 0.85rem; font-weight: 600; color: var(--grey-mid); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
-
-    .plan-price { font-family: var(--font-head); font-size: 3rem; font-weight: 800; color: var(--white); letter-spacing: -0.04em; line-height: 1; margin-bottom: 6px; }
-    .plan-price span { font-size: 1.1rem; font-weight: 500; color: var(--grey-mid); letter-spacing: 0; }
-
-    .plan-period { font-size: 0.8rem; color: var(--grey-mid); margin-bottom: 36px; }
-    .plan-divider { height: 1px; background: var(--border); margin-bottom: 32px; }
-
-    .plan-features { list-style: none; display: flex; flex-direction: column; gap: 14px; margin-bottom: 40px; }
-
-    .plan-features li { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--grey-mid); }
-
-    .plan-features li::before {
-      content: '';
-      width: 16px; height: 16px;
-      border-radius: 50%;
-      background: rgba(139,60,247,0.15);
-      border: 1px solid rgba(139,60,247,0.35);
-      flex-shrink: 0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8l3 3 5-5' stroke='%238b3cf7' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
+    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .plan {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 36px 30px;
+      transition: border-color 0.25s, transform 0.25s;
     }
-
-    .plan .btn-primary, .plan .btn-ghost { display: block; text-align: center; width: 100%; padding: 12px; }
+    .plan:hover { transform: translateY(-3px); }
+    .plan.featured {
+      background: linear-gradient(180deg, var(--purple-bg) 0%, var(--surface) 60%);
+      border-color: rgba(139,60,247,0.5);
+      box-shadow: 0 30px 70px -30px rgba(139,60,247,0.4);
+    }
+    .plan-badge {
+      display: inline-block; background: var(--purple-hi); color: #fff;
+      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; padding: 4px 11px; border-radius: 100px; margin-bottom: 18px;
+    }
+    .plan-name { font-family: var(--font-head); font-size: 0.82rem; font-weight: 600; color: var(--grey-mid); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+    .plan-price { font-family: var(--font-head); font-size: 2.9rem; font-weight: 700; color: var(--white); letter-spacing: -0.04em; line-height: 1; margin-bottom: 5px; }
+    .plan-price span { font-size: 1.05rem; font-weight: 500; color: var(--grey-mid); letter-spacing: 0; }
+    .plan-period { font-size: 0.8rem; color: var(--grey-mid); margin-bottom: 30px; }
+    .plan-divider { height: 1px; background: var(--border); margin-bottom: 28px; }
+    .plan-features { list-style: none; display: flex; flex-direction: column; gap: 13px; margin-bottom: 34px; }
+    .plan-features li { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--grey-hi); }
+    .plan-features li::before {
+      content: ''; width: 17px; height: 17px; border-radius: 50%; flex-shrink: 0;
+      background: rgba(139,60,247,0.14); border: 1px solid rgba(139,60,247,0.32);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8l3 3 5-5' stroke='%238b3cf7' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: center;
+    }
+    .plan .btn-primary, .plan .btn-ghost { display: block; text-align: center; width: 100%; padding: 13px; }
 
     /* ── CTA ── */
-    .cta-banner { padding: 120px 0; background: var(--surface); border-top: 1px solid var(--border); position: relative; overflow: hidden; }
-
+    .cta-banner { padding: 130px 0; background: var(--surface); border-top: 1px solid var(--border); position: relative; overflow: hidden; }
     .cta-banner::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 600px;
-      height: 400px;
-      background: radial-gradient(ellipse at center, rgba(139,60,247,0.15) 0%, transparent 70%);
+      content: ''; position: absolute; top: -40%; left: 50%; transform: translateX(-50%);
+      width: 640px; height: 440px;
+      background: radial-gradient(ellipse at center, rgba(139,60,247,0.18) 0%, transparent 68%);
       pointer-events: none;
     }
-
-    .cta-inner { max-width: 700px; margin: 0 auto; text-align: center; padding: 0 24px; }
-    .cta-inner .section-title { font-size: clamp(2rem, 4vw, 3.5rem); margin-bottom: 20px; }
-    .cta-inner .section-desc { margin: 0 auto 48px; text-align: center; }
-
-    .cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-
-    /* ── TRUST BADGES ── */
-    .trust-strip { display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap; margin-top: 32px; padding-top: 32px; border-top: 1px solid var(--border); }
-    .trust-item { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--grey-mid); font-weight: 500; letter-spacing: 0.02em; }
-    .trust-icon { color: var(--purple-hi); font-size: 0.85rem; }
+    .cta-inner { max-width: 680px; margin: 0 auto; text-align: center; padding: 0 24px; position: relative; z-index: 2; }
+    .cta-inner .section-title { font-size: clamp(2rem, 4vw, 3.2rem); margin-bottom: 18px; }
+    .cta-inner .section-desc { margin: 0 auto 40px; text-align: center; }
+    .cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .trust-strip {
+      display: flex; align-items: center; justify-content: center; gap: 22px;
+      flex-wrap: wrap; margin-top: 36px; padding-top: 36px; border-top: 1px solid var(--border);
+    }
+    .trust-item { display: flex; align-items: center; gap: 7px; font-size: 0.76rem; color: var(--grey-mid); font-weight: 500; }
+    .trust-item svg { width: 15px; height: 15px; color: var(--purple-hi); }
 
     /* ── FOOTER ── */
-    footer { border-top: 1px solid var(--border); padding: 64px 48px 40px; max-width: 1100px; margin: 0 auto; }
-
-    .footer-top { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 60px; margin-bottom: 64px; }
-
-    .footer-brand p { font-size: 0.85rem; color: var(--grey-mid); line-height: 1.65; max-width: 260px; margin-top: 16px; }
-    .footer-logo { height: 28px; width: auto; }
-
-    .footer-col-title { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey-mid); margin-bottom: 20px; }
-
-    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    footer { border-top: 1px solid var(--border); padding: 60px 48px 40px; max-width: 1100px; margin: 0 auto; }
+    .footer-top { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 56px; margin-bottom: 56px; }
+    .footer-brand p { font-size: 0.85rem; color: var(--grey-mid); line-height: 1.6; max-width: 260px; margin-top: 16px; }
+    .footer-logo { height: 27px; width: auto; }
+    .footer-col-title { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey-mid); margin-bottom: 18px; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 11px; }
     .footer-links a { font-size: 0.85rem; color: var(--grey-mid); text-decoration: none; transition: color 0.2s; }
     .footer-links a:hover { color: var(--white); }
-
-    .footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 32px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 16px; }
+    .footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 30px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 16px; }
     .footer-bottom p { font-size: 0.8rem; color: var(--grey-mid); }
-
-    .footer-bottom-links { display: flex; gap: 24px; }
+    .footer-bottom-links { display: flex; gap: 22px; align-items: center; }
     .footer-bottom-links a { font-size: 0.8rem; color: var(--grey-mid); text-decoration: none; transition: color 0.2s; }
     .footer-bottom-links a:hover { color: var(--white); }
 
     /* ── MOBILE NAV ── */
     .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
     .hamburger span { display: block; width: 24px; height: 2px; background: var(--grey-hi); border-radius: 2px; transition: all 0.3s; }
-    .mobile-menu { display: none; position: fixed; top: 65px; left: 0; right: 0; background: rgba(9,9,9,0.97); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 24px 24px 32px; z-index: 99; flex-direction: column; gap: 20px; }
+    .mobile-menu { display: none; position: fixed; top: 66px; left: 0; right: 0; background: rgba(8,8,10,0.97); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 22px 24px 30px; z-index: 99; flex-direction: column; gap: 18px; }
     .mobile-menu.open { display: flex; }
     .mobile-menu a { color: var(--grey-hi); text-decoration: none; font-size: 1rem; font-weight: 500; padding: 8px 0; border-bottom: 1px solid var(--border); }
     .mobile-menu a:last-child { border-bottom: none; color: var(--purple-hi); font-weight: 600; }
 
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1); }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1000px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 48px; }
+      .demo-wrap { max-width: 460px; }
+    }
     @media (max-width: 900px) {
       nav { padding: 16px 24px; }
       .nav-links { display: none; }
       .hamburger { display: flex; }
       .section-inner { padding: 0 24px; }
       .how-steps, .features-grid, .pricing-grid { grid-template-columns: 1fr; }
-      .preview-layout { grid-template-columns: 1fr; }
-      .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 36px; }
       footer { padding: 48px 24px 32px; }
+      .hero { padding: 140px 24px 60px; }
     }
-
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+      .reveal { opacity: 1; transform: none; }
     }
   </style>
 </head>
 <body>
 
 <!-- ── NAV ── -->
-<nav>
-  <a href="#" class="nav-logo">
-    <img src="vblogo.png" alt="VoxaBase" />
-  </a>
+<nav id="nav">
+  <a href="#" class="nav-logo"><img src="vblogo.png" alt="VoxaBase" /></a>
   <ul class="nav-links">
-    <li><a href="#how">How It Works</a></li>
+    <li><a href="#how">How it works</a></li>
     <li><a href="#features">Features</a></li>
     <li><a href="#pricing">Pricing</a></li>
-    <li><a href="https://app.voxabase.com/dashboard" class="nav-cta">Get Started Free</a></li>
+    <li><a href="https://app.voxabase.com/login">Sign in</a></li>
+    <li><a href="https://app.voxabase.com/signup" class="nav-cta">Get started free</a></li>
   </ul>
-  <button class="hamburger" id="hamburger" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
+  <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
 </nav>
 
 <div class="mobile-menu" id="mobile-menu">
-  <a href="#how" onclick="closeMobileMenu()">How It Works</a>
+  <a href="#how" onclick="closeMobileMenu()">How it works</a>
   <a href="#features" onclick="closeMobileMenu()">Features</a>
   <a href="#pricing" onclick="closeMobileMenu()">Pricing</a>
-  <a href="https://app.voxabase.com/dashboard" onclick="closeMobileMenu()">Get Started Free →</a>
+  <a href="https://app.voxabase.com/login" onclick="closeMobileMenu()">Sign in</a>
+  <a href="https://app.voxabase.com/signup" onclick="closeMobileMenu()">Get started free →</a>
 </div>
-
-<script>
-  document.getElementById('hamburger').addEventListener('click', function() {
-    document.getElementById('mobile-menu').classList.toggle('open');
-  });
-  function closeMobileMenu() {
-    document.getElementById('mobile-menu').classList.remove('open');
-  }
-</script>
 
 <!-- ── HERO ── -->
 <section class="hero">
   <div class="hex-grid"></div>
-
-  <div class="hero-eyebrow">Now live — free to start, no credit card required</div>
-
-  <h1 class="hero-headline">
-    <span class="hl-white">Deliver your work</span><br/>
-    <span class="hl-grey">like a studio. </span><span class="hl-purple">Get paid like one.</span>
-  </h1>
-
-  <p class="hero-sub">
-    A branded client portal that makes you look established, gets you paid faster, and saves hours of back-and-forth. Upload your files, share one link, collect payment — done.
-  </p>
-
-  <div class="hero-actions">
-    <a href="https://app.voxabase.com/dashboard" class="btn-primary">Get Started Free →</a>
-    <a href="#how" class="btn-ghost">See How It Works</a>
-  </div>
-
-  <div class="portal-preview">
-    <span class="portal-preview-dot"></span>
-    <span class="portal-preview-label">Your client sees:</span>
-    <span class="portal-preview-url">voxabase.com/acme-corp</span>
-  </div>
-
-  <div class="hero-stats">
-    <div class="stat">
-      <span class="stat-num">2 min</span>
-      <span class="stat-label">To create a portal</span>
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <div class="hero-eyebrow">Live now — free to start</div>
+      <h1 class="hero-headline">
+        <span class="hl-grey">Deliver your work</span><br/>
+        <span class="hl-grey">like a studio.</span><br/>
+        <span class="hl-purple">Get paid like one.</span>
+      </h1>
+      <p class="hero-sub">
+        A branded client portal for your files and invoices. Upload your work, send one link, and collect payment — without the email back-and-forth.
+      </p>
+      <div class="hero-actions">
+        <a href="https://app.voxabase.com/signup" class="btn-primary">Get started free →</a>
+        <a href="#how" class="btn-ghost">See how it works</a>
+      </div>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          No credit card required
+        </div>
+        <div class="hero-meta-item">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          2 minutes to your first portal
+        </div>
+      </div>
     </div>
-    <div class="stat-divider"></div>
-    <div class="stat">
-      <span class="stat-num">$0</span>
-      <span class="stat-label">Free to start</span>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat">
-      <span class="stat-num">1 link</span>
-      <span class="stat-label">Files + payment</span>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat">
-      <span class="stat-num">Live</span>
-      <span class="stat-label">Available now</span>
+
+    <!-- Interactive portal demo -->
+    <div class="demo-wrap">
+      <div class="portal-frame" id="portalFrame">
+        <div class="portal-topbar">
+          <div class="portal-dot pd1"></div>
+          <div class="portal-dot pd2"></div>
+          <div class="portal-dot pd3"></div>
+          <div class="portal-url" id="portalUrl">voxabase.com/studio-novo/acme-corp</div>
+        </div>
+        <div class="portal-body">
+          <div class="portal-brandbar">
+            <div class="portal-brand-logo">
+              <div class="portal-brand-mark" id="brandMark">
+                <svg id="brandSvg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg>
+              </div>
+              <span id="brandName">Studio Novo</span>
+            </div>
+            <span class="portal-delivered" id="brandDelivered">Delivered for you</span>
+          </div>
+
+          <div class="portal-project">
+            <div class="portal-project-name">Brand Refresh — Final Files</div>
+            <div class="portal-project-sub">3 files · Ready to download</div>
+          </div>
+
+          <div class="portal-files" id="portalFiles">
+            <div class="portal-file">
+              <div class="file-icon">PDF</div>
+              <div class="file-info">
+                <div class="file-name">Brand_Guidelines_v2.pdf</div>
+                <div class="file-meta">4.2 MB</div>
+              </div>
+              <div class="file-dl">↓ Download</div>
+            </div>
+            <div class="portal-file">
+              <div class="file-icon">ZIP</div>
+              <div class="file-info">
+                <div class="file-name">Logo_Package_Final.zip</div>
+                <div class="file-meta">18.6 MB</div>
+              </div>
+              <div class="file-dl">↓ Download</div>
+            </div>
+            <div class="portal-file">
+              <div class="file-icon">MP4</div>
+              <div class="file-info">
+                <div class="file-name">Brand_Intro.mp4</div>
+                <div class="file-meta">92.1 MB</div>
+              </div>
+              <div class="file-dl">↓ Download</div>
+            </div>
+          </div>
+
+          <button class="portal-pay-btn">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            Pay Invoice — $2,400.00
+          </button>
+        </div>
+      </div>
+
+      <div class="brand-switcher">
+        <span class="brand-switcher-label">Try a brand →</span>
+        <div class="brand-chips" id="brandChips"></div>
+      </div>
     </div>
   </div>
 </section>
@@ -605,48 +761,45 @@
     <span class="marquee-item"><span class="marquee-dot"></span>Invoice Collection</span>
     <span class="marquee-item"><span class="marquee-dot"></span>Stripe Payments</span>
     <span class="marquee-item"><span class="marquee-dot"></span>No Email Attachments</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Instant Sharing</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>PDF & Image Support</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Client Download Links</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Custom Branding</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Activity Tracking</span>
     <span class="marquee-item"><span class="marquee-dot"></span>One-Click Payment</span>
     <span class="marquee-item"><span class="marquee-dot"></span>File Delivery</span>
     <span class="marquee-item"><span class="marquee-dot"></span>Branded Portals</span>
     <span class="marquee-item"><span class="marquee-dot"></span>Invoice Collection</span>
     <span class="marquee-item"><span class="marquee-dot"></span>Stripe Payments</span>
     <span class="marquee-item"><span class="marquee-dot"></span>No Email Attachments</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Instant Sharing</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>PDF & Image Support</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Client Download Links</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Custom Branding</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Activity Tracking</span>
     <span class="marquee-item"><span class="marquee-dot"></span>One-Click Payment</span>
   </div>
 </div>
 
-<!-- ── HOW IT WORKS ── -->
+<!-- ── HOW ── -->
 <section class="how" id="how">
   <div class="section-inner">
-    <div class="how-header">
+    <div class="how-header reveal">
       <div>
-        <p class="section-label">How It Works</p>
+        <p class="section-label">How it works</p>
         <h2 class="section-title">Three steps from<br/><span class="muted">upload to paid.</span></h2>
       </div>
-      <p style="color: var(--grey-mid); font-size: 0.9rem; line-height: 1.7; max-width: 300px;">The average freelancer loses 3–5 hours a month to file re-sends, invoice follow-ups, and "which version was final?" messages. VoxaBase eliminates all of it.</p>
+      <p style="color: var(--grey-mid); font-size: 0.9rem; line-height: 1.65; max-width: 300px;">Most freelancers lose hours each month to file re-sends, "which version is final?" threads, and chasing invoices. VoxaBase replaces all of it with one link.</p>
     </div>
-
     <div class="how-steps">
-      <div class="step">
-        <div class="step-num">01</div>
+      <div class="step reveal">
+        <div class="step-num">Step 01</div>
         <div class="step-title">Create a client portal</div>
-        <p class="step-body">Log in, click "New Portal," and type your client's name. VoxaBase generates a clean, branded link in seconds — like <strong style="color:var(--grey-hi)">voxabase.com/acme-corp</strong>.</p>
+        <p class="step-body">Name your client, and VoxaBase builds a clean, branded link in seconds — like <strong style="color:var(--grey-hi)">voxabase.com/you/acme-corp</strong>.</p>
       </div>
-      <div class="step">
-        <div class="step-num">02</div>
+      <div class="step reveal">
+        <div class="step-num">Step 02</div>
         <div class="step-title">Upload your deliverables</div>
-        <p class="step-body">Drag in your PDFs, images, videos, or any file. They appear instantly in the portal, ready for your client to view and download — no login required on their end.</p>
+        <p class="step-body">Drag in PDFs, images, video, or any file. They appear instantly, ready for your client to view and download — no login on their end.</p>
       </div>
-      <div class="step">
-        <div class="step-num">03</div>
-        <div class="step-title">Send the link and get paid</div>
-        <p class="step-body">Share the link. Your client sees their files and a "Pay Invoice" button. They pay via Stripe — you get notified and the money hits your account. Done.</p>
+      <div class="step reveal">
+        <div class="step-num">Step 03</div>
+        <div class="step-title">Send the link, get paid</div>
+        <p class="step-body">Your client sees their files and a Pay Invoice button. They pay through Stripe, and the money lands in your account.</p>
       </div>
     </div>
   </div>
@@ -655,182 +808,90 @@
 <!-- ── FEATURES ── -->
 <section class="features" id="features">
   <div class="section-inner">
-    <div class="features-header">
+    <div class="features-header reveal">
       <p class="section-label">Features</p>
       <h2 class="section-title">Everything in <span class="muted">one link.</span></h2>
-      <p class="section-desc">One tool that replaces the scattered mess of folder links, separate invoicing apps, and endless email threads — so you spend less time managing delivery and more time doing the work you charge for.</p>
+      <p class="section-desc">One tool instead of scattered folder links, a separate invoicing app, and endless email threads. Spend less time managing delivery and more time on the work you charge for.</p>
     </div>
-
     <div class="features-grid">
-      <div class="feat">
-        <div class="feat-icon">
-          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        </div>
-        <div class="feat-title">File Delivery</div>
-        <p class="feat-body">Upload any file type — PDFs, images, videos, zips. Clients get a clean download button, no account needed.</p>
+      <div class="feat reveal">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+        <div class="feat-title">File delivery</div>
+        <p class="feat-body">Upload any file type — PDFs, images, video, archives. Clients get a clean download button, no account needed.</p>
       </div>
-      <div class="feat">
-        <div class="feat-icon">
-          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-        </div>
-        <div class="feat-title">Branded Portal</div>
-        <p class="feat-body">Every portal carries your business name. Clients land on a page that looks like it was built by a professional studio.</p>
+      <div class="feat reveal">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+        <div class="feat-title">Your brand, not ours</div>
+        <p class="feat-body">Add your logo and accent color. Clients land on a page that looks like your studio built it — because you did.</p>
       </div>
-      <div class="feat">
-        <div class="feat-icon">
-          <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-        </div>
-        <div class="feat-title">Invoice & Payment</div>
-        <p class="feat-body">Add an invoice to any portal. Clients pay via Stripe directly on the page. No more chasing payments over email.</p>
+      <div class="feat reveal">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        <div class="feat-title">Invoice & payment</div>
+        <p class="feat-body">Attach an invoice to any portal. Clients pay by card through Stripe, right on the page. No more chasing.</p>
       </div>
-      <div class="feat">
-        <div class="feat-icon">
-          <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
-        </div>
-        <div class="feat-title">Shareable Link</div>
-        <p class="feat-body">One link per client. Send it over email, Slack, or text. It works everywhere and never expires unless you want it to.</p>
+      <div class="feat reveal">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div>
+        <div class="feat-title">One shareable link</div>
+        <p class="feat-body">Send it over email, Slack, or text. It works everywhere and never expires unless you want it to.</p>
       </div>
-      <div class="feat">
-        <div class="feat-icon">
-          <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
-        </div>
-        <div class="feat-title">Revision Rounds</div>
-        <p class="feat-body">Upload updated files to the same portal. Clients always see the latest version without you resending a thing.</p>
+      <div class="feat reveal">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
+        <div class="feat-title">Revision rounds</div>
+        <p class="feat-body">Upload a new version to the same portal. Clients always see the latest files — you never resend a thing.</p>
       </div>
-      <div class="feat">
-        <div class="feat-icon">
-          <svg viewBox="0 0 24 24"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
-        </div>
-        <div class="feat-title">Activity Tracking</div>
-        <p class="feat-body">See when your client viewed the portal and downloaded their files. Know exactly where things stand without asking.</p>
+      <div class="feat reveal">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg></div>
+        <div class="feat-title">Activity tracking</div>
+        <p class="feat-body">See when a client opened the portal and how many times. Know where things stand without asking.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── PORTAL PREVIEW ── -->
-<section class="preview">
+<!-- ── WHO ── -->
+<section class="who">
   <div class="section-inner">
-    <div class="preview-layout">
-      <div class="preview-copy">
-        <p class="section-label">The client experience</p>
-        <h2 class="section-title">What your<br/><span class="muted">client sees.</span></h2>
-        <p class="section-desc">Your client gets a clean, branded page with their files and a pay button — no login, no confusion. The moment they're happiest with your work is the moment they're asked to pay. That timing matters.</p>
-        <ul class="preview-bullets">
-          <li><span class="bullet-dot"></span>Branded with your business name and project title</li>
-          <li><span class="bullet-dot"></span>All deliverables listed with one-click download</li>
-          <li><span class="bullet-dot"></span>Invoice amount and "Pay Now" button front and center</li>
-          <li><span class="bullet-dot"></span>Works on any device, no app or account needed</li>
-        </ul>
-      </div>
-
-      <div class="portal-frame">
-        <div class="portal-topbar">
-          <div class="portal-dot pd1"></div>
-          <div class="portal-dot pd2"></div>
-          <div class="portal-dot pd3"></div>
-          <div class="portal-url">voxabase.com/acme-corp</div>
-        </div>
-        <div class="portal-body">
-          <div class="portal-header-row">
-            <div>
-              <div class="portal-client-name">ACME Corp — Brand Refresh</div>
-              <div class="portal-client-sub">Delivered by Studio Novo · 3 files</div>
-            </div>
-            <div class="portal-badge">Ready to download</div>
-          </div>
-          <div class="portal-files">
-            <div class="portal-file">
-              <div class="file-icon">PDF</div>
-              <div class="file-info">
-                <div class="file-name">Brand_Guidelines_v2.pdf</div>
-                <div class="file-meta">4.2 MB · Updated today</div>
-              </div>
-              <div class="file-dl">↓ Download</div>
-            </div>
-            <div class="portal-file">
-              <div class="file-icon">PNG</div>
-              <div class="file-info">
-                <div class="file-name">Logo_Package_Final.zip</div>
-                <div class="file-meta">18.6 MB · All formats included</div>
-              </div>
-              <div class="file-dl">↓ Download</div>
-            </div>
-            <div class="portal-file">
-              <div class="file-icon">MP4</div>
-              <div class="file-info">
-                <div class="file-name">Brand_Intro_Animation.mp4</div>
-                <div class="file-meta">92.1 MB · 1080p</div>
-              </div>
-              <div class="file-dl">↓ Download</div>
-            </div>
-          </div>
-          <button class="portal-pay-btn">💳 Pay Invoice — $2,400.00</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── WHO IT'S FOR ── -->
-<section style="padding: 120px 0; background: var(--surface); border-top: 1px solid var(--border);">
-  <div class="section-inner">
-    <div style="margin-bottom: 64px;">
+    <div class="who-header reveal">
       <p class="section-label">Who it's for</p>
       <h2 class="section-title">Built for anyone who <span class="muted">delivers work and invoices clients.</span></h2>
     </div>
     <div class="features-grid">
-      <div class="feat">
-        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg></div>
-        <div class="feat-title">Designers & Creatives</div>
-        <p class="feat-body">"Can you resend the logo in a different format?" — Stop answering that email. Every file, every version, always accessible in one link.</p>
+      <div class="feat reveal">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg></div>
+        <div class="feat-title">Designers & creatives</div>
+        <p class="feat-body">"Can you resend the logo in another format?" — never again. Every file, every version, always in one link.</p>
       </div>
-      <div class="feat">
-        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
-        <div class="feat-title">Video Editors & Producers</div>
-        <p class="feat-body">Video files are too big for email and too messy in Dropbox. Give clients a clean page with their footage, cuts, and a pay button.</p>
+      <div class="feat reveal">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+        <div class="feat-title">Video editors</div>
+        <p class="feat-body">Big files are a mess over email and Dropbox. Give clients a clean page with their cuts and a pay button.</p>
       </div>
-      <div class="feat">
-        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg></div>
-        <div class="feat-title">Marketing Agencies</div>
-        <p class="feat-body">Managing 10+ clients means 10+ scattered Google Drives. VoxaBase gives every client their own branded space — and you see who's actually looked at their deliverables.</p>
+      <div class="feat reveal">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg></div>
+        <div class="feat-title">Marketing agencies</div>
+        <p class="feat-body">Ten clients shouldn't mean ten scattered Drives. Give each one a branded space — and see who's actually looked.</p>
       </div>
-      <div class="feat">
-        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
-        <div class="feat-title">Web Developers</div>
-        <p class="feat-body">Hand off staging links, assets, and final files in one place. Attach the invoice. Get paid before you hand over the keys.</p>
+      <div class="feat reveal">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+        <div class="feat-title">Web developers</div>
+        <p class="feat-body">Hand off staging links, assets, and final files in one place. Attach the invoice. Get paid on delivery.</p>
       </div>
-      <div class="feat">
-        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+      <div class="feat reveal">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
         <div class="feat-title">Photographers</div>
-        <p class="feat-body">WeTransfer expires. Google Drive is clunky. Give clients a portal with their photos and a download button that never breaks.</p>
+        <p class="feat-body">WeTransfer expires and Drive is clunky. Give clients a gallery with a download button that never breaks.</p>
       </div>
-      <div class="feat">
-        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
-        <div class="feat-title">Copywriters & Consultants</div>
-        <p class="feat-body">Deliver documents, decks, and reports professionally. No more Word docs buried in email chains your client can't find two weeks later.</p>
-      </div>
-      <div class="feat">
-        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M3 12h18"/><path d="M3 18h18"/></svg></div>
-        <div class="feat-title">Law Firms & Legal Teams</div>
-        <p class="feat-body">Share contracts, case documents, and invoices in a secure, branded portal. Clients sign off and pay — no printing, no scanning, no email back-and-forth.</p>
-      </div>
-      <div class="feat">
-        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg></div>
-        <div class="feat-title">Social Media Managers</div>
-        <p class="feat-body">Deliver content calendars, graphics, and campaign reports to each client in their own portal. No more "which version was the final one?" messages.</p>
-      </div>
-      <div class="feat">
-        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
-        <div class="feat-title">Architects & Interior Designers</div>
-        <p class="feat-body">Share floor plans, renders, and mood boards in a polished client portal. Collect milestone payments before releasing the next phase of files.</p>
+      <div class="feat reveal">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+        <div class="feat-title">Consultants & copywriters</div>
+        <p class="feat-body">Deliver decks, docs, and reports professionally — not buried in an email chain your client can't find later.</p>
       </div>
     </div>
 
-    <div style="margin-top: 64px; padding: 40px; background: var(--black); border: 1px solid var(--border); border-radius: 12px; display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">
-      <div style="width: 52px; height: 52px; border-radius: 50%; background: var(--purple-bg); border: 1px solid rgba(139,60,247,0.4); display: flex; align-items: center; justify-content: center; font-family: var(--font-head); font-size: 1.1rem; font-weight: 700; color: var(--purple-hi); flex-shrink: 0;">J</div>
+    <div class="founder-note reveal">
+      <div class="founder-avatar">J</div>
       <div style="flex: 1; min-width: 260px;">
-        <p style="font-size: 0.95rem; color: var(--grey-hi); line-height: 1.75; margin-bottom: 16px;">"I built VoxaBase because I kept watching talented freelancers lose client trust over something completely avoidable — messy file delivery. You do great work. The way you hand it off should reflect that."</p>
+        <p style="font-size: 0.95rem; color: var(--grey-hi); line-height: 1.7; margin-bottom: 14px;">"I built VoxaBase because I kept watching talented freelancers lose client trust over something avoidable — messy file delivery. You do great work. The way you hand it off should reflect that."</p>
         <p style="font-size: 0.8rem; color: var(--grey-mid); font-weight: 600;">Jacob P. &nbsp;·&nbsp; <span style="font-weight: 400;">Founder, VoxaBase</span></p>
       </div>
     </div>
@@ -840,14 +901,13 @@
 <!-- ── PRICING ── -->
 <section class="pricing" id="pricing">
   <div class="section-inner">
-    <div class="pricing-header">
+    <div class="pricing-header reveal">
       <p class="section-label">Pricing</p>
       <h2 class="section-title">Simple pricing, <span class="muted">no surprises.</span></h2>
-      <p class="section-desc">Free to start. Upgrade when your client list grows.</p>
+      <p class="section-desc">Start free. Upgrade when your client list grows.</p>
     </div>
-
     <div class="pricing-grid">
-      <div class="plan">
+      <div class="plan reveal">
         <div class="plan-name">Starter</div>
         <div class="plan-price">$0</div>
         <div class="plan-period">Free forever</div>
@@ -856,13 +916,12 @@
           <li>3 active client portals</li>
           <li>1 GB file storage</li>
           <li>Shareable portal links</li>
-          <li>File activity tracking</li>
+          <li>Activity tracking</li>
           <li>Stripe payment collection</li>
         </ul>
-        <a href="https://app.voxabase.com/dashboard" class="btn-ghost">Get Started Free</a>
+        <a href="https://app.voxabase.com/signup" class="btn-ghost">Get started free</a>
       </div>
-
-      <div class="plan featured">
+      <div class="plan featured reveal">
         <div class="plan-badge">Most popular</div>
         <div class="plan-name">Pro</div>
         <div class="plan-price">$15<span>/mo</span></div>
@@ -871,15 +930,13 @@
         <ul class="plan-features">
           <li>Unlimited client portals</li>
           <li>25 GB file storage</li>
-          <li>Stripe payment collection</li>
+          <li>Custom logo & brand color</li>
           <li>Password-protected portals</li>
-          <li>Activity notifications</li>
           <li>Priority support</li>
         </ul>
-        <a href="https://app.voxabase.com/dashboard" class="btn-primary">Get Started →</a>
+        <a href="https://app.voxabase.com/signup" class="btn-primary">Get started →</a>
       </div>
-
-      <div class="plan">
+      <div class="plan reveal">
         <div class="plan-name">Agency</div>
         <div class="plan-price">$49<span>/mo</span></div>
         <div class="plan-period">Billed monthly</div>
@@ -889,148 +946,27 @@
           <li>250 GB file storage</li>
           <li>Team member seats</li>
           <li>White-label portal domain</li>
-          <li>Client approval workflows</li>
           <li>Dedicated support</li>
         </ul>
-        <a href="https://app.voxabase.com/dashboard" class="btn-ghost">Get Started</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── COMPARISON ── -->
-<section style="padding: 120px 0; background: var(--black); border-top: 1px solid var(--border);">
-  <div class="section-inner">
-    <p class="section-label">Why VoxaBase</p>
-    <h2 class="section-title" style="margin-bottom: 16px;">Better than what <span class="muted">you're using now.</span></h2>
-    <p class="section-desc" style="margin-bottom: 64px;">Google Drive is for storage. WeTransfer is for one-off sends. Email is for communication. None of them were built for professional client delivery — VoxaBase was.</p>
-
-    <div style="overflow-x: auto;">
-      <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem;">
-        <thead>
-          <tr>
-            <th style="text-align: left; padding: 16px 20px; color: var(--grey-mid); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; border-bottom: 1px solid var(--border); width: 28%;"></th>
-            <th style="text-align: center; padding: 16px 20px; color: var(--purple-hi); font-weight: 700; font-size: 0.85rem; border-bottom: 2px solid var(--purple-hi); background: rgba(139,60,247,0.06); border-radius: 8px 8px 0 0;">VoxaBase</th>
-            <th style="text-align: center; padding: 16px 20px; color: var(--grey-mid); font-weight: 600; font-size: 0.85rem; border-bottom: 1px solid var(--border);">Google Drive</th>
-            <th style="text-align: center; padding: 16px 20px; color: var(--grey-mid); font-weight: 600; font-size: 0.85rem; border-bottom: 1px solid var(--border);">WeTransfer</th>
-            <th style="text-align: center; padding: 16px 20px; color: var(--grey-mid); font-weight: 600; font-size: 0.85rem; border-bottom: 1px solid var(--border);">Email</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style="padding: 16px 20px; color: var(--grey-hi); border-bottom: 1px solid var(--border); font-weight: 500;">Branded client portal</td>
-            <td style="text-align: center; padding: 16px 20px; border-bottom: 1px solid var(--border); background: rgba(139,60,247,0.04);"><span style="color: #4ade80; font-size: 1.1rem;">✓</span></td>
-            <td style="text-align: center; padding: 16px 20px; border-bottom: 1px solid var(--border);"><span style="color: var(--grey-lo); font-size: 1.1rem;">✗</span></td>
-            <td style="text-align: center; padding: 16px 20px; border-bottom: 1px solid var(--border);"><span style="color: var(--grey-lo); font-size: 1.1rem;">✗</span></td>
-            <td style="text-align: center; padding: 16px 20px; border-bottom: 1px solid var(--border);"><span style="color: var(--grey-lo); font-size: 1.1rem;">✗</span></td>
-          </tr>
-          <tr>
-            <td style="padding: 16px 20px; color: var(--grey-hi); border-bottom: 1px solid var(--border); font-weight: 500;">Built-in payment collection</td>
-            <td style="text-align: center; padding: 16px 20px; border-bottom: 1px solid var(--border); background: rgba(139,60,247,0.04);"><span style="color: #4ade80; font-size: 1.1rem;">✓</span></td>
-            <td style="text-align: center; padding: 16px 20px; border-bottom: 1px solid var(--border);"><span style="color: var(--grey-lo); font-size: 1.1rem;">✗</span></td>
-            <td style="text-align: center; padding: 16px 20px; border-bottom: 1px solid var(--border);"><span style="color: var(--grey-lo); font-size: 1.1rem;">✗</span></td>
-            <td style="text-align: center; padding: 16px 20px; border-bottom: 1px solid var(--border);"><span style="color: var(--grey-lo); font-size: 1.1rem;">✗</span></td>
-          </tr>
-          <tr>
-            <td style="padding: 16px 20px; color: var(--grey-hi); border-bottom: 1px solid var(--border); font-weight: 500;">No client login required</td>
-            <td style="text-align: center; padding: 16px 20px; border-bottom: 1px solid var(--border); background: rgba(139,60,247,0.04);"><span style="color: #4ade80; font-size: 1.1rem;">✓</span></td>
-            <td style="text-align: center; padding: 16px 20px; border-bottom: 1px solid var(--border);"><span style="color: var(--grey-lo); font-size: 1.1rem;">✗</span></td>
-            <td style="text-align: center; padding: 16px 20px; border-bottom: 1px solid var(--border);"><span style="color: #4ade80; font-size: 1.1rem;">✓</span></td>
-            <td style="text-align: center; padding: 16px 20px; border-bottom: 1px solid var(--border);"><span style="color: #4ade80; font-size: 1.1rem;">✓</span></td>
-          </tr>
-          <tr>
-            <td style="padding: 16px 20px; color: var(--grey-hi); border-bottom: 1px solid var(--border); font-weight: 500;">Files never expire</td>
-            <td style="text-align: center; padding: 16px 20px; border-bottom: 1px solid var(--border); background: rgba(139,60,247,0.04);"><span style="color: #4ade80; font-size: 1.1rem;">✓</span></td>
-            <td style="text-align: center; padding: 16px 20px; border-bottom: 1px solid var(--border);"><span style="color: #4ade80; font-size: 1.1rem;">✓</span></td>
-            <td style="text-align: center; padding: 16px 20px; border-bottom: 1px solid var(--border);"><span style="color: var(--grey-lo); font-size: 1.1rem;">✗</span></td>
-            <td style="text-align: center; padding: 16px 20px; border-bottom: 1px solid var(--border);"><span style="color: var(--grey-lo); font-size: 1.1rem;">✗</span></td>
-          </tr>
-          <tr>
-            <td style="padding: 16px 20px; color: var(--grey-hi); border-bottom: 1px solid var(--border); font-weight: 500;">Client activity tracking</td>
-            <td style="text-align: center; padding: 16px 20px; border-bottom: 1px solid var(--border); background: rgba(139,60,247,0.04);"><span style="color: #4ade80; font-size: 1.1rem;">✓</span></td>
-            <td style="text-align: center; padding: 16px 20px; border-bottom: 1px solid var(--border);"><span style="color: var(--grey-mid); font-size: 0.75rem;">Limited</span></td>
-            <td style="text-align: center; padding: 16px 20px; border-bottom: 1px solid var(--border);"><span style="color: var(--grey-lo); font-size: 1.1rem;">✗</span></td>
-            <td style="text-align: center; padding: 16px 20px; border-bottom: 1px solid var(--border);"><span style="color: var(--grey-lo); font-size: 1.1rem;">✗</span></td>
-          </tr>
-          <tr>
-            <td style="padding: 16px 20px; color: var(--grey-hi); border-bottom: 1px solid var(--border); font-weight: 500;">Built for client delivery</td>
-            <td style="text-align: center; padding: 16px 20px; border-bottom: 1px solid var(--border); background: rgba(139,60,247,0.04);"><span style="color: #4ade80; font-size: 1.1rem;">✓</span></td>
-            <td style="text-align: center; padding: 16px 20px; border-bottom: 1px solid var(--border);"><span style="color: var(--grey-lo); font-size: 1.1rem;">✗</span></td>
-            <td style="text-align: center; padding: 16px 20px; border-bottom: 1px solid var(--border);"><span style="color: var(--grey-mid); font-size: 0.75rem;">Partial</span></td>
-            <td style="text-align: center; padding: 16px 20px; border-bottom: 1px solid var(--border);"><span style="color: var(--grey-lo); font-size: 1.1rem;">✗</span></td>
-          </tr>
-          <tr>
-            <td style="padding: 16px 20px; color: var(--grey-hi); font-weight: 500;">Free to start</td>
-            <td style="text-align: center; padding: 16px 20px; background: rgba(139,60,247,0.04);"><span style="color: #4ade80; font-size: 1.1rem;">✓</span></td>
-            <td style="text-align: center; padding: 16px 20px;"><span style="color: #4ade80; font-size: 1.1rem;">✓</span></td>
-            <td style="text-align: center; padding: 16px 20px;"><span style="color: #4ade80; font-size: 1.1rem;">✓</span></td>
-            <td style="text-align: center; padding: 16px 20px;"><span style="color: #4ade80; font-size: 1.1rem;">✓</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-<!-- ── FAQ ── -->
-<section style="padding: 120px 0; background: var(--surface); border-top: 1px solid var(--border);">
-  <div class="section-inner">
-    <p class="section-label">FAQ</p>
-    <h2 class="section-title" style="margin-bottom: 64px;">Questions we <span class="muted">get asked.</span></h2>
-
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--border);">
-      <div style="background: var(--surface); padding: 36px 32px;">
-        <div style="font-family: var(--font-head); font-size: 1rem; font-weight: 600; color: var(--white); margin-bottom: 12px;">Do my clients need to create an account?</div>
-        <p style="font-size: 0.875rem; color: var(--grey-mid); line-height: 1.7;">No. Clients click the link and immediately see their files. No signup, no password, no friction — just their deliverables.</p>
-      </div>
-      <div style="background: var(--surface); padding: 36px 32px;">
-        <div style="font-family: var(--font-head); font-size: 1rem; font-weight: 600; color: var(--white); margin-bottom: 12px;">What file types can I upload?</div>
-        <p style="font-size: 0.875rem; color: var(--grey-mid); line-height: 1.7;">Any file type — PDFs, images, videos, ZIP archives, Word docs, spreadsheets, and more. If you can save it, you can deliver it.</p>
-      </div>
-      <div style="background: var(--surface); padding: 36px 32px;">
-        <div style="font-family: var(--font-head); font-size: 1rem; font-weight: 600; color: var(--white); margin-bottom: 12px;">How does payment collection work?</div>
-        <p style="font-size: 0.875rem; color: var(--grey-mid); line-height: 1.7;">You add an invoice amount to your portal. When the client clicks "Pay Invoice," they pay securely via Stripe. The money goes directly to your connected bank account.</p>
-      </div>
-      <div style="background: var(--surface); padding: 36px 32px;">
-        <div style="font-family: var(--font-head); font-size: 1rem; font-weight: 600; color: var(--white); margin-bottom: 12px;">Is my data secure?</div>
-        <p style="font-size: 0.875rem; color: var(--grey-mid); line-height: 1.7;">Yes. All files are encrypted in transit and at rest. Portal links are unique and unguessable. You can also password-protect any portal on Pro for sensitive projects.</p>
-      </div>
-      <div style="background: var(--surface); padding: 36px 32px;">
-        <div style="font-family: var(--font-head); font-size: 1rem; font-weight: 600; color: var(--white); margin-bottom: 12px;">Can I update files after sharing the link?</div>
-        <p style="font-size: 0.875rem; color: var(--grey-mid); line-height: 1.7;">Yes. Upload a new version any time — the link stays the same. Your client always sees the latest files without you having to resend anything.</p>
-      </div>
-      <div style="background: var(--surface); padding: 36px 32px;">
-        <div style="font-family: var(--font-head); font-size: 1rem; font-weight: 600; color: var(--white); margin-bottom: 12px;">Do clients have to pay to see their files?</div>
-        <p style="font-size: 0.875rem; color: var(--grey-mid); line-height: 1.7;">Files are always accessible before payment. This protects both sides — clients know exactly what they are getting, and freelancers have a clear record of delivery if payment is ever disputed.</p>
-      </div>
-      <div style="background: var(--surface); padding: 36px 32px;">
-        <div style="font-family: var(--font-head); font-size: 1rem; font-weight: 600; color: var(--white); margin-bottom: 12px;">Do I need a Stripe account?</div>
-        <p style="font-size: 0.875rem; color: var(--grey-mid); line-height: 1.7;">Yes, to collect payments you will connect your Stripe account — it takes about 5 minutes. If you only need file delivery, no Stripe account is required.</p>
-      </div>
-      <div style="background: var(--surface); padding: 36px 32px;">
-        <div style="font-family: var(--font-head); font-size: 1rem; font-weight: 600; color: var(--white); margin-bottom: 12px;">Can I use my own domain for portals?</div>
-        <p style="font-size: 0.875rem; color: var(--grey-mid); line-height: 1.7;">Custom domains are available on the Agency plan. Your clients will see <span style="color: var(--purple-hi); font-family: monospace;">yourcompany.com/client-name</span> instead of voxabase.com.</p>
+        <a href="https://app.voxabase.com/signup" class="btn-ghost">Get started</a>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ── CTA ── -->
-<section class="cta-banner" id="signup">
-  <div class="cta-inner">
+<section class="cta-banner">
+  <div class="cta-inner reveal">
     <h2 class="section-title">Look more professional <span class="muted">starting today.</span></h2>
-    <p class="section-desc">Create your free account and start delivering work like a studio. No credit card required — free forever on the Starter plan.</p>
-
+    <p class="section-desc">Create a free account and start delivering work like a studio. No credit card required.</p>
     <div class="cta-actions">
-      <a href="https://app.voxabase.com/dashboard" class="btn-primary">Create free account →</a>
+      <a href="https://app.voxabase.com/signup" class="btn-primary">Create free account →</a>
       <a href="https://app.voxabase.com/login" class="btn-ghost">Sign in</a>
     </div>
-
     <div class="trust-strip">
-      <div class="trust-item"><span class="trust-icon">🔒</span> 256-bit encryption</div>
-      <div class="trust-item"><span class="trust-icon">💳</span> Payments by Stripe</div>
-      <div class="trust-item"><span class="trust-icon">✓</span> No credit card required</div>
-      <div class="trust-item"><span class="trust-icon">✗</span> Cancel anytime</div>
+      <div class="trust-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 00-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg> Encrypted storage</div>
+      <div class="trust-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> Payments by Stripe</div>
+      <div class="trust-item"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> No credit card required</div>
     </div>
   </div>
 </section>
@@ -1040,37 +976,31 @@
   <div class="footer-top">
     <div class="footer-brand">
       <img src="vblogo.png" alt="VoxaBase" class="footer-logo" />
-      <p>The client portal for freelancers and agencies who want to look established, get paid faster, and stop losing hours to email back-and-forth.</p>
+      <p>The client portal for freelancers and agencies who want to look established, get paid faster, and stop losing hours to email.</p>
     </div>
     <div>
       <div class="footer-col-title">Product</div>
       <ul class="footer-links">
         <li><a href="#features">Features</a></li>
         <li><a href="#pricing">Pricing</a></li>
-        <li><a href="#">Changelog</a></li>
-        <li><a href="#">Roadmap</a></li>
+        <li><a href="#how">How it works</a></li>
       </ul>
     </div>
     <div>
-      <div class="footer-col-title">Use Cases</div>
+      <div class="footer-col-title">Get started</div>
       <ul class="footer-links">
-        <li><a href="#">Designers</a></li>
-        <li><a href="#">Video Editors</a></li>
-        <li><a href="#">Marketing Agencies</a></li>
-        <li><a href="#">Web Developers</a></li>
+        <li><a href="https://app.voxabase.com/signup">Create account</a></li>
+        <li><a href="https://app.voxabase.com/login">Sign in</a></li>
       </ul>
     </div>
     <div>
       <div class="footer-col-title">Company</div>
       <ul class="footer-links">
-        <li><a href="#">About</a></li>
-        <li><a href="#">Blog</a></li>
-        <li><a href="#">Contact</a></li>
-        <li><a href="https://app.voxabase.com/dashboard">Get Started Free</a></li>
+        <li><a href="mailto:jacobp@voxabase.com">Contact</a></li>
+        <li><a href="https://x.com/VoxaBase" target="_blank" rel="noopener">Twitter / X</a></li>
       </ul>
     </div>
   </div>
-
   <div class="footer-bottom">
     <p>© 2026 VoxaBase. All rights reserved.</p>
     <div class="footer-bottom-links">
@@ -1083,6 +1013,93 @@
     </div>
   </div>
 </footer>
+
+<script>
+  // Nav scroll state
+  const nav = document.getElementById('nav');
+  const onScroll = () => { nav.classList.toggle('scrolled', window.scrollY > 20); };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Mobile menu
+  document.getElementById('hamburger').addEventListener('click', () => {
+    document.getElementById('mobile-menu').classList.toggle('open');
+  });
+  function closeMobileMenu() { document.getElementById('mobile-menu').classList.remove('open'); }
+
+  // Scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // ── Interactive brand switcher ──
+  const brands = [
+    { name: 'Studio Novo', slug: 'studio-novo/acme-corp', color: '#8b3cf7', radius: '8px',
+      icon: 'M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z' },
+    { name: 'Lumen Films', slug: 'lumen-films/northwind', color: '#f43f5e', radius: '14px',
+      icon: 'M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z' },
+    { name: 'Atlas Studio', slug: 'atlas-studio/everdene', color: '#10b981', radius: '50%',
+      icon: 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5' },
+    { name: 'Marlowe & Co', slug: 'marlowe-co/halcyon', color: '#f59e0b', radius: '6px',
+      icon: 'M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z' },
+    { name: 'Indigo Lab', slug: 'indigo-lab/cascade', color: '#3b82f6', radius: '10px',
+      icon: 'M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
+  ];
+
+  const root = document.documentElement;
+  const brandName = document.getElementById('brandName');
+  const brandSvg = document.getElementById('brandSvg');
+  const brandMark = document.getElementById('brandMark');
+  const portalUrl = document.getElementById('portalUrl');
+  const brandDelivered = document.getElementById('brandDelivered');
+  const chipsWrap = document.getElementById('brandChips');
+  const portalFiles = document.getElementById('portalFiles');
+  let activeIdx = 0;
+  let cycleTimer;
+
+  function applyBrand(i, userTriggered) {
+    const b = brands[i];
+    activeIdx = i;
+    root.style.setProperty('--accent', b.color);
+    brandName.textContent = b.name;
+    brandDelivered.textContent = 'Delivered by ' + b.name;
+    portalUrl.textContent = 'voxabase.com/' + b.slug;
+    brandSvg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="' + b.icon + '"/>';
+    brandMark.style.borderRadius = b.radius;
+    // subtle file re-stagger to feel "alive"
+    portalFiles.querySelectorAll('.portal-file').forEach((f, idx) => {
+      f.style.transform = 'translateX(-6px)';
+      setTimeout(() => { f.style.transform = 'translateX(0)'; }, 60 + idx * 55);
+    });
+    // chip active state
+    chipsWrap.querySelectorAll('.brand-chip').forEach((c, ci) => c.classList.toggle('active', ci === i));
+    if (userTriggered) { clearInterval(cycleTimer); startCycle(8000); }
+  }
+
+  // Build chips
+  brands.forEach((b, i) => {
+    const chip = document.createElement('button');
+    chip.className = 'brand-chip' + (i === 0 ? ' active' : '');
+    chip.style.background = b.color;
+    chip.style.borderRadius = b.radius === '50%' ? '50%' : '9px';
+    chip.setAttribute('aria-label', 'Preview ' + b.name + ' branding');
+    chip.innerHTML = '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="' + b.icon + '"/></svg>';
+    chip.addEventListener('click', () => applyBrand(i, true));
+    chipsWrap.appendChild(chip);
+  });
+
+  function startCycle(delay) {
+    cycleTimer = setInterval(() => {
+      applyBrand((activeIdx + 1) % brands.length, false);
+    }, delay || 3200);
+  }
+
+  // Only auto-cycle if motion is allowed
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    startCycle(3200);
+  }
+</script>
 
 </body>
 </html>
