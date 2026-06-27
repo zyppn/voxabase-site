@@ -111,7 +111,7 @@
     .hero {
       position: relative;
       padding: 180px 24px 80px;
-      overflow: hidden;
+      /* overflow: hidden removed — lets bottom glow breathe without hard clip */
     }
 
     .hero-inner {
@@ -123,42 +123,41 @@
       align-items: center;
     }
 
-    .hero::after {
-      content: '';
+    /* ── GLOW DIVS (replaced ::before / ::after for reliable GPU animation) ── */
+    .hero-glow {
       position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      will-change: transform, opacity;
+    }
+
+    .hero-glow--right {
       top: -20%;
       right: -5%;
       width: 760px;
       height: 760px;
-      background: radial-gradient(ellipse at center, rgba(139,60,247,0.16) 0%, transparent 65%);
-      pointer-events: none;
-      z-index: 0;
-      animation: auroraDrift 26s ease-in-out infinite;
-      will-change: transform, opacity;
+      background: radial-gradient(ellipse at center, rgba(139,60,247,0.18) 0%, transparent 65%);
+      animation: auroraDrift 18s ease-in-out infinite;
     }
 
-    .hero::before {
-      content: '';
-      position: absolute;
-      bottom: -25%;
+    .hero-glow--left {
+      bottom: -5%;
       left: -10%;
       width: 620px;
       height: 620px;
-      background: radial-gradient(ellipse at center, rgba(139,60,247,0.10) 0%, transparent 68%);
-      pointer-events: none;
-      z-index: 0;
-      animation: auroraDrift2 32s ease-in-out infinite;
-      will-change: transform, opacity;
+      background: radial-gradient(ellipse at center, rgba(139,60,247,0.14) 0%, transparent 68%);
+      animation: auroraDrift2 22s ease-in-out infinite;
     }
 
     @keyframes auroraDrift {
-      0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.85; }
-      50%      { transform: translate(-40px, 30px) scale(1.12); opacity: 1; }
+      0%, 100% { transform: translate(0, 0) scale(1);    opacity: 0.8; }
+      50%       { transform: translate(-50px, 35px) scale(1.14); opacity: 1;   }
     }
 
     @keyframes auroraDrift2 {
-      0%, 100% { transform: translate(0, 0) scale(1.05); opacity: 0.7; }
-      50%      { transform: translate(50px, -25px) scale(1); opacity: 0.95; }
+      0%, 100% { transform: translate(0, 0) scale(1.05); opacity: 0.65; }
+      50%       { transform: translate(55px, -30px) scale(1); opacity: 1;    }
     }
 
     .hex-grid {
@@ -169,6 +168,7 @@
       background-size: 60px 52px;
       mask-image: linear-gradient(to bottom, black, transparent 70%);
       -webkit-mask-image: linear-gradient(to bottom, black, transparent 70%);
+      pointer-events: none;
     }
 
     .hero-copy { position: relative; z-index: 2; }
@@ -656,7 +656,7 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
       .reveal { opacity: 1; transform: none; }
-      .hero::before, .hero::after { transform: none !important; opacity: 0.85 !important; }
+      .hero-glow { animation: none !important; }
     }
   </style>
 </head>
@@ -666,17 +666,17 @@
 <nav id="nav">
   <a href="#" class="nav-logo"><img src="vblogo.png" alt="VoxaBase" /></a>
   <ul class="nav-links">
-    <li><a href="#how">How it works</a></li>
+    <li><a href="#how">How It Works</a></li>
     <li><a href="#features">Features</a></li>
     <li><a href="#pricing">Pricing</a></li>
-    <li><a href="https://app.voxabase.com/login">Sign in</a></li>
-    <li><a href="https://app.voxabase.com/signup" class="nav-cta">Get started free</a></li>
+    <li><a href="https://app.voxabase.com/dashboard">Sign In</a></li>
+    <li><a href="https://app.voxabase.com/dashboard" class="nav-cta">Get Started Free</a></li>
   </ul>
   <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
 </nav>
 
 <div class="mobile-menu" id="mobile-menu">
-  <a href="#how" onclick="closeMobileMenu()">How it works</a>
+  <a href="#how" onclick="closeMobileMenu()">How It Works</a>
   <a href="#features" onclick="closeMobileMenu()">Features</a>
   <a href="#pricing" onclick="closeMobileMenu()">Pricing</a>
   <a href="https://app.voxabase.com/login" onclick="closeMobileMenu()">Sign in</a>
@@ -685,7 +685,11 @@
 
 <!-- ── HERO ── -->
 <section class="hero">
-  <div class="hex-grid"></div>
+  <!-- Glow orbs as real divs for reliable GPU-composited animation -->
+  <div class="hero-glow hero-glow--right" aria-hidden="true"></div>
+  <div class="hero-glow hero-glow--left"  aria-hidden="true"></div>
+  <div class="hex-grid" aria-hidden="true"></div>
+
   <div class="hero-inner">
     <div class="hero-copy">
       <div class="hero-eyebrow">Live now — free to start</div>
@@ -699,7 +703,7 @@
       </p>
       <div class="hero-actions">
         <a href="https://app.voxabase.com/signup" class="btn-primary">Get started free →</a>
-        <a href="#how" class="btn-ghost">See how it works</a>
+        <a href="#how" class="btn-ghost">See How It Works</a>
       </div>
       <div class="hero-meta">
         <div class="hero-meta-item">
@@ -946,7 +950,7 @@
           <li>Activity tracking</li>
           <li>Stripe payment collection</li>
         </ul>
-        <a href="https://app.voxabase.com/signup" class="btn-ghost">Get started free</a>
+        <a href="https://app.voxabase.com/signup" class="btn-ghost">Get Started Free</a>
       </div>
       <div class="plan featured reveal">
         <div class="plan-badge">Most popular</div>
@@ -961,7 +965,7 @@
           <li>Password-protected portals</li>
           <li>Priority support</li>
         </ul>
-        <a href="https://app.voxabase.com/signup" class="btn-primary">Get started →</a>
+        <a href="https://app.voxabase.com/signup" class="btn-primary">Get Started →</a>
       </div>
       <div class="plan reveal">
         <div class="plan-name">Agency</div>
@@ -975,7 +979,7 @@
           <li>White-label portal domain</li>
           <li>Dedicated support</li>
         </ul>
-        <a href="https://app.voxabase.com/signup" class="btn-ghost">Get started</a>
+        <a href="https://app.voxabase.com/signup" class="btn-ghost">Get Started</a>
       </div>
     </div>
   </div>
@@ -1014,7 +1018,7 @@
       </ul>
     </div>
     <div>
-      <div class="footer-col-title">Get started</div>
+      <div class="footer-col-title">Get Started</div>
       <ul class="footer-links">
         <li><a href="https://app.voxabase.com/signup">Create account</a></li>
         <li><a href="https://app.voxabase.com/login">Sign in</a></li>
@@ -1023,7 +1027,7 @@
     <div>
       <div class="footer-col-title">Company</div>
       <ul class="footer-links">
-        <li><a href="mailto:jacobp@voxabase.com">Contact</a></li>
+        <li><a href="mailto:admin@voxabase.com">Contact</a></li>
         <li><a href="https://x.com/VoxaBase" target="_blank" rel="noopener">Twitter / X</a></li>
       </ul>
     </div>
@@ -1094,17 +1098,14 @@
     portalUrl.textContent = 'voxabase.com/' + b.slug;
     brandSvg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="' + b.icon + '"/>';
     brandMark.style.borderRadius = b.radius;
-    // subtle file re-stagger to feel "alive"
     portalFiles.querySelectorAll('.portal-file').forEach((f, idx) => {
       f.style.transform = 'translateX(-6px)';
       setTimeout(() => { f.style.transform = 'translateX(0)'; }, 60 + idx * 55);
     });
-    // chip active state
     chipsWrap.querySelectorAll('.brand-chip').forEach((c, ci) => c.classList.toggle('active', ci === i));
     if (userTriggered) { clearInterval(cycleTimer); startCycle(8000); }
   }
 
-  // Build chips
   brands.forEach((b, i) => {
     const chip = document.createElement('button');
     chip.className = 'brand-chip' + (i === 0 ? ' active' : '');
@@ -1122,7 +1123,6 @@
     }, delay || 3200);
   }
 
-  // Only auto-cycle if motion is allowed
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     startCycle(3200);
   }
