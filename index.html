@@ -889,6 +889,21 @@ button { font: inherit; }
 .t-stage.b-approved .t-row-new .st-ok { display: inline; }
 .t-stage.b-approved .t-toast { opacity: 1; transform: translate(-50%, 0); }
 
+/* The cursor that "uses" the app in the walkthrough */
+.t-cursor {
+  position: absolute; left: 0; top: 0; z-index: 3; width: 22px; height: 22px; pointer-events: none;
+  opacity: 0; transform: translate(60%, 70%);
+  transition: transform .75s cubic-bezier(.45, .05, .25, 1), opacity .3s;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, .55));
+}
+.t-cursor.is-on { opacity: 1; }
+.t-cursor svg { width: 22px; height: 22px; display: block; transition: transform .12s; }
+.t-cursor.is-down svg { transform: scale(.86); }
+.t-ripple { position: absolute; left: 6px; top: 4px; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .7); opacity: 0; transform: scale(.3); }
+.t-cursor.is-click .t-ripple { animation: t-ripple .5s ease-out; }
+@keyframes t-ripple { 0% { opacity: .9; transform: scale(.3); } 100% { opacity: 0; transform: scale(1.4); } }
+@media (prefers-reduced-motion: reduce) { .t-cursor { display: none; } }
+
 @media (max-width: 560px) {
   .t-win { grid-template-columns: 112px minmax(0, 1fr); min-height: 300px; font-size: 0.75rem; }
   .t-ws em { display: none; }
@@ -1156,6 +1171,7 @@ button { font: inherit; }
               <div class="t-toast"><i></i>Harbor Coffee approved the delivery</div>
             </div>
           </div>
+          <div class="t-cursor"><svg viewBox="0 0 24 24"><path d="M5 3l14 8.2-6.3 1.4-3.2 5.9z" fill="#fff" stroke="#0c0b10" stroke-width="1.4" stroke-linejoin="round"/></svg><i class="t-ripple"></i></div>
         </div>
       </div>
     </div>
@@ -1458,6 +1474,26 @@ button { font: inherit; }
     var tSteps = Array.prototype.slice.call(tWrap.querySelectorAll('.t-step'));
     var tTyped = tStage.querySelector('.t-typed');
     var tBtn = tStage.querySelector('.t-btn');
+    var tCursor = tStage.querySelector('.t-cursor');
+    var tField = tStage.querySelector('.t-field');
+    var tWs = tStage.querySelector('.t-ws');
+    var tNewRow = tStage.querySelector('.t-row-new');
+    // Glide the cursor to a spot on an element (fractions of its box), relative to the stage
+    var pointAt = function (el, fx, fy) {
+      var s = tStage.getBoundingClientRect(), r = el.getBoundingClientRect();
+      var x = r.left - s.left + r.width * (fx == null ? 0.5 : fx) - 5;
+      var y = r.top - s.top + r.height * (fy == null ? 0.5 : fy) - 3;
+      tCursor.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+    };
+    var restAt = function (fx, fy) {
+      var s = tStage.getBoundingClientRect();
+      tCursor.style.transform = 'translate(' + s.width * fx + 'px,' + s.height * fy + 'px)';
+    };
+    var click = function () {
+      tCursor.classList.add('is-down', 'is-click');
+      later(function () { tCursor.classList.remove('is-down'); }, 140);
+      later(function () { tCursor.classList.remove('is-click'); }, 520);
+    };
     var EMAIL = 'maya@studionovo.com';
     var SCENE_MS = 5400;
     var BEATS = ['b-invited', 'b-joined', 'b-leo', 'b-newrow', 'b-personal', 'b-approved'];
@@ -1487,15 +1523,21 @@ button { font: inherit; }
         var bar = s.querySelector('.t-bar');
         bar.style.animation = 'none'; void bar.offsetWidth; bar.style.animation = '';
       });
-      if (!animate) { tTyped.textContent = n === 1 ? EMAIL : ''; setBeats(END[n]); return; }
+      if (!animate) { tCursor.classList.remove('is-on'); tTyped.textContent = n === 1 ? EMAIL : ''; setBeats(END[n]); return; }
 
       if (n === 1) {
         setBeats([]); tTyped.textContent = '';
+        tCursor.classList.add('is-on');
+        restAt(0.55, 0.8);
+        later(function () { pointAt(tField, 0.3, 0.55); }, 80);
+        later(click, 850);
         var i = 0;
         var type = function () { tTyped.textContent = EMAIL.slice(0, ++i); if (i < EMAIL.length) later(type, 55); };
-        later(type, 450);
-        var sent = 450 + EMAIL.length * 55 + 350;
+        later(type, 1000);
+        var sent = 1000 + EMAIL.length * 55 + 700;
+        later(function () { pointAt(tBtn, 0.45, 0.55); }, sent - 750);
         later(function () {
+          click();
           tBtn.classList.add('is-press');
           later(function () { tBtn.classList.remove('is-press'); }, 160);
           setBeats(['b-invited']); tTyped.textContent = '';
@@ -1503,15 +1545,24 @@ button { font: inherit; }
         later(function () { setBeats(END[1]); }, sent + 1500);
       } else if (n === 2) {
         setBeats(['b-joined']);
+        tCursor.classList.add('is-on');
+        later(function () { restAt(0.62, 0.72); }, 100);
         later(function () { setBeats(['b-joined', 'b-leo']); }, 700);
         later(function () { setBeats(END[2]); }, 1500);
+        later(function () { pointAt(tNewRow, 0.5, 0.6); }, 2100);
       } else if (n === 3) {
         setBeats(END[2]);
-        later(function () { setBeats(END[3]); }, 900);
-        later(function () { setBeats(END[2]); }, 4000);
+        tCursor.classList.add('is-on');
+        later(function () { pointAt(tWs, 0.55, 0.55); }, 100);
+        later(function () { click(); setBeats(END[3]); }, 1000);
+        later(function () { restAt(0.66, 0.62); }, 1500);
+        later(function () { pointAt(tWs, 0.55, 0.55); }, 3200);
+        later(function () { click(); setBeats(END[2]); }, 4100);
       } else {
         setBeats(END[2]);
-        later(function () { setBeats(END[4]); }, 1100);
+        tCursor.classList.add('is-on');
+        later(function () { restAt(0.9, 0.16); }, 100);
+        later(function () { setBeats(END[4]); }, 1300);
       }
       later(function () { showScene(n % 4 + 1, true); }, SCENE_MS);
     };
