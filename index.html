@@ -683,6 +683,8 @@ button { font: inherit; }
 .per { margin-top: 10px; font-size: 0.875rem; color: var(--faint); min-height: 1.6em; }
 .plan ul { flex: 1; display: grid; align-content: start; gap: 12px; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--rule); font-size: 0.9375rem; }
 .plan li { display: flex; align-items: baseline; gap: 10px; }
+.plan li.is-soon { color: var(--muted); }
+.soon { margin-left: 2px; padding: 2px 7px; border: 1px solid var(--rule-2); border-radius: 999px; font-size: 0.6875rem; font-weight: 600; line-height: 1.2; color: var(--faint); white-space: nowrap; }
 .plan li::before {
   content: "";
   flex: none;
@@ -1062,8 +1064,8 @@ button { font: inherit; }
           <ul>
             <li>Everything in Pro</li>
             <li>250 GB file storage</li>
-            <li>Team member seats</li>
-            <li>White-label portal domain</li>
+            <li class="is-soon">Team member seats <span class="soon">Soon</span></li>
+            <li class="is-soon">White-label portal domain <span class="soon">Soon</span></li>
             <li>Dedicated support</li>
           </ul>
           <a class="btn btn-ghost" href="https://app.voxabase.com/signup">Get started</a>
