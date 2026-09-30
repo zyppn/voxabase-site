@@ -765,6 +765,148 @@ button { font: inherit; }
   .p-received.is-in { animation: land 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
   .p-amount.is-flash { animation: flash 1.4s ease-out; }
 }
+
+/* ── Teams: a looping walkthrough of the Team workspace ───────────── */
+.new-pill {
+  display: inline-block; margin-right: 8px; padding: 2px 8px; border-radius: 999px;
+  background: var(--ok-soft); border: 1px solid var(--ok-line); color: var(--ok);
+  font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; vertical-align: 1px;
+}
+.teams {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+  gap: clamp(2rem, 1rem + 4vw, 5rem);
+  align-items: center;
+}
+@media (max-width: 960px) { .teams { grid-template-columns: minmax(0, 1fr); } .t-stage { order: -1; } }
+
+/* Steps */
+.t-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.t-step { position: relative; border-top: 1px solid var(--rule); }
+.t-step:last-child { border-bottom: 1px solid var(--rule); }
+.t-step button {
+  all: unset; box-sizing: border-box; cursor: pointer; width: 100%;
+  display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 16px; padding: 18px 4px;
+}
+.t-step button:focus-visible { outline: 2px solid var(--violet-ink); outline-offset: 2px; border-radius: 4px; }
+.t-n { font-size: 0.8125rem; font-weight: 600; color: var(--faint); padding-top: 2px; font-variant-numeric: tabular-nums; }
+.t-copy b { display: block; font-family: var(--font-display); font-stretch: 105%; font-weight: 650; font-size: 1.0625rem; letter-spacing: -0.01em; color: var(--muted); transition: color .3s; }
+.t-copy > span { display: block; color: var(--faint); font-size: 0.9375rem; line-height: 1.5; max-height: 0; opacity: 0; overflow: hidden; transition: max-height .45s ease, opacity .35s ease, margin .35s ease; }
+.t-step.is-on .t-copy b { color: var(--paper); }
+.t-step.is-on .t-n { color: var(--paper); }
+.t-step.is-on .t-copy > span { max-height: 6em; opacity: 1; margin-top: 6px; }
+.t-bar { position: absolute; left: 0; top: -1px; height: 1px; width: 0; background: var(--paper); }
+.t-step.is-on .t-bar { animation: t-bar var(--t-dur, 5s) linear forwards; }
+.teams.is-paused .t-step.is-on .t-bar, .teams.is-static .t-bar { animation: none; width: 100%; }
+@keyframes t-bar { from { width: 0; } to { width: 100%; } }
+
+/* Stage: a small copy of the app */
+.t-stage { position: relative; }
+.t-win {
+  display: grid; grid-template-columns: 188px minmax(0, 1fr); min-height: 380px;
+  border: 1px solid var(--rule-2); border-radius: 12px; overflow: hidden;
+  background: var(--ink); box-shadow: var(--shadow-lg); font-size: 0.8125rem;
+}
+.t-side { border-right: 1px solid var(--rule); padding: 14px 10px; display: flex; flex-direction: column; gap: 12px; background: var(--ink); }
+.t-logo { display: flex; align-items: center; gap: 7px; font-family: var(--font-display); font-weight: 750; font-stretch: 110%; font-size: 0.9375rem; letter-spacing: -0.02em; padding: 0 4px; }
+.t-logo svg { width: 17px; height: 17px; flex: none; }
+.t-ws { position: relative; display: flex; align-items: center; gap: 7px; height: 30px; padding: 0 9px; border: 1px solid var(--rule-2); border-radius: 7px; background: var(--ink-2); color: var(--muted); font-size: 0.75rem; overflow: hidden; }
+.t-ws em { font-style: normal; color: var(--faint); }
+.t-ws-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); flex: none; transition: background .3s; }
+.t-ws-team, .t-ws-personal { position: absolute; left: 22px; transition: opacity .3s, transform .3s; white-space: nowrap; }
+.t-ws-personal { opacity: 0; transform: translateY(8px); }
+.t-nav { display: flex; flex-direction: column; gap: 2px; }
+.t-nav span { padding: 6px 8px; border-radius: 6px; color: var(--faint); }
+.t-nav .on { background: var(--ink-3); color: var(--paper); }
+.t-team { margin-top: 4px; transition: opacity .35s; }
+.t-label { margin: 0 0 4px; padding: 0 6px; font-size: 0.625rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); }
+.t-person { display: flex; align-items: center; gap: 8px; padding: 5px 6px; white-space: nowrap; overflow: hidden; color: rgba(238, 234, 227, 0.85); transition: opacity .4s, transform .4s; }
+.t-person em { margin-left: auto; font-style: normal; font-size: 0.625rem; color: var(--faint); }
+.t-av { position: relative; width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; background: var(--ink-3); border: 1px solid var(--rule-2); font-size: 0.5625rem; font-weight: 700; flex: none; }
+.t-av i { position: absolute; right: -2px; bottom: -2px; width: 7px; height: 7px; border-radius: 50%; background: var(--faint); box-shadow: 0 0 0 2px var(--ink); transition: background .4s; }
+.t-person[data-p="you"] .t-av i { background: var(--ok); }
+.t-main { position: relative; padding: 18px 18px 16px; display: flex; flex-direction: column; gap: 14px; overflow: hidden; }
+.t-head { display: flex; flex-direction: column; gap: 2px; min-height: 40px; position: relative; }
+.t-title, .t-sub { position: relative; display: block; height: 1.35em; }
+.t-title { font-family: var(--font-display); font-weight: 720; font-stretch: 108%; font-size: 1.125rem; letter-spacing: -0.02em; height: 1.4em; }
+.t-sub { color: var(--faint); font-size: 0.75rem; }
+.t-title > span, .t-sub > span { position: absolute; left: 0; top: 0; white-space: nowrap; transition: opacity .3s, transform .3s; }
+.t-title-personal, .t-sub-personal { opacity: 0; transform: translateY(6px); }
+
+.t-invite { display: flex; gap: 8px; max-height: 0; opacity: 0; overflow: hidden; transition: max-height .4s ease, opacity .3s; }
+.t-field { flex: 1; display: flex; align-items: center; height: 32px; padding: 0 10px; border: 1px solid var(--rule-2); border-radius: 7px; background: var(--ink-2); color: var(--paper); font-size: 0.75rem; min-width: 0; overflow: hidden; white-space: nowrap; }
+.t-caret { width: 1px; height: 14px; background: var(--paper); margin-left: 1px; animation: t-blink 1s steps(1) infinite; }
+@keyframes t-blink { 50% { opacity: 0; } }
+.t-btn { display: grid; place-items: center; padding: 0 14px; height: 32px; border-radius: 7px; background: var(--paper); color: var(--ink); font-weight: 650; font-size: 0.75rem; transition: transform .15s; }
+.t-btn.is-press { transform: scale(0.94); }
+
+.t-list { display: flex; flex-direction: column; border: 1px solid var(--rule); border-radius: 9px; overflow: hidden; transition: opacity .3s; }
+.t-list-personal { display: none; }
+.t-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 10px 12px; border-top: 1px solid var(--rule); background: var(--ink); }
+.t-row:first-child { border-top: 0; }
+.t-fold { width: 22px; height: 22px; border-radius: 6px; background: var(--ink-3); border: 1px solid var(--rule-2); }
+.t-name { display: flex; flex-direction: column; min-width: 0; color: var(--paper); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.t-name small { display: flex; align-items: center; gap: 5px; font-weight: 400; font-size: 0.6875rem; color: var(--faint); }
+.t-mini-av { width: 13px; height: 13px; border-radius: 50%; display: grid; place-items: center; background: var(--ink-3); border: 1px solid var(--rule-2); font-size: 0.4375rem; font-weight: 700; color: var(--paper); }
+.t-status { position: relative; font-size: 0.6875rem; color: var(--muted); display: flex; align-items: center; gap: 5px; white-space: nowrap; }
+.t-status > span::before { content: ""; display: inline-block; width: 5px; height: 5px; border-radius: 50%; margin-right: 5px; vertical-align: 1px; }
+.st-unpaid::before { background: var(--warn); }
+.st-paid::before, .st-ok::before { background: var(--ok); }
+.st-none::before { background: var(--rule-2); }
+.st-ok { display: none; color: var(--ok); }
+.t-row-new { max-height: 0; padding-block: 0; opacity: 0; border-top-width: 0; transition: max-height .45s ease, padding .45s ease, opacity .35s ease .1s; }
+
+.t-toast {
+  position: absolute; left: 50%; bottom: 14px; transform: translate(-50%, 12px); opacity: 0;
+  display: flex; align-items: center; gap: 7px; padding: 8px 12px; border-radius: 8px; white-space: nowrap;
+  background: var(--ink-2); border: 1px solid var(--ok-line); color: var(--paper); font-size: 0.75rem;
+  box-shadow: 0 12px 30px -10px rgba(0,0,0,.8); transition: opacity .35s, transform .35s;
+}
+.t-toast i { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); }
+
+/* Beats, set by script.js as the scene plays */
+.t-stage[data-scene="1"] .t-invite { max-height: 40px; opacity: 1; }
+.t-stage[data-scene="1"]:not(.b-invited) .t-person[data-p="maya"] { opacity: 0; transform: translateX(-6px); }
+.t-stage[data-scene="1"]:not(.b-invited) .t-person[data-p="leo"] { opacity: 0; }
+.t-stage[data-scene="1"] .t-person[data-p="leo"] { opacity: 0; }
+.t-stage .inv { display: none; }
+.t-stage[data-scene="1"].b-invited:not(.b-joined) .inv { display: inline; color: var(--warn); }
+.t-stage[data-scene="1"].b-invited:not(.b-joined) .t-person[data-p="maya"] .t-av i { background: var(--warn); }
+.t-stage.b-joined .t-person[data-p="maya"] .t-av i,
+.t-stage:not([data-scene="1"]) .t-person[data-p="maya"] .t-av i { background: var(--ok); }
+.t-stage.b-leo .t-person[data-p="leo"] .t-av i { background: var(--ok); }
+.t-stage.b-newrow .t-row-new,
+.t-stage[data-scene="3"] .t-row-new, .t-stage[data-scene="4"] .t-row-new { max-height: 60px; padding-block: 10px; opacity: 1; border-top-width: 0; }
+.t-stage.b-newrow .t-row-new, .t-stage[data-scene="3"] .t-row-new, .t-stage[data-scene="4"] .t-row-new { background: var(--ink); }
+.t-stage.b-newrow[data-scene="2"] .t-row-new { background: rgba(134, 95, 217, 0.08); }
+.t-stage.b-personal .t-ws-team, .t-stage.b-personal .t-title-team, .t-stage.b-personal .t-sub-team { opacity: 0; transform: translateY(-6px); }
+.t-stage.b-personal .t-ws-personal, .t-stage.b-personal .t-title-personal, .t-stage.b-personal .t-sub-personal { opacity: 1; transform: none; }
+.t-stage.b-personal .t-ws-dot { background: var(--faint); }
+.t-stage.b-personal .t-team { opacity: 0; }
+.t-stage.b-personal .t-list-team { display: none; }
+.t-stage.b-personal .t-list-personal { display: flex; }
+.t-stage.b-approved .t-row-new .st-unpaid { display: none; }
+.t-stage.b-approved .t-row-new .st-ok { display: inline; }
+.t-stage.b-approved .t-toast { opacity: 1; transform: translate(-50%, 0); }
+
+@media (max-width: 560px) {
+  .t-win { grid-template-columns: 112px minmax(0, 1fr); min-height: 300px; font-size: 0.75rem; }
+  .t-ws em { display: none; }
+  .t-fold { display: none; }
+  .t-row { grid-template-columns: minmax(0, 1fr) auto; padding-inline: 10px; }
+  .t-side { padding: 12px 8px; }
+  .t-logo { font-size: 0.8125rem; gap: 5px; }
+  .t-logo svg { width: 14px; height: 14px; }
+  .t-nav { display: none; }
+  .t-main { padding: 14px 12px; }
+  .t-name small { display: none; }
+  .t-person em { display: none; }
+  .t-ws { font-size: 0.6875rem; }
+  .t-toast { font-size: 0.6875rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .t-stage *, .t-stage { transition: none !important; animation: none !important; }
+}
 </style>
 </head>
 <body>
@@ -779,6 +921,7 @@ button { font: inherit; }
     <nav class="nav-links" aria-label="Primary">
       <a href="#how">How it works</a>
       <a href="#features">Features</a>
+      <a href="#teams">Teams</a>
       <a href="#pricing">Pricing</a>
       <a href="https://app.voxabase.com/login">Sign in</a>
       <a class="btn btn-primary btn-sm" href="https://app.voxabase.com/signup">Get started free</a>
@@ -788,6 +931,7 @@ button { font: inherit; }
   <div class="mobile-menu" id="mobileMenu" hidden>
     <a href="#how">How it works</a>
     <a href="#features">Features</a>
+    <a href="#teams">Teams</a>
     <a href="#pricing">Pricing</a>
     <a href="https://app.voxabase.com/login">Sign in</a>
     <a class="btn btn-primary" href="https://app.voxabase.com/signup">Get started free <span class="arrow" aria-hidden="true">→</span></a>
@@ -957,6 +1101,63 @@ button { font: inherit; }
         <div class="feat"><dt class="h3">Client approvals<span class="tag">Agency</span></dt><dd>Clients approve the delivery or request changes right in the portal. Their answer and notes land on your dashboard.</dd></div>
         <div class="feat"><dt class="h3">Your team, your domain<span class="tag">Agency</span></dt><dd>Invite up to 4 teammates into a shared Team workspace, and send portals from your own domain, like files.yourstudio.com.</dd></div>
       </dl>
+    </div>
+  </section>
+
+  <section class="section band" id="teams" aria-labelledby="teams-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="kicker"><span class="new-pill">New</span> Teams, on Agency</p>
+        <h2 class="h2" id="teams-title">Bring your team in. Keep one front door.</h2>
+        <p class="lede">Invite up to 4 teammates into a shared Team workspace. Everyone ships to the same branded portals, and your clients never have to know how many people made it.</p>
+      </div>
+
+      <div class="teams">
+        <ol class="t-steps" aria-label="How teams work">
+          <li class="t-step" data-scene="1"><button type="button"><span class="t-n">01</span><span class="t-copy"><b>Invite your team</b><span>Send a link. They join with their own login, and you see who’s online.</span></span></button><i class="t-bar" aria-hidden="true"></i></li>
+          <li class="t-step" data-scene="2"><button type="button"><span class="t-n">02</span><span class="t-copy"><b>Work in one shared space</b><span>Anyone on the team can create portals, upload files and send deliveries.</span></span></button><i class="t-bar" aria-hidden="true"></i></li>
+          <li class="t-step" data-scene="3"><button type="button"><span class="t-n">03</span><span class="t-copy"><b>Keep personal work personal</b><span>Your Personal workspace stays yours. Move a portal to Team only when you want to.</span></span></button><i class="t-bar" aria-hidden="true"></i></li>
+          <li class="t-step" data-scene="4"><button type="button"><span class="t-n">04</span><span class="t-copy"><b>Everyone sees the answer</b><span>When a client approves or asks for changes, the whole team sees it.</span></span></button><i class="t-bar" aria-hidden="true"></i></li>
+        </ol>
+
+        <div class="t-stage" id="teamsStage" data-scene="1" aria-hidden="true">
+          <div class="t-win">
+            <aside class="t-side">
+              <div class="t-logo"><svg viewBox="0 0 40 40"><path fill="#eeeae3" d="M3.2 7H11.2L19.2 20V33Z"/><path fill="#9c7de8" d="M36.8 7H28.8L20.8 20V33Z"/></svg>voxabase</div>
+              <div class="t-ws"><i class="t-ws-dot"></i><span class="t-ws-team">Studio Novo <em>· Team</em></span><span class="t-ws-personal">Personal</span></div>
+              <div class="t-nav"><span class="on">All portals</span><span>Active</span><span>Completed</span></div>
+              <div class="t-team">
+                <p class="t-label">Team</p>
+                <div class="t-person" data-p="you"><span class="t-av">J<i></i></span>Jacob<em>You</em></div>
+                <div class="t-person" data-p="maya"><span class="t-av">M<i></i></span>Maya Chen<em class="t-maya-tag"><span class="inv">Invited</span></em></div>
+                <div class="t-person" data-p="leo"><span class="t-av">L<i></i></span>Leo Park</div>
+              </div>
+            </aside>
+            <div class="t-main">
+              <div class="t-head">
+                <span class="t-title"><span class="t-title-team">Team portals</span><span class="t-title-personal">Personal portals</span></span>
+                <span class="t-sub"><span class="t-sub-team">Shared with the Studio Novo team</span><span class="t-sub-personal">Only you can see these</span></span>
+              </div>
+
+              <div class="t-invite">
+                <span class="t-field"><span class="t-typed"></span><i class="t-caret"></i></span>
+                <span class="t-btn">Invite</span>
+              </div>
+
+              <div class="t-list t-list-team">
+                <div class="t-row t-row-new"><span class="t-fold"></span><span class="t-name">Harbor Coffee — Brand refresh<small><span class="t-mini-av">M</span>Maya added 3 files</small></span><span class="t-status"><span class="st-unpaid">Unpaid</span><span class="st-ok">Approved</span></span></div>
+                <div class="t-row"><span class="t-fold"></span><span class="t-name">Marigold Bakery — Menu launch<small>/studio-novo/marigold</small></span><span class="t-status"><span class="st-paid">Paid</span></span></div>
+                <div class="t-row"><span class="t-fold"></span><span class="t-name">Everdene — Investor deck<small>/studio-novo/everdene</small></span><span class="t-status"><span class="st-unpaid">Unpaid</span></span></div>
+              </div>
+              <div class="t-list t-list-personal">
+                <div class="t-row"><span class="t-fold"></span><span class="t-name">Side project — Logo exploration<small>/studio-novo/logo-lab</small></span><span class="t-status"><span class="st-none">No invoice</span></span></div>
+              </div>
+
+              <div class="t-toast"><i></i>Harbor Coffee approved the delivery</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -1248,6 +1449,90 @@ button { font: inherit; }
 
   /* Play the payment once for visitors who just watch, after the portal has arrived */
   if (!reduceMotion) autoTimer = window.setTimeout(pay, 2600);
+
+  /* Teams: a looping walkthrough. Plays while on screen, steps can be clicked,
+     and with reduced motion each step just shows its end state. */
+  var tStage = document.getElementById('teamsStage');
+  if (tStage) {
+    var tWrap = tStage.closest('.teams');
+    var tSteps = Array.prototype.slice.call(tWrap.querySelectorAll('.t-step'));
+    var tTyped = tStage.querySelector('.t-typed');
+    var tBtn = tStage.querySelector('.t-btn');
+    var EMAIL = 'maya@studionovo.com';
+    var SCENE_MS = 5400;
+    var BEATS = ['b-invited', 'b-joined', 'b-leo', 'b-newrow', 'b-personal', 'b-approved'];
+    var END = {
+      1: ['b-invited', 'b-joined'],
+      2: ['b-joined', 'b-leo', 'b-newrow'],
+      3: ['b-joined', 'b-leo', 'b-newrow', 'b-personal'],
+      4: ['b-joined', 'b-leo', 'b-newrow', 'b-approved']
+    };
+    var tTimers = [];
+    var tScene = 1;
+    var tOnScreen = false;
+    tWrap.style.setProperty('--t-dur', SCENE_MS + 'ms');
+    if (reduceMotion) tWrap.classList.add('is-static');
+
+    var later = function (fn, ms) { tTimers.push(window.setTimeout(fn, ms)); };
+    var stopAll = function () { tTimers.forEach(window.clearTimeout); tTimers = []; };
+    var setBeats = function (on) { BEATS.forEach(function (b) { tStage.classList.toggle(b, on.indexOf(b) !== -1); }); };
+
+    var showScene = function (n, animate) {
+      stopAll();
+      tScene = n;
+      tStage.setAttribute('data-scene', String(n));
+      tSteps.forEach(function (s) {
+        var on = Number(s.getAttribute('data-scene')) === n;
+        s.classList.toggle('is-on', on);
+        var bar = s.querySelector('.t-bar');
+        bar.style.animation = 'none'; void bar.offsetWidth; bar.style.animation = '';
+      });
+      if (!animate) { tTyped.textContent = n === 1 ? EMAIL : ''; setBeats(END[n]); return; }
+
+      if (n === 1) {
+        setBeats([]); tTyped.textContent = '';
+        var i = 0;
+        var type = function () { tTyped.textContent = EMAIL.slice(0, ++i); if (i < EMAIL.length) later(type, 55); };
+        later(type, 450);
+        var sent = 450 + EMAIL.length * 55 + 350;
+        later(function () {
+          tBtn.classList.add('is-press');
+          later(function () { tBtn.classList.remove('is-press'); }, 160);
+          setBeats(['b-invited']); tTyped.textContent = '';
+        }, sent);
+        later(function () { setBeats(END[1]); }, sent + 1500);
+      } else if (n === 2) {
+        setBeats(['b-joined']);
+        later(function () { setBeats(['b-joined', 'b-leo']); }, 700);
+        later(function () { setBeats(END[2]); }, 1500);
+      } else if (n === 3) {
+        setBeats(END[2]);
+        later(function () { setBeats(END[3]); }, 900);
+        later(function () { setBeats(END[2]); }, 4000);
+      } else {
+        setBeats(END[2]);
+        later(function () { setBeats(END[4]); }, 1100);
+      }
+      later(function () { showScene(n % 4 + 1, true); }, SCENE_MS);
+    };
+
+    tSteps.forEach(function (s) {
+      s.querySelector('button').addEventListener('click', function () {
+        showScene(Number(s.getAttribute('data-scene')), !reduceMotion && tOnScreen);
+      });
+    });
+
+    showScene(1, false);
+    if (!reduceMotion && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          tOnScreen = e.isIntersecting;
+          tWrap.classList.toggle('is-paused', !tOnScreen);
+          if (tOnScreen) showScene(tScene, true); else stopAll();
+        });
+      }, { threshold: 0.35 }).observe(tStage);
+    }
+  }
 
   /* Pricing: monthly / annual */
   var periodBtns = Array.prototype.slice.call(document.querySelectorAll('.billing button'));
