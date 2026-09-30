@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page not found · Voxabase</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wdth,wght@0,75..125,200..900;1,75..125,200..900&display=swap">
+<style>
+  :root { color-scheme: dark; --ink: #0c0b10; --ink-2: #131219; --rule: #24212d; --rule-2: #353140; --paper: #eeeae3; --muted: #a39eaf; --faint: #8a8595; --violet-ink: #baa8f2; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: flex; flex-direction: column; background: var(--ink); color: var(--paper);
+    font-family: "Mona Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+  a { color: inherit; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 16px; max-width: 1200px; width: 100%; margin: 0 auto; padding: 18px clamp(1rem, .35rem + 3vw, 3rem); }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 750; font-stretch: 112%; font-size: 1.25rem; letter-spacing: -0.03em; }
+  .brand svg { width: 26px; height: 26px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 20px; border-radius: 6px; font-weight: 600; font-size: .9375rem; text-decoration: none; transition: background .15s, border-color .15s, color .15s; }
+  .btn-primary { background: var(--paper); color: var(--ink); }
+  .btn-primary:hover { background: #fff; }
+  .btn-ghost { border: 1px solid var(--rule-2); color: var(--paper); }
+  .btn-ghost:hover { border-color: var(--muted); }
+  .btn-sm { padding: 8px 16px; font-size: .875rem; }
+  main { flex: 1; display: flex; align-items: center; padding: 40px 0 96px; }
+  .inner { max-width: 1200px; width: 100%; margin: 0 auto; padding-inline: clamp(1rem, .35rem + 3vw, 3rem); }
+  .kicker { font-size: .875rem; font-weight: 600; color: var(--faint); margin: 0 0 18px; }
+  h1 { margin: 0; font-weight: 740; font-stretch: 118%; font-size: clamp(2.6rem, 1rem + 6vw, 5.6rem); line-height: .98; letter-spacing: -0.045em; max-width: 12ch; text-wrap: balance; }
+  h1 em { font-style: italic; font-weight: 700; }
+  p.lede { color: var(--muted); max-width: 46ch; margin: 22px 0 32px; font-size: 1.0625rem; text-wrap: pretty; }
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+  .hint { margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--rule); max-width: 46ch; color: var(--faint); font-size: .9375rem; }
+  .hint code { color: var(--paper); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .875em; }
+  @media (max-width: 640px) { h1 { font-stretch: 100%; letter-spacing: -0.035em; } }
+</style>
+</head>
+<body>
+  <header>
+    <a class="brand" href="/" aria-label="Voxabase home">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path fill="#eeeae3" d="M3.2 7H11.2L19.2 20V33Z"/><path fill="#9c7de8" d="M36.8 7H28.8L20.8 20V33Z"/></svg>voxabase
+    </a>
+    <a class="btn btn-primary btn-sm" href="https://app.voxabase.com/signup">Get started free</a>
+  </header>
+  <main>
+    <div class="inner">
+      <p class="kicker">404 · Page not found</p>
+      <h1>Nothing lives at <em>this address.</em></h1>
+      <p class="lede">The link may be mistyped, or the page was moved. Everything Voxabase does is one click away from the home page.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="/">Back to home</a>
+        <a class="btn btn-ghost" href="https://app.voxabase.com/login">Sign in</a>
+      </div>
+      <p class="hint">Looking for a client portal? Portal links look like <code>app.voxabase.com/studio/project</code>. If yours doesn’t work, ask the person who sent it for a fresh link.</p>
+    </div>
+  </main>
+</body>
+</html>
