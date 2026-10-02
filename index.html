@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Voxabase — Client Deliverables Portal</title>
-<meta name="description" content="Deliver client work like a studio. Upload files, share one branded link, and collect payment, all in one portal.">
+<meta name="description" content="Deliver client work like a studio. Upload files, share one branded link, and get paid, with files that unlock the moment your client pays.">
 <meta name="theme-color" content="#0c0b10">
 <link rel="canonical" href="https://voxabase.com/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Voxabase">
 <meta property="og:url" content="https://voxabase.com/">
 <meta property="og:title" content="Voxabase — Client Deliverables Portal">
-<meta property="og:description" content="Deliver client work like a studio. Upload files, share one branded link, and collect payment, all in one portal.">
+<meta property="og:description" content="Deliver client work like a studio. Upload files, share one branded link, and get paid, with files that unlock the moment your client pays.">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@Voxabase">
 <link rel="icon" href="favicon.ico" sizes="48x48">
@@ -255,6 +255,7 @@ button { font: inherit; }
 }
 .demo-cap::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
 .browser {
+  position: relative;
   border: 1px solid var(--rule-2);
   border-radius: 14px;
   background: var(--ink);
@@ -285,7 +286,7 @@ button { font: inherit; }
 .url svg { width: 12px; height: 12px; flex: none; color: var(--faint); }
 .url span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-.portal { background: var(--ink-2); margin: 14px; border: 1px solid var(--rule); border-radius: 14px; overflow: hidden; }
+.portal { position: relative; background: var(--ink-2); margin: 14px; border: 1px solid var(--rule); border-radius: 14px; overflow: hidden; }
 .p-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 20px; border-bottom: 1px solid var(--rule); }
 .p-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 0.9375rem; letter-spacing: -0.01em; min-width: 0; }
 .p-mark {
@@ -338,7 +339,68 @@ button { font: inherit; }
 .p-name { font-size: 0.875rem; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
 .p-size { font-family: var(--font-body); font-size: 0.75rem; color: var(--faint); }
 .p-dl { display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; font-weight: 600; padding: 7px 12px; border: 1px solid var(--rule-2); border-radius: 7px; }
-.p-dl svg, .p-all svg { width: 14px; height: 14px; flex: none; }
+.p-dl svg, .p-all svg, .p-locked svg, .pv-dl svg { width: 14px; height: 14px; flex: none; }
+
+/* Lock files until paid: rows show "Locked" until the invoice is paid, then
+   open one by one (thumbnails appear, Download replaces Locked) */
+.p-lockbar {
+  display: flex; align-items: center; gap: 12px;
+  margin: 0 12px 8px; padding: 12px 14px; max-height: 90px; overflow: hidden;
+  border: 1px solid color-mix(in oklab, var(--brand) 34%, transparent);
+  border-radius: 10px;
+  background: color-mix(in oklab, var(--brand) 12%, var(--ink-2));
+  transition: max-height .45s ease .15s, opacity .3s ease .15s, margin .45s ease .15s, padding .45s ease .15s, border-width .45s ease .15s, background-color .35s, border-color .35s;
+}
+.p-lockbar svg { width: 20px; height: 20px; flex: none; color: color-mix(in oklab, var(--brand) 55%, var(--paper)); overflow: visible; transition: color .35s; }
+.p-lockbar b { display: block; font-size: 0.875rem; font-weight: 600; }
+.p-lockbar span { display: block; font-size: 0.75rem; color: var(--muted); }
+.p-shackle { transition: transform .4s cubic-bezier(.3, 1.5, .5, 1); }
+.portal.is-opening .p-shackle { transform: translateY(-3.5px); }
+.portal.is-unlocked .p-lockbar { max-height: 0; opacity: 0; margin-bottom: 0; padding-block: 0; border-width: 0; }
+
+.p-thumb, .p-name { all: unset; box-sizing: border-box; }
+.p-thumb { position: relative; display: grid; width: 38px; height: 38px; border-radius: 8px; }
+.p-thumb > * { grid-area: 1 / 1; }
+.p-art { display: block; overflow: hidden; border-radius: 8px; opacity: 0; transform: scale(.8); transition: opacity .35s, transform .45s cubic-bezier(.3, 1.4, .5, 1); transition-delay: calc(var(--i) * 0.12s + 0.25s); }
+.p-art svg, .pv-image svg { display: block; width: 100%; height: 100%; }
+.p-name { font-size: 0.875rem; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; color: rgba(238, 234, 227, 0.8); transition: color .3s; }
+.p-act { display: grid; justify-items: end; }
+.p-act > * { grid-area: 1 / 1; transition: opacity .3s, transform .4s cubic-bezier(.3, 1.4, .5, 1); transition-delay: calc(var(--i) * 0.12s + 0.2s); }
+.p-locked { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; font-size: 0.75rem; font-weight: 600; color: var(--faint); }
+.p-act .p-dl { opacity: 0; transform: translateY(5px) scale(.94); pointer-events: none; }
+.p-all { max-height: 0; opacity: 0; margin-top: 0 !important; padding-block: 0 !important; border-width: 0 !important; overflow: hidden; transition: max-height .4s ease .55s, opacity .3s ease .6s, margin .4s ease .55s, padding .4s ease .55s; }
+
+.portal.is-unlocked .p-art { opacity: 1; transform: none; }
+.portal.is-unlocked .p-name { color: var(--paper); }
+.portal.is-unlocked .p-locked { opacity: 0; transform: translateY(-5px); }
+.portal.is-unlocked .p-act .p-dl { opacity: 1; transform: none; pointer-events: auto; }
+/* After the unlock has played, presses respond right away (no stagger) */
+.portal.is-settled .p-act > *, .portal.is-settled .p-all { transition-delay: 0s; }
+
+/* Download: a working button in the demo (Downloading, then Downloaded) */
+button.p-dl { position: relative; overflow: hidden; justify-content: center; width: 124px; padding-inline: 8px; background: transparent; color: var(--paper); font-family: var(--font-body); }
+.p-dl > svg, .p-dl-label { position: relative; }
+.p-fill { position: absolute; inset: 0 auto 0 0; width: 0; background: color-mix(in oklab, var(--brand) 32%, transparent); }
+.p-dl.is-loading .p-fill { animation: p-fill .95s cubic-bezier(.3, .6, .4, 1) forwards; }
+@keyframes p-fill { to { width: 100%; } }
+.p-dl .i-done { display: none; }
+.p-dl.is-done .i-dl { display: none; }
+.p-dl.is-done .i-done { display: block; }
+.portal .p-act .p-dl.is-done { color: var(--ok); border-color: var(--ok-line); background: var(--ok-soft); }
+.portal.is-unlocked .p-act .p-dl.is-press, .p-pay.is-press, .p-all.is-press { transform: scale(.94); }
+.p-pay { transition: background-color 0.35s, filter 0.2s, transform .15s; }
+.p-pay.is-hover { filter: brightness(1.08); }
+button.p-all { display: flex; width: calc(100% - 24px); background: transparent; font-family: var(--font-body); cursor: pointer; transition: max-height .4s ease .55s, opacity .3s ease .6s, margin .4s ease .55s, padding .4s ease .55s, transform .15s, background-color .2s; }
+#heroCursor { z-index: 4; filter: drop-shadow(0 4px 10px rgba(0, 0, 0, .75)) drop-shadow(0 1px 2px rgba(0, 0, 0, .6)); }
+/* Replay resets the portal in one frame, so nothing is still moving when the cursor aims */
+.portal.is-instant, .portal.is-instant * { transition: none !important; animation: none !important; }
+.portal.is-unlocked .p-all { max-height: 50px; opacity: 1; margin-top: 8px !important; padding-block: 10px !important; border-width: 1px !important; }
+
+.portal { transition: opacity .4s ease; }
+.portal.is-fading { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .portal * { transition: none !important; animation: none !important; }
+}
 .p-all {
   margin: 8px 12px 0;
   padding: 10px;
@@ -415,20 +477,7 @@ button { font: inherit; }
 }
 .chip:hover { transform: scale(1.08); }
 .chip[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--paper); }
-.replay {
-  font-family: var(--font-body);
-  font-size: var(--step--1);
-  color: var(--muted);
-  background: none;
-  border: 0;
-  padding: 4px 0;
-  cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  text-decoration-color: var(--rule-2);
-}
-.replay:hover { color: var(--paper); text-decoration-color: var(--muted); }
-@media (max-width: 480px) { .p-size { display: none; } .p-file { grid-template-columns: auto minmax(0, 1fr) auto; } }
+@media (max-width: 480px) { .p-size { display: none; } .p-file { grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; } button.p-dl { width: 114px; padding-inline: 4px; gap: 5px; } }
 
 /* ── Sections ──────────────────────────────────────── */
 .section { padding-block: clamp(4.5rem, 2.5rem + 6vw, 8.5rem); border-top: 1px solid var(--rule); }
@@ -594,6 +643,7 @@ button { font: inherit; }
   color: var(--violet-ink);
   vertical-align: 3px;
 }
+.tag-new { border-color: var(--ok-line); color: var(--ok); background: var(--ok-soft); }
 @media (max-width: 720px) { .feat { grid-template-columns: minmax(0, 1fr); } }
 
 /* Who it's for */
@@ -767,6 +817,41 @@ button { font: inherit; }
   .p-received.is-in { animation: land 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
   .p-amount.is-flash { animation: flash 1.4s ease-out; }
 }
+
+/* ── Scroll-in moments: Before / after, and How it works ── */
+.mf-value { display: inline-flex; align-items: center; }
+.mf-caret { display: none; width: 1px; height: 1em; margin-left: 2px; background: var(--paper); animation: t-blink 1s steps(1) infinite; }
+.steps.is-typing .mf-caret { display: inline-block; }
+.ba.is-pre .mess li, .ba.is-pre .one-link, .ba.is-pre .ba-note, .ba.is-pre .ba-status { opacity: 0; }
+.ba.is-pre .mess li { transform: translateX(-10px); }
+.ba.is-pre .one-link, .ba.is-pre .ba-note, .ba.is-pre .ba-status { transform: translateY(10px); }
+.ba.is-in .mess li, .ba.is-in .one-link, .ba.is-in .ba-note, .ba.is-in .ba-status { opacity: 1; transform: none; transition: opacity .5s ease, transform .6s cubic-bezier(.2, .7, .2, 1); }
+.ba.is-in .mess li:nth-child(2) { transition-delay: .12s; }
+.ba.is-in .mess li:nth-child(3) { transition-delay: .24s; }
+.ba.is-in .mess li:nth-child(4) { transition-delay: .36s; }
+.ba.is-in .mess li:nth-child(5) { transition-delay: .48s; }
+.ba.is-in .one-link { transition-delay: .8s; }
+.ba.is-in .ba-note { transition-delay: .95s; }
+.ba.is-in .ba-status { transition-delay: 1.25s; }
+.ba.is-in .ba-status .p-pill { animation: land .45s cubic-bezier(.2, .7, .2, 1) 1.35s both; }
+.steps.is-pre .step-art { opacity: 0; transform: translateY(10px); }
+.steps.is-pre .step.is-on .step-art { opacity: 1; transform: none; transition: opacity .45s ease, transform .55s cubic-bezier(.2, .7, .2, 1); }
+.steps.is-pre .mini-files span { opacity: 0; transform: translateY(-12px); }
+.steps.is-pre .step.is-on .mini-files span { animation: rise .5s cubic-bezier(.2, .7, .2, 1) both; animation-name: drop; }
+.steps.is-pre .step.is-on .mini-files span:nth-child(1) { animation-delay: .2s; }
+.steps.is-pre .step.is-on .mini-files span:nth-child(2) { animation-delay: .38s; }
+.steps.is-pre .step.is-on .mini-files span:nth-child(3) { animation-delay: .56s; }
+@keyframes drop { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: none; } }
+.mini-paid .p-pill.is-pop { animation: land .45s cubic-bezier(.2, .7, .2, 1) both; }
+.mini-paid .amt.is-flash { animation: flash 1.4s ease-out; }
+
+.who.is-pre li { opacity: 0; transform: translateY(14px); }
+.who.is-in li { opacity: 1; transform: none; transition: opacity .55s ease, transform .65s cubic-bezier(.2, .7, .2, 1); }
+.who.is-in li:nth-child(2) { transition-delay: .08s; }
+.who.is-in li:nth-child(3) { transition-delay: .16s; }
+.who.is-in li:nth-child(4) { transition-delay: .24s; }
+.who.is-in li:nth-child(5) { transition-delay: .32s; }
+.who.is-in li:nth-child(6) { transition-delay: .40s; }
 
 /* ── Teams: a looping walkthrough of the Team workspace ───────────── */
 .new-pill {
@@ -971,7 +1056,7 @@ button { font: inherit; }
 
       <div class="hero-grid">
         <div class="hero-copy">
-          <p class="hero-sub">Deliver finished work and collect payment in a single branded portal. Upload your files, attach the invoice, send one link. Clients pay in a click, without the email back-and-forth.</p>
+          <p class="hero-sub">Deliver finished work and collect payment in a single branded portal. Upload your files, attach the invoice, send one link. Clients pay in a click, and the files can stay locked until they do.</p>
           <div class="actions">
             <a class="btn btn-primary" href="https://app.voxabase.com/signup">Get started free <span class="arrow" aria-hidden="true">→</span></a>
             <a class="btn btn-ghost" href="#how">See how it works</a>
@@ -980,7 +1065,7 @@ button { font: inherit; }
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>No credit card required</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>2 minutes to your first portal</li>
           </ul>
-          <p class="demo-hint">The portal on the right is the page your client opens. Pick a brand color under it to re-theme it, or press Pay to watch the invoice get paid.</p>
+          <p class="demo-hint">The portal on the right is the page your client opens. Watch them pay, the files unlock, and download. Pick a brand color under it to see it in your client’s colors.</p>
         </div>
 
         <figure class="demo" id="demo" aria-label="Example client portal">
@@ -989,7 +1074,7 @@ button { font: inherit; }
             <div class="browser-bar">
               <div class="url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg><span id="demoUrl">voxabase.com/studio-novo/harbor-coffee</span></div>
             </div>
-            <div class="portal">
+            <div class="portal" id="portal" inert>
               <div class="p-top">
                 <div class="p-brand">
                   <span class="p-mark" id="demoInitial" aria-hidden="true">S</span>
@@ -1000,14 +1085,18 @@ button { font: inherit; }
               <div class="p-head">
                 <p class="p-by" id="demoBy">Delivered by Studio Novo</p>
                 <p class="p-title">Brand Refresh — Final Files</p>
-                <p class="p-count">3 files · Ready to download</p>
+                <p class="p-count" id="pCount">3 files · Unlock after payment</p>
+              </div>
+              <div class="p-lockbar" id="lockbar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path class="p-shackle" d="M8 11V7a4 4 0 018 0v4"/></svg>
+                <div><b>Files unlock after payment</b><span>Pay the invoice below to download all 3 files.</span></div>
               </div>
               <ul class="p-files">
-                <li class="p-file"><span class="p-type">PDF</span><span class="p-name">Brand_Guidelines_v2.pdf</span><span class="p-size">4.2 MB</span><span class="p-dl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Download</span></li>
-                <li class="p-file"><span class="p-type">ZIP</span><span class="p-name">Logo_Package_Final.zip</span><span class="p-size">18.6 MB</span><span class="p-dl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Download</span></li>
-                <li class="p-file"><span class="p-type">MP4</span><span class="p-name">Brand_Intro.mp4</span><span class="p-size">46.8 MB</span><span class="p-dl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Download</span></li>
+                <li class="p-file" style="--i:0" data-kind="image" data-name="Logo_Primary.png"><button class="p-thumb" type="button" tabindex="-1" aria-hidden="true"><span class="p-type">PNG</span><span class="p-art"><svg class="p-art-svg" viewBox="0 0 120 120" aria-hidden="true"><rect width="120" height="120" style="fill:var(--brand)"/><circle cx="60" cy="62" r="36" fill="none" style="stroke:var(--on-brand)" stroke-opacity=".9" stroke-width="4"/><path d="M42 54h32v12a16 16 0 01-32 0z" style="fill:var(--on-brand)"/><path d="M74 58h5a7 7 0 010 14h-5" fill="none" style="stroke:var(--on-brand)" stroke-width="4"/><path d="M51 44c0-4 4-5 4-9M63 44c0-4 4-5 4-9" fill="none" style="stroke:var(--on-brand)" stroke-width="3" stroke-linecap="round"/></svg></span></button><button class="p-name" type="button">Logo_Primary.png</button><span class="p-size">1.2 MB</span><span class="p-act"><span class="p-locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>Locked</span><button class="p-dl" type="button"><i class="p-fill" aria-hidden="true"></i><svg class="i-dl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg><svg class="i-done" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg><span class="p-dl-label">Download</span></button></span></li>
+                <li class="p-file" style="--i:1" data-kind="pdf" data-name="Brand_Guidelines_v2.pdf"><button class="p-thumb" type="button" tabindex="-1" aria-hidden="true"><span class="p-type">PDF</span></button><button class="p-name" type="button">Brand_Guidelines_v2.pdf</button><span class="p-size">4.2 MB</span><span class="p-act"><span class="p-locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>Locked</span><button class="p-dl" type="button"><i class="p-fill" aria-hidden="true"></i><svg class="i-dl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg><svg class="i-done" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg><span class="p-dl-label">Download</span></button></span></li>
+                <li class="p-file" style="--i:2" data-kind="video" data-name="Brand_Intro.mp4"><button class="p-thumb" type="button" tabindex="-1" aria-hidden="true"><span class="p-type">MP4</span></button><button class="p-name" type="button">Brand_Intro.mp4</button><span class="p-size">46.8 MB</span><span class="p-act"><span class="p-locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>Locked</span><button class="p-dl" type="button"><i class="p-fill" aria-hidden="true"></i><svg class="i-dl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg><svg class="i-done" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg><span class="p-dl-label">Download</span></button></span></li>
               </ul>
-              <p class="p-all"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Download all</p>
+              <button class="p-all" id="dlAll" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Download all</button>
               <div class="p-invoice">
                 <div class="p-inv-row">
                   <div>
@@ -1030,6 +1119,7 @@ button { font: inherit; }
                 <p class="p-stripe">Secure payment powered by Stripe</p>
               </div>
             </div>
+            <div class="t-cursor" id="heroCursor" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 3l14 8.2-6.3 1.4-3.2 5.9z" fill="#fff" stroke="#0c0b10" stroke-width="1.4" stroke-linejoin="round"/></svg><i class="t-ripple"></i></div>
             <p class="p-foot"><span>Delivered via <svg viewBox="0 0 40 40" aria-hidden="true"><path fill="#eeeae3" d="M3.2 7H11.2L19.2 20V33Z"/><path fill="#9c7de8" d="M36.8 7H28.8L20.8 20V33Z"/></svg><b>Voxabase</b></span></p>
           </div>
           <div class="demo-controls">
@@ -1041,7 +1131,6 @@ button { font: inherit; }
               <button class="chip" type="button" style="--c:#f59e0b" data-brand="3" aria-pressed="false" aria-label="Marlowe &amp; Co, amber"></button>
               <button class="chip" type="button" style="--c:#3b82f6" data-brand="4" aria-pressed="false" aria-label="Indigo Lab, blue"></button>
             </div>
-            <button class="replay" id="replay" type="button" hidden>Replay payment</button>
           </div>
         </figure>
       </div>
@@ -1086,19 +1175,19 @@ button { font: inherit; }
           <span class="step-n">01</span>
           <h3 class="h3">Create a client portal</h3>
           <p>Name your client, and Voxabase builds a clean, branded link in seconds, like <b class="url-inline">voxabase.com/you/harbor-coffee</b>.</p>
-          <div class="step-art"><div class="mini-field"><span class="mf-label">Client name</span><span>Harbor Coffee</span></div></div>
+          <div class="step-art"><div class="mini-field"><span class="mf-label">Client name</span><span class="mf-value"><span id="mfTyped">Harbor Coffee</span><i class="mf-caret" aria-hidden="true"></i></span></div></div>
         </li>
         <li class="step">
           <span class="step-n">02</span>
           <h3 class="h3">Upload your deliverables</h3>
-          <p>Drag in PDFs, images, video, or any file. They appear instantly, ready for your client to view and download. No login needed on their end.</p>
-          <div class="step-art"><div class="mini-files"><span>PDF 4.2 MB</span><span>ZIP 18.6 MB</span><span>MP4 46.8 MB</span></div></div>
+          <p>Drag in PDFs, images, video, or any file. They appear instantly, ready for your client to preview in the browser or download. No login needed on their end.</p>
+          <div class="step-art"><div class="mini-files"><span>PNG 1.2 MB</span><span>PDF 4.2 MB</span><span>MP4 46.8 MB</span></div></div>
         </li>
         <li class="step">
           <span class="step-n">03</span>
           <h3 class="h3">Send the link, get paid</h3>
-          <p>Your client sees their files and a Pay Invoice button. They pay through Stripe, and the money lands in your account.</p>
-          <div class="step-art"><div class="mini-paid"><span class="amt">$2,400.00</span><span class="p-pill" data-state="paid">Paid</span></div></div>
+          <p>Your client sees their files and a Pay Invoice button. They pay through Stripe, the money lands in your account, and locked files open on the spot.</p>
+          <div class="step-art"><div class="mini-paid"><span class="amt" id="miniAmt">$2,400.00</span><span class="p-pill" id="miniPill" data-state="paid">Paid</span></div></div>
         </li>
       </ol>
     </div>
@@ -1112,15 +1201,16 @@ button { font: inherit; }
         <p class="lede">One tool instead of scattered folder links, a separate invoicing app, and endless email threads. Spend less time managing delivery and more time on the work you charge for.</p>
       </div>
       <dl class="feats">
-        <div class="feat"><dt class="h3">File delivery</dt><dd>Upload any file type: PDFs, images, video, archives. Clients get a clean download button, no account needed.</dd></div>
+        <div class="feat"><dt class="h3">File delivery</dt><dd>Upload any file type: PDFs, images, video, archives. Clients open them right in the browser, with thumbnails for images, or download in one click. No account needed.</dd></div>
         <div class="feat"><dt class="h3">Your brand, not ours<span class="tag">Pro</span></dt><dd>Add your logo and accent color. Clients land on a page that looks like your studio built it. Because you did.</dd></div>
         <div class="feat"><dt class="h3">Invoice &amp; payment</dt><dd>Attach an invoice to any portal. Clients pay by card through Stripe, right on the page. No more chasing.</dd></div>
+        <div class="feat feat-new"><dt class="h3">Lock files until paid<span class="tag tag-new">New</span></dt><dd>Your client sees exactly what’s ready, but nothing opens until the invoice is paid. The moment Stripe confirms, every file unlocks on its own. On every plan.</dd></div>
         <div class="feat"><dt class="h3">One shareable link</dt><dd>Send it over email, Slack, or text. It works everywhere and stays live until you take it down.</dd></div>
-        <div class="feat"><dt class="h3">Revision rounds</dt><dd>Upload a new version to the same portal. Clients always see the latest files, and you never resend a thing.</dd></div>
+        <div class="feat"><dt class="h3">Revision rounds</dt><dd>Replace a file with its new version, or rename and reorder files. Clients always see the latest, and you never resend a thing.</dd></div>
         <div class="feat"><dt class="h3">Activity tracking</dt><dd>See when a client opened the portal and how many times. Know where things stand without asking.</dd></div>
-        <div class="feat"><dt class="h3">Private portals<span class="tag">Pro</span></dt><dd>Lock a portal with a password. Files, invoice and details stay hidden until your client enters it.</dd></div>
+        <div class="feat"><dt class="h3">Private portals<span class="tag">Pro</span></dt><dd>Protect a portal with a password. Files, invoice and details stay hidden until your client enters it.</dd></div>
         <div class="feat"><dt class="h3">Client approvals<span class="tag">Agency</span></dt><dd>Clients approve the delivery or request changes right in the portal. Their answer and notes land on your dashboard.</dd></div>
-        <div class="feat"><dt class="h3">Teams<span class="tag">Pro</span></dt><dd>Invite teammates into a shared Team workspace: 1 on Pro, up to 4 on Agency. Your personal portals stay yours.</dd></div>
+        <div class="feat"><dt class="h3">Teams<span class="tag">Pro</span></dt><dd>Invite teammates into a shared Team workspace: 1 on Pro, up to 4 on Agency. See who’s online, and keep your personal portals yours.</dd></div>
         <div class="feat"><dt class="h3">Your own domain<span class="tag">Agency</span></dt><dd>Send portals from files.yourstudio.com with no Voxabase branding, so every link looks like your studio’s.</dd></div>
       </dl>
     </div>
@@ -1268,6 +1358,7 @@ button { font: inherit; }
             <li>Shareable portal links</li>
             <li>Activity tracking</li>
             <li>Stripe payments (2% Voxabase fee)</li>
+            <li>Lock files until paid</li>
           </ul>
           <a class="btn btn-ghost" href="https://app.voxabase.com/signup">Get started free</a>
         </article>
@@ -1313,7 +1404,7 @@ button { font: inherit; }
         <a class="btn btn-ghost" href="https://app.voxabase.com/login">Sign in</a>
       </div>
       <ul class="trust">
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>Encrypted storage</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>Private, encrypted files</li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg>Payments by Stripe</li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>No credit card required</li>
       </ul>
@@ -1420,42 +1511,73 @@ button { font: inherit; }
     c.addEventListener('click', function () { applyBrand(Number(c.getAttribute('data-brand'))); });
   });
 
-  /* Live portal: the invoice gets paid (mirrors the real portal's states) */
+  /* Live portal: a watch-only walkthrough of what the client does. A cursor
+     pays the invoice, the files unlock (same states as the real portal), and
+     it downloads them. Visitors can't click inside it (the portal is inert);
+     brand chips only re-theme it. Loops while on screen, like Teams. */
   var payBtn = document.getElementById('payBtn');
   var payLabel = document.getElementById('payLabel');
   var received = document.getElementById('received');
   var invNote = document.getElementById('invNote');
   var invPill = document.getElementById('invPill');
   var invAmount = document.getElementById('invAmount');
-  var replay = document.getElementById('replay');
+  var portal = document.getElementById('portal');
+  var pCount = document.getElementById('pCount');
+  var dlBtns = Array.prototype.slice.call(portal.querySelectorAll('.p-dl'));
+  var dlAll = document.getElementById('dlAll');
   var state = 'unpaid';
-  var payTimer = null;
-  var autoTimer = null;
+  var timers = [];  // the portal's own state changes
+  var pLater = function (fn, ms) { timers.push(window.setTimeout(fn, reduceMotion ? 0 : ms)); };
 
+  function setLocked(locked) {
+    portal.classList.toggle('is-unlocked', !locked);
+    if (locked) portal.classList.remove('is-opening', 'is-settled');
+    else pLater(function () { portal.classList.add('is-settled'); }, 1100);
+    if (locked) dlBtns.forEach(function (b) {
+      b.classList.remove('is-loading', 'is-done');
+      b.querySelector('.p-dl-label').textContent = 'Download';
+    });
+    pCount.textContent = '3 files · ' + (locked ? 'Unlock after payment' : 'Ready to download');
+  }
   function setPaid() {
     state = 'paid';
     payBtn.hidden = true;
-    payBtn.removeAttribute('aria-busy');
     received.hidden = false;
     received.classList.add('is-in');
     invPill.setAttribute('data-state', 'paid');
     invPill.textContent = 'Paid';
     invNote.textContent = 'Payment complete';
     invAmount.classList.add('is-flash');
-    replay.hidden = false;
+    // The lock opens, then the files unlock one by one
+    pLater(function () { portal.classList.add('is-opening'); }, 250);
+    pLater(function () { setLocked(false); }, 800);
   }
   function pay() {
     if (state !== 'unpaid') return;
     state = 'processing';
-    payBtn.setAttribute('aria-busy', 'true');
     payLabel.textContent = 'Redirecting to payment...';
-    payTimer = window.setTimeout(setPaid, reduceMotion ? 0 : 1100);
+    pLater(setPaid, 1100);
   }
+  function download(btn) {
+    if (!portal.classList.contains('is-unlocked') || btn.classList.contains('is-loading') || btn.classList.contains('is-done')) return;
+    var label = btn.querySelector('.p-dl-label');
+    btn.classList.add('is-loading');
+    label.textContent = 'Downloading';
+    pLater(function () {
+      btn.classList.remove('is-loading');
+      btn.classList.add('is-done');
+      label.textContent = 'Downloaded';
+    }, 950);
+  }
+  function downloadAll() {
+    dlBtns.forEach(function (b, i) { pLater(function () { download(b); }, i * 220); });
+  }
+  // Back to locked and unpaid in a single frame, so nothing is still moving
+  // when the cursor aims
   function reset() {
-    window.clearTimeout(payTimer);
+    timers.forEach(window.clearTimeout); timers = [];
     state = 'unpaid';
     payBtn.hidden = false;
-    payBtn.removeAttribute('aria-busy');
     payLabel.textContent = 'Pay Invoice — $2,400.00';
     received.hidden = true;
     received.classList.remove('is-in');
@@ -1463,17 +1585,150 @@ button { font: inherit; }
     invPill.textContent = 'Unpaid';
     invNote.textContent = 'Payment due upon receipt';
     invAmount.classList.remove('is-flash');
-    replay.hidden = true;
+    portal.classList.add('is-instant');
+    setLocked(true);
+    void portal.offsetWidth;
+    window.requestAnimationFrame(function () { portal.classList.remove('is-instant'); });
   }
-  payBtn.addEventListener('click', function () { window.clearTimeout(autoTimer); pay(); });
-  replay.addEventListener('click', function () {
-    reset();
-    window.setTimeout(pay, reduceMotion ? 0 : 350);
-    payBtn.focus();
-  });
+  function press(el) {
+    el.classList.add('is-press');
+    window.setTimeout(function () { el.classList.remove('is-press'); }, 150);
+  }
 
-  /* Play the payment once for visitors who just watch, after the portal has arrived */
-  if (!reduceMotion) autoTimer = window.setTimeout(pay, 2600);
+  /* The cursor (same as the Teams walkthrough) */
+  var browser = demo.querySelector('.browser');
+  var hCursor = document.getElementById('heroCursor');
+  var wTimers = [];
+  var wLater = function (fn, ms) { wTimers.push(window.setTimeout(fn, ms)); };
+  var hPoint = function (el, fx, fy) {
+    var b = browser.getBoundingClientRect(), r = el.getBoundingClientRect();
+    hCursor.style.transform = 'translate(' + (r.left - b.left + r.width * fx - 5) + 'px,' + (r.top - b.top + r.height * fy - 3) + 'px)';
+  };
+  var hRest = function (fx, fy) {
+    var b = browser.getBoundingClientRect();
+    hCursor.style.transform = 'translate(' + b.width * fx + 'px,' + b.height * fy + 'px)';
+  };
+  var hClick = function () {
+    hCursor.classList.add('is-down', 'is-click');
+    wLater(function () { hCursor.classList.remove('is-down'); }, 140);
+    wLater(function () { hCursor.classList.remove('is-click'); }, 520);
+  };
+  // Rest on an element while the layout around it moves (the banner collapsing,
+  // Pay turning into Payment received), so the cursor stays on it
+  var followRaf = null;
+  var hFollow = function (getEl, fx, fy, ms) {
+    var end = performance.now() + ms;
+    hCursor.style.transition = 'none';
+    var step = function () {
+      hPoint(getEl(), fx, fy);
+      if (performance.now() < end) followRaf = window.requestAnimationFrame(step);
+      else { followRaf = null; hCursor.style.transition = ''; }
+    };
+    step();
+  };
+  function stopWalk() {
+    window.cancelAnimationFrame(followRaf); followRaf = null; hCursor.style.transition = '';
+    wTimers.forEach(window.clearTimeout); wTimers = [];
+    hCursor.classList.remove('is-on', 'is-down', 'is-click');
+    payBtn.classList.remove('is-hover');
+  }
+  function walk() {
+    stopWalk();
+    // Start in place (no glide from wherever it last was), fade in, then move
+    hCursor.style.transition = 'none';
+    hRest(0.82, 0.97);
+    void hCursor.offsetWidth;
+    hCursor.style.transition = '';
+    hCursor.classList.add('is-on');
+    // Pay, then wait on the button while the payment goes through
+    wLater(function () { hPoint(payBtn, 0.62, 0.55); }, 380);
+    wLater(function () { payBtn.classList.add('is-hover'); }, 1100);
+    wLater(function () { hClick(); press(payBtn); payBtn.classList.remove('is-hover'); pay(); }, 1300);
+    wLater(function () { hFollow(function () { return payBtn.hidden ? received : payBtn; }, 0.62, 0.55, 2350); }, 1500);
+    // The first file, then the rest with Download all
+    wLater(function () { hPoint(dlBtns[0], 0.55, 0.6); }, 3950);
+    wLater(function () { hPoint(dlBtns[0], 0.55, 0.6); }, 4550);
+    wLater(function () { hClick(); press(dlBtns[0]); download(dlBtns[0]); }, 4850);
+    wLater(function () { hPoint(dlAll, 0.5, 0.6); }, 5500);
+    wLater(function () { hPoint(dlAll, 0.5, 0.6); }, 6100);
+    wLater(function () { hClick(); press(dlAll); downloadAll(); }, 6400);
+    wLater(function () { hCursor.classList.remove('is-on'); }, 8000);
+    // Hold on the finished portal, fade it back to locked, and go again
+    wLater(function () { portal.classList.add('is-fading'); }, 10400);
+    wLater(function () { reset(); }, 10800);
+    wLater(function () { portal.classList.remove('is-fading'); }, 10900);
+    wLater(walk, 11700);
+  }
+
+  setLocked(true);
+  if (reduceMotion) {
+    // No motion: show the finished state (paid, unlocked, downloaded)
+    setPaid(); setLocked(false); portal.classList.add('is-opening', 'is-settled');
+    dlBtns.forEach(function (b) { b.classList.add('is-done'); b.querySelector('.p-dl-label').textContent = 'Downloaded'; });
+  } else {
+    // Play while the invoice is fully on screen; pause when it scrolls away
+    var running = false;
+    var startWalk = function () {
+      if (running) return;
+      running = true;
+      if (state !== 'unpaid' || dlBtns.some(function (b) { return b.classList.contains('is-done'); })) reset();
+      wLater(walk, 900);
+    };
+    var heroStop = function () { running = false; stopWalk(); portal.classList.remove('is-fading'); };
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        var e = entries[0];
+        if (e.intersectionRatio >= 0.95) startWalk();
+        else if (!e.isIntersecting) heroStop();
+      }, { threshold: [0, 0.95] }).observe(portal.querySelector('.p-invoice'));
+    } else startWalk();
+  }
+
+  /* Scroll-in moments. The page is written in its finished state; with motion
+     on, each section starts from its "before" state and plays once on screen. */
+  var onceVisible = function (el, fn) {
+    new IntersectionObserver(function (entries, io) {
+      if (entries[0].isIntersecting) { io.disconnect(); fn(); }
+    }, { threshold: 0.35 }).observe(el);
+  };
+  var canPlay = !reduceMotion && 'IntersectionObserver' in window;
+
+  // Before / after: the email mess piles up, then one link replaces it
+  var ba = document.querySelector('.ba');
+  if (ba && canPlay) {
+    ba.classList.add('is-pre');
+    onceVisible(ba, function () { ba.classList.add('is-in'); });
+  }
+
+  // How it works: the name is typed, files drop in, the invoice gets paid
+  var steps = document.querySelector('.steps');
+  if (steps && canPlay) {
+    var stepEls = steps.querySelectorAll('.step');
+    var mfTyped = document.getElementById('mfTyped');
+    var miniPill = document.getElementById('miniPill');
+    var miniAmt = document.getElementById('miniAmt');
+    var NAME = mfTyped.textContent;
+    steps.classList.add('is-pre');
+    mfTyped.textContent = '';
+    miniPill.setAttribute('data-state', 'unpaid'); miniPill.textContent = 'Unpaid';
+    onceVisible(steps, function () {
+      stepEls[0].classList.add('is-on');
+      steps.classList.add('is-typing');
+      var i = 0;
+      var type = function () {
+        mfTyped.textContent = NAME.slice(0, ++i);
+        if (i < NAME.length) window.setTimeout(type, 70);
+        else window.setTimeout(function () { steps.classList.remove('is-typing'); }, 900);
+      };
+      window.setTimeout(type, 450);
+      window.setTimeout(function () { stepEls[1].classList.add('is-on'); }, 1100);
+      window.setTimeout(function () { stepEls[2].classList.add('is-on'); }, 1900);
+      window.setTimeout(function () {
+        miniPill.setAttribute('data-state', 'paid'); miniPill.textContent = 'Paid';
+        miniPill.classList.add('is-pop'); miniAmt.classList.add('is-flash');
+      }, 2900);
+    });
+  }
 
   /* Teams: a looping walkthrough. Plays while on screen, steps can be clicked,
      and with reduced motion each step just shows its end state. */
@@ -1594,12 +1849,30 @@ button { font: inherit; }
     }
   }
 
+  // Who it's for: the cards settle in one after another
+  var who = document.querySelector('.who');
+  if (who && canPlay) {
+    who.classList.add('is-pre');
+    onceVisible(who, function () { who.classList.add('is-in'); });
+  }
+
   /* Pricing: monthly / annual */
   var periodBtns = Array.prototype.slice.call(document.querySelectorAll('.billing button'));
   var priced = Array.prototype.slice.call(document.querySelectorAll('[data-monthly]'));
   function setPeriod(p) {
     periodBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-period') === p)); });
-    priced.forEach(function (el) { el.textContent = el.getAttribute('data-' + p); });
+    priced.forEach(function (el) {
+      var next = el.getAttribute('data-' + p);
+      if (el.textContent === next) return;
+      // Prices roll: the old one lifts away, the new one rises in
+      if (reduceMotion || !el.animate) { el.textContent = next; return; }
+      var big = el.classList.contains('amt');
+      el.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(' + (big ? -0.3 : -0.4) + 'em)' }], { duration: 150, easing: 'ease-in', fill: 'forwards' })
+        .onfinish = function () {
+          el.textContent = next;
+          el.animate([{ opacity: 0, transform: 'translateY(' + (big ? 0.3 : 0.4) + 'em)' }, { opacity: 1, transform: 'none' }], { duration: 300, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'forwards' });
+        };
+    });
   }
   periodBtns.forEach(function (b) {
     b.addEventListener('click', function () { setPeriod(b.getAttribute('data-period')); });
