@@ -396,6 +396,8 @@ button.p-dl:hover:not(:disabled) { background: var(--ink-3); }
 button.p-all { display: flex; width: calc(100% - 24px); background: transparent; font-family: var(--font-body); cursor: pointer; transition: max-height .4s ease .55s, opacity .3s ease .6s, margin .4s ease .55s, padding .4s ease .55s, transform .15s, background-color .2s; }
 button.p-all:hover:not(:disabled) { background: var(--ink); color: var(--paper); }
 #heroCursor { z-index: 4; }
+/* Replay resets the portal in one frame, so nothing is still moving when the cursor aims */
+.portal.is-instant, .portal.is-instant * { transition: none !important; animation: none !important; }
 .portal.is-unlocked .p-all { max-height: 50px; opacity: 1; margin-top: 8px !important; padding-block: 10px !important; border-width: 1px !important; }
 .p-thumb:focus-visible, .p-name:focus-visible { outline: 2px solid var(--violet-ink); outline-offset: 2px; border-radius: 6px; }
 
@@ -1641,7 +1643,10 @@ button.p-all:hover:not(:disabled) { background: var(--ink); color: var(--paper);
     replay.hidden = true;
     unlockTimers.forEach(window.clearTimeout); unlockTimers = [];
     closeViewer();
+    portal.classList.add('is-instant');
     setLocked(true);
+    void portal.offsetWidth; // apply the locked layout now
+    window.requestAnimationFrame(function () { portal.classList.remove('is-instant'); });
   }
 
   /* Download: the button fills, then shows Downloaded */
@@ -1694,16 +1699,21 @@ button.p-all:hover:not(:disabled) { background: var(--ink); color: var(--paper);
   function walk() {
     stopWalk();
     var firstDl = dlBtns[0];
+    // Start in place (no glide from wherever it last was), fade in, then move
+    hCursor.style.transition = 'none';
     hRest(0.82, 0.97);
+    void hCursor.offsetWidth;
+    hCursor.style.transition = '';
     hCursor.classList.add('is-on');
-    wLater(function () { hPoint(payBtn, 0.62, 0.55); }, 150);
-    wLater(function () { payBtn.classList.add('is-hover'); }, 800);
-    wLater(function () { hClick(); press(payBtn); payBtn.classList.remove('is-hover'); pay(); }, 1050);
-    wLater(function () { hRest(0.86, 0.8); }, 1500);
-    wLater(function () { hPoint(firstDl, 0.55, 0.6); }, 3700);
-    wLater(function () { hClick(); press(firstDl); download(firstDl); }, 4550);
-    wLater(function () { hRest(0.9, 0.62); }, 5300);
-    wLater(function () { hCursor.classList.remove('is-on'); }, 6400);
+    wLater(function () { hPoint(payBtn, 0.62, 0.55); }, 380);
+    wLater(function () { payBtn.classList.add('is-hover'); }, 1100);
+    wLater(function () { hClick(); press(payBtn); payBtn.classList.remove('is-hover'); pay(); }, 1300);
+    wLater(function () { hRest(0.86, 0.8); }, 1750);
+    wLater(function () { hPoint(firstDl, 0.55, 0.6); }, 3950);
+    wLater(function () { hPoint(firstDl, 0.55, 0.6); }, 4550);
+    wLater(function () { hClick(); press(firstDl); download(firstDl); }, 4850);
+    wLater(function () { hRest(0.9, 0.62); }, 5600);
+    wLater(function () { hCursor.classList.remove('is-on'); }, 6700);
   }
   demo.addEventListener('pointerdown', function (e) { if (!e.target.closest('.chips')) stopWalk(); });
 
@@ -1711,7 +1721,7 @@ button.p-all:hover:not(:disabled) { background: var(--ink); color: var(--paper);
   replay.addEventListener('click', function () {
     reset();
     if (reduceMotion) { pay(); payBtn.focus(); return; }
-    window.setTimeout(walk, 300);
+    wLater(walk, 250);
   });
 
   /* Preview: clicking an unlocked file opens it in the portal, no download */
