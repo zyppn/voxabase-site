@@ -349,14 +349,20 @@ button { font: inherit; }
   border: 1px solid color-mix(in oklab, var(--brand) 34%, transparent);
   border-radius: 10px;
   background: color-mix(in oklab, var(--brand) 12%, var(--ink-2));
-  transition: max-height .45s ease .15s, opacity .3s ease .15s, margin .45s ease .15s, padding .45s ease .15s, border-width .45s ease .15s, background-color .35s, border-color .35s;
+  transition: background-color .4s ease .15s, border-color .4s ease .15s;
 }
-.p-lockbar svg { width: 20px; height: 20px; flex: none; color: color-mix(in oklab, var(--brand) 55%, var(--paper)); overflow: visible; transition: color .35s; }
+.p-lockbar svg { width: 20px; height: 20px; flex: none; color: color-mix(in oklab, var(--brand) 55%, var(--paper)); overflow: visible; transition: color .35s ease .15s; }
+.p-lk-text { display: grid; min-width: 0; }
+.p-lk-text > div { grid-area: 1 / 1; transition: opacity .3s ease .2s, transform .4s cubic-bezier(.2, .7, .2, 1) .2s; }
+.lk-open { opacity: 0; transform: translateY(6px); }
+.portal.is-unlocked .lk-shut { opacity: 0; transform: translateY(-6px); transition-delay: 0s; }
+.portal.is-unlocked .lk-open { opacity: 1; transform: none; }
 .p-lockbar b { display: block; font-size: 0.875rem; font-weight: 600; }
 .p-lockbar span { display: block; font-size: 0.75rem; color: var(--muted); }
 .p-shackle { transition: transform .4s cubic-bezier(.3, 1.5, .5, 1); }
 .portal.is-opening .p-shackle { transform: translateY(-3.5px); }
-.portal.is-unlocked .p-lockbar { max-height: 0; opacity: 0; margin-bottom: 0; padding-block: 0; border-width: 0; }
+.portal.is-unlocked .p-lockbar { border-color: var(--ok-line); background: var(--ok-soft); }
+.portal.is-unlocked .p-lockbar svg { color: var(--ok); }
 
 .p-thumb, .p-name { all: unset; box-sizing: border-box; }
 .p-thumb { position: relative; display: grid; width: 38px; height: 38px; border-radius: 8px; }
@@ -368,7 +374,7 @@ button { font: inherit; }
 .p-act > * { grid-area: 1 / 1; transition: opacity .3s, transform .4s cubic-bezier(.3, 1.4, .5, 1); transition-delay: calc(var(--i) * 0.12s + 0.2s); }
 .p-locked { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; font-size: 0.75rem; font-weight: 600; color: var(--faint); }
 .p-act .p-dl { opacity: 0; transform: translateY(5px) scale(.94); pointer-events: none; }
-.p-all { max-height: 0; opacity: 0; margin-top: 0 !important; padding-block: 0 !important; border-width: 0 !important; overflow: hidden; transition: max-height .4s ease .55s, opacity .3s ease .6s, margin .4s ease .55s, padding .4s ease .55s; }
+.p-all { opacity: .38; transition: opacity .35s ease .55s, color .35s ease .55s, transform .15s; }
 
 .portal.is-unlocked .p-art { opacity: 1; transform: none; }
 .portal.is-unlocked .p-name { color: var(--paper); }
@@ -390,11 +396,11 @@ button.p-dl { position: relative; overflow: hidden; justify-content: center; wid
 .portal.is-unlocked .p-act .p-dl.is-press, .p-pay.is-press, .p-all.is-press { transform: scale(.94); }
 .p-pay { transition: background-color 0.35s, filter 0.2s, transform .15s; }
 .p-pay.is-hover { filter: brightness(1.08); }
-button.p-all { display: flex; width: calc(100% - 24px); background: transparent; font-family: var(--font-body); cursor: pointer; transition: max-height .4s ease .55s, opacity .3s ease .6s, margin .4s ease .55s, padding .4s ease .55s, transform .15s, background-color .2s; }
+button.p-all { display: flex; width: calc(100% - 24px); background: transparent; font-family: var(--font-body); cursor: pointer; }
 #heroCursor { z-index: 4; filter: drop-shadow(0 4px 10px rgba(0, 0, 0, .75)) drop-shadow(0 1px 2px rgba(0, 0, 0, .6)); }
 /* Replay resets the portal in one frame, so nothing is still moving when the cursor aims */
 .portal.is-instant, .portal.is-instant * { transition: none !important; animation: none !important; }
-.portal.is-unlocked .p-all { max-height: 50px; opacity: 1; margin-top: 8px !important; padding-block: 10px !important; border-width: 1px !important; }
+.portal.is-unlocked .p-all { opacity: 1; color: var(--paper); }
 
 .portal { transition: opacity .4s ease; }
 .portal.is-fading { opacity: 0; }
@@ -477,6 +483,27 @@ button.p-all { display: flex; width: calc(100% - 24px); background: transparent;
 }
 .chip:hover { transform: scale(1.08); }
 .chip[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--paper); }
+.h-steps { list-style: none; margin: 14px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.h-step { position: relative; display: flex; gap: 10px; padding: 12px 10px 0 0; border-top: 1px solid var(--rule); font-size: 0.8125rem; color: var(--faint); transition: color .3s; }
+.h-step .t-n { padding-top: 0; transition: color .3s; }
+.h-step.is-on, .h-step.is-on .t-n { color: var(--paper); }
+.h-step.is-done { color: var(--muted); }
+.h-step .t-bar { top: -1px; }
+.h-step.is-on .t-bar { animation: t-bar var(--h-dur, 3s) linear forwards; }
+.h-step.is-done .t-bar { width: 100%; background: var(--muted); }
+.h-toast {
+  position: absolute; left: 50%; bottom: 44px; z-index: 5;
+  display: flex; align-items: center; gap: 10px; padding: 10px 14px 10px 12px; border-radius: 10px;
+  background: var(--ink-2); border: 1px solid var(--ok-line); box-shadow: 0 18px 40px -12px rgba(0, 0, 0, .9);
+  font-size: 0.8125rem; white-space: nowrap; pointer-events: none;
+  opacity: 0; transform: translate(-50%, 12px) scale(.97); transition: opacity .3s ease, transform .45s cubic-bezier(.2, .9, .3, 1.2);
+}
+.h-toast.is-in { opacity: 1; transform: translate(-50%, 0); }
+.h-toast svg { width: 18px; height: 18px; flex: none; }
+.h-toast b { display: block; font-weight: 600; color: var(--paper); }
+.h-toast div > span { display: block; font-size: 0.75rem; color: var(--muted); }
+.h-toast .amt-ok { color: var(--ok); font-weight: 600; }
+@media (max-width: 480px) { .h-step { font-size: 0.75rem; gap: 6px; } .h-toast { bottom: 40px; } }
 @media (max-width: 480px) { .p-size { display: none; } .p-file { grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; } button.p-dl { width: 114px; padding-inline: 4px; gap: 5px; } }
 
 /* ── Sections ──────────────────────────────────────── */
@@ -1089,7 +1116,7 @@ button.p-all { display: flex; width: calc(100% - 24px); background: transparent;
               </div>
               <div class="p-lockbar" id="lockbar">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path class="p-shackle" d="M8 11V7a4 4 0 018 0v4"/></svg>
-                <div><b>Files unlock after payment</b><span>Pay the invoice below to download all 3 files.</span></div>
+                <div class="p-lk-text"><div class="lk-shut"><b>Files unlock after payment</b><span>Pay the invoice below to download all 3 files.</span></div><div class="lk-open"><b>Files unlocked</b><span>Paid in full. Download any of them, any time.</span></div></div>
               </div>
               <ul class="p-files">
                 <li class="p-file" style="--i:0" data-kind="image" data-name="Logo_Primary.png"><button class="p-thumb" type="button" tabindex="-1" aria-hidden="true"><span class="p-type">PNG</span><span class="p-art"><svg class="p-art-svg" viewBox="0 0 120 120" aria-hidden="true"><rect width="120" height="120" style="fill:var(--brand)"/><circle cx="60" cy="62" r="36" fill="none" style="stroke:var(--on-brand)" stroke-opacity=".9" stroke-width="4"/><path d="M42 54h32v12a16 16 0 01-32 0z" style="fill:var(--on-brand)"/><path d="M74 58h5a7 7 0 010 14h-5" fill="none" style="stroke:var(--on-brand)" stroke-width="4"/><path d="M51 44c0-4 4-5 4-9M63 44c0-4 4-5 4-9" fill="none" style="stroke:var(--on-brand)" stroke-width="3" stroke-linecap="round"/></svg></span></button><button class="p-name" type="button">Logo_Primary.png</button><span class="p-size">1.2 MB</span><span class="p-act"><span class="p-locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>Locked</span><button class="p-dl" type="button"><i class="p-fill" aria-hidden="true"></i><svg class="i-dl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg><svg class="i-done" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg><span class="p-dl-label">Download</span></button></span></li>
@@ -1119,9 +1146,15 @@ button.p-all { display: flex; width: calc(100% - 24px); background: transparent;
                 <p class="p-stripe">Secure payment powered by Stripe</p>
               </div>
             </div>
+            <div class="h-toast" id="hToast" aria-hidden="true"><svg viewBox="0 0 40 40"><path fill="#eeeae3" d="M3.2 7H11.2L19.2 20V33Z"/><path fill="#9c7de8" d="M36.8 7H28.8L20.8 20V33Z"/></svg><div><b>You got paid <span class="amt-ok">$2,400.00</span></b><span>Harbor Coffee paid the invoice</span></div></div>
             <div class="t-cursor" id="heroCursor" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 3l14 8.2-6.3 1.4-3.2 5.9z" fill="#fff" stroke="#0c0b10" stroke-width="1.4" stroke-linejoin="round"/></svg><i class="t-ripple"></i></div>
             <p class="p-foot"><span>Delivered via <svg viewBox="0 0 40 40" aria-hidden="true"><path fill="#eeeae3" d="M3.2 7H11.2L19.2 20V33Z"/><path fill="#9c7de8" d="M36.8 7H28.8L20.8 20V33Z"/></svg><b>Voxabase</b></span></p>
           </div>
+          <ol class="h-steps" aria-hidden="true">
+            <li class="h-step"><span class="t-n">01</span>Client pays<i class="t-bar"></i></li>
+            <li class="h-step"><span class="t-n">02</span>Files unlock<i class="t-bar"></i></li>
+            <li class="h-step"><span class="t-n">03</span>They download<i class="t-bar"></i></li>
+          </ol>
           <div class="demo-controls">
             <div class="chips" role="group" aria-label="Preview a client brand">
               <span class="chips-label">Try a brand</span>
@@ -1585,10 +1618,25 @@ button.p-all { display: flex; width: calc(100% - 24px); background: transparent;
     invPill.textContent = 'Unpaid';
     invNote.textContent = 'Payment due upon receipt';
     invAmount.classList.remove('is-flash');
+    hToast.classList.remove('is-in');
+    hStep(0);
     portal.classList.add('is-instant');
     setLocked(true);
     void portal.offsetWidth;
     window.requestAnimationFrame(function () { portal.classList.remove('is-instant'); });
+  }
+  // The freelancer's side of the moment: a "You got paid" notification
+  var hToast = document.getElementById('hToast');
+  var hSteps = Array.prototype.slice.call(demo.querySelectorAll('.h-step'));
+  // Steps under the portal, like the Teams steps: the current one fills its bar
+  function hStep(n, ms) {
+    hSteps.forEach(function (st, i) {
+      st.classList.toggle('is-on', i === n - 1);
+      st.classList.toggle('is-done', i < n - 1);
+      var bar = st.querySelector('.t-bar');
+      bar.style.animation = 'none'; void bar.offsetWidth; bar.style.animation = '';
+    });
+    if (ms) demo.style.setProperty('--h-dur', ms + 'ms');
   }
   function press(el) {
     el.classList.add('is-press');
@@ -1631,6 +1679,7 @@ button.p-all { display: flex; width: calc(100% - 24px); background: transparent;
     wTimers.forEach(window.clearTimeout); wTimers = [];
     hCursor.classList.remove('is-on', 'is-down', 'is-click');
     payBtn.classList.remove('is-hover');
+    hToast.classList.remove('is-in');
   }
   function walk() {
     stopWalk();
@@ -1640,24 +1689,30 @@ button.p-all { display: flex; width: calc(100% - 24px); background: transparent;
     void hCursor.offsetWidth;
     hCursor.style.transition = '';
     hCursor.classList.add('is-on');
-    // Pay, then wait on the button while the payment goes through
-    wLater(function () { hPoint(payBtn, 0.62, 0.55); }, 380);
-    wLater(function () { payBtn.classList.add('is-hover'); }, 1100);
-    wLater(function () { hClick(); press(payBtn); payBtn.classList.remove('is-hover'); pay(); }, 1300);
-    wLater(function () { hFollow(function () { return payBtn.hidden ? received : payBtn; }, 0.62, 0.55, 2350); }, 1500);
-    // The first file, then the rest with Download all
-    wLater(function () { hPoint(dlBtns[0], 0.55, 0.6); }, 3950);
-    wLater(function () { hPoint(dlBtns[0], 0.55, 0.6); }, 4550);
-    wLater(function () { hClick(); press(dlBtns[0]); download(dlBtns[0]); }, 4850);
-    wLater(function () { hPoint(dlAll, 0.5, 0.6); }, 5500);
-    wLater(function () { hPoint(dlAll, 0.5, 0.6); }, 6100);
-    wLater(function () { hClick(); press(dlAll); downloadAll(); }, 6400);
-    wLater(function () { hCursor.classList.remove('is-on'); }, 8000);
+    // 01 Client pays: aim, press, and wait on the button while it goes through
+    hStep(1, 2300);
+    wLater(function () { hPoint(payBtn, 0.62, 0.55); }, 250);
+    wLater(function () { payBtn.classList.add('is-hover'); }, 950);
+    wLater(function () { hClick(); press(payBtn); payBtn.classList.remove('is-hover'); pay(); }, 1150);
+    wLater(function () { hFollow(function () { return payBtn.hidden ? received : payBtn; }, 0.62, 0.55, 1500); }, 1300);
+    // 02 Files unlock, and you get paid
+    wLater(function () { hStep(2, 1500); }, 2300);
+    wLater(function () { hToast.classList.add('is-in'); }, 2550);
+    wLater(function () { hRest(0.7, 0.62); }, 2900);
+    // 03 They download: one file, then the rest with Download all
+    wLater(function () { hStep(3, 4200); }, 3800);
+    wLater(function () { hPoint(dlBtns[0], 0.55, 0.6); }, 3850);
+    wLater(function () { hClick(); press(dlBtns[0]); download(dlBtns[0]); }, 4600);
+    wLater(function () { hToast.classList.remove('is-in'); }, 5000);
+    wLater(function () { hPoint(dlAll, 0.5, 0.6); }, 5250);
+    wLater(function () { hClick(); press(dlAll); downloadAll(); }, 6000);
+    wLater(function () { hCursor.classList.remove('is-on'); }, 7400);
     // Hold on the finished portal, fade it back to locked, and go again
-    wLater(function () { portal.classList.add('is-fading'); }, 10400);
-    wLater(function () { reset(); }, 10800);
-    wLater(function () { portal.classList.remove('is-fading'); }, 10900);
-    wLater(walk, 11700);
+    wLater(function () { hStep(4); }, 8000);
+    wLater(function () { portal.classList.add('is-fading'); }, 9200);
+    wLater(function () { reset(); }, 9600);
+    wLater(function () { portal.classList.remove('is-fading'); }, 9700);
+    wLater(walk, 10300);
   }
 
   setLocked(true);
@@ -1665,22 +1720,26 @@ button.p-all { display: flex; width: calc(100% - 24px); background: transparent;
     // No motion: show the finished state (paid, unlocked, downloaded)
     setPaid(); setLocked(false); portal.classList.add('is-opening', 'is-settled');
     dlBtns.forEach(function (b) { b.classList.add('is-done'); b.querySelector('.p-dl-label').textContent = 'Downloaded'; });
+    hStep(4);
   } else {
-    // Play while the invoice is fully on screen; pause when it scrolls away
+    // Play while the portal is on screen; pause when it scrolls away
     var running = false;
     var startWalk = function () {
       if (running) return;
       running = true;
       if (state !== 'unpaid' || dlBtns.some(function (b) { return b.classList.contains('is-done'); })) reset();
-      wLater(walk, 900);
+      wLater(walk, 500);
     };
     var heroStop = function () { running = false; stopWalk(); portal.classList.remove('is-fading'); };
     if ('IntersectionObserver' in window) {
+      // Start once the Pay button is on screen (the line under it is visible),
+      // so the first click is never off screen; stop when the portal leaves
       new IntersectionObserver(function (entries) {
-        var e = entries[0];
-        if (e.intersectionRatio >= 0.95) startWalk();
-        else if (!e.isIntersecting) heroStop();
-      }, { threshold: [0, 0.95] }).observe(portal.querySelector('.p-invoice'));
+        if (entries[0].isIntersecting) startWalk();
+      }, { threshold: 1 }).observe(portal.querySelector('.p-stripe'));
+      new IntersectionObserver(function (entries) {
+        if (!entries[0].isIntersecting) heroStop();
+      }).observe(portal);
     } else startWalk();
   }
 
