@@ -371,17 +371,14 @@ button { font: inherit; }
 .p-all { max-height: 0; opacity: 0; margin-top: 0 !important; padding-block: 0 !important; border-width: 0 !important; overflow: hidden; transition: max-height .4s ease .55s, opacity .3s ease .6s, margin .4s ease .55s, padding .4s ease .55s; }
 
 .portal.is-unlocked .p-art { opacity: 1; transform: none; }
-.portal.is-unlocked .p-name { color: var(--paper); cursor: pointer; }
-.portal.is-unlocked .p-thumb { cursor: pointer; }
-.portal.is-unlocked .p-name:hover { text-decoration: underline; text-underline-offset: 3px; }
+.portal.is-unlocked .p-name { color: var(--paper); }
 .portal.is-unlocked .p-locked { opacity: 0; transform: translateY(-5px); }
 .portal.is-unlocked .p-act .p-dl { opacity: 1; transform: none; pointer-events: auto; }
 /* After the unlock has played, presses respond right away (no stagger) */
 .portal.is-settled .p-act > *, .portal.is-settled .p-all { transition-delay: 0s; }
 
 /* Download: a working button in the demo (Downloading, then Downloaded) */
-button.p-dl { position: relative; overflow: hidden; justify-content: center; width: 124px; padding-inline: 8px; background: transparent; color: var(--paper); font-family: var(--font-body); cursor: pointer; }
-button.p-dl:hover:not(:disabled) { background: var(--ink-3); }
+button.p-dl { position: relative; overflow: hidden; justify-content: center; width: 124px; padding-inline: 8px; background: transparent; color: var(--paper); font-family: var(--font-body); }
 .p-dl > svg, .p-dl-label { position: relative; }
 .p-fill { position: absolute; inset: 0 auto 0 0; width: 0; background: color-mix(in oklab, var(--brand) 32%, transparent); }
 .p-dl.is-loading .p-fill { animation: p-fill .95s cubic-bezier(.3, .6, .4, 1) forwards; }
@@ -394,45 +391,15 @@ button.p-dl:hover:not(:disabled) { background: var(--ink-3); }
 .p-pay { transition: background-color 0.35s, filter 0.2s, transform .15s; }
 .p-pay.is-hover { filter: brightness(1.08); }
 button.p-all { display: flex; width: calc(100% - 24px); background: transparent; font-family: var(--font-body); cursor: pointer; transition: max-height .4s ease .55s, opacity .3s ease .6s, margin .4s ease .55s, padding .4s ease .55s, transform .15s, background-color .2s; }
-button.p-all:hover:not(:disabled) { background: var(--ink); color: var(--paper); }
-#heroCursor { z-index: 4; }
+#heroCursor { z-index: 4; filter: drop-shadow(0 4px 10px rgba(0, 0, 0, .75)) drop-shadow(0 1px 2px rgba(0, 0, 0, .6)); }
 /* Replay resets the portal in one frame, so nothing is still moving when the cursor aims */
 .portal.is-instant, .portal.is-instant * { transition: none !important; animation: none !important; }
 .portal.is-unlocked .p-all { max-height: 50px; opacity: 1; margin-top: 8px !important; padding-block: 10px !important; border-width: 1px !important; }
-.p-thumb:focus-visible, .p-name:focus-visible { outline: 2px solid var(--violet-ink); outline-offset: 2px; border-radius: 6px; }
 
-/* The in-portal preview: images, PDFs and video open without downloading */
-.p-viewer {
-  position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column;
-  background: rgba(12, 11, 16, 0.94);
-  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
-  animation: pv-in .28s cubic-bezier(.2, .7, .2, 1) both;
-}
-@keyframes pv-in { from { opacity: 0; transform: scale(.985); } to { opacity: 1; transform: none; } }
-.pv-bar { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-bottom: 1px solid var(--rule); }
-.pv-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.875rem; font-weight: 600; }
-.pv-dl { display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; border: 1px solid var(--rule-2); border-radius: 7px; font-size: 0.75rem; font-weight: 600; }
-.pv-close { display: grid; place-items: center; width: 30px; height: 30px; border: 1px solid var(--rule-2); border-radius: 7px; background: transparent; color: var(--paper); cursor: pointer; }
-.pv-close:hover { background: var(--ink-3); }
-.pv-close svg { width: 14px; height: 14px; }
-.pv-body { flex: 1; min-height: 0; display: grid; place-items: start center; padding: clamp(18px, 4vw, 40px) 18px; }
-.pv-body > * { display: none; }
-.pv-body[data-kind="image"] .pv-image, .pv-body[data-kind="pdf"] .pv-pdf, .pv-body[data-kind="video"] .pv-video { display: block; }
-.pv-image { width: min(64%, 260px); aspect-ratio: 1; border-radius: 12px; overflow: hidden; box-shadow: 0 24px 50px -20px rgba(0, 0, 0, .9); }
-.pv-pdf { width: 100%; }
-.pv-page { margin-inline: auto; width: min(62%, 230px); aspect-ratio: 0.77; padding: 18px 16px; display: flex; flex-direction: column; gap: 8px; border-radius: 4px; background: #f6f3ee; box-shadow: 0 24px 50px -20px rgba(0, 0, 0, .9); }
-.pv-page i { display: block; height: 5px; border-radius: 3px; background: #d9d4cc; }
-.pv-page .pv-h { height: 11px; width: 62%; margin-bottom: 6px; background: var(--brand); transition: background-color .35s; }
-.pv-page .pv-s { width: 70%; }
-.pv-page .pv-block { height: 46px; margin-block: 4px; background: color-mix(in oklab, var(--brand) 22%, #f6f3ee); }
-.pv-video { position: relative; width: 92%; aspect-ratio: 16 / 9; border-radius: 10px; overflow: hidden; background: radial-gradient(120% 90% at 30% 20%, color-mix(in oklab, var(--brand) 55%, var(--ink)), var(--ink) 70%); box-shadow: 0 24px 50px -20px rgba(0, 0, 0, .9); }
-.pv-play { position: absolute; left: 50%; top: 50%; display: grid; place-items: center; width: 52px; height: 52px; margin: -26px 0 0 -26px; border-radius: 50%; background: rgba(255, 255, 255, .92); color: var(--ink); }
-.pv-play svg { width: 22px; height: 22px; margin-left: 3px; }
-.pv-track { position: absolute; left: 14px; right: 14px; bottom: 12px; height: 3px; border-radius: 3px; background: rgba(255, 255, 255, .25); overflow: hidden; }
-.pv-track i { display: block; width: 0; height: 100%; background: var(--paper); animation: pv-track 6s linear infinite; }
-@keyframes pv-track { to { width: 100%; } }
+.portal { transition: opacity .4s ease; }
+.portal.is-fading { opacity: 0; }
 @media (prefers-reduced-motion: reduce) {
-  .portal *, .p-viewer { transition: none !important; animation: none !important; }
+  .portal * { transition: none !important; animation: none !important; }
 }
 .p-all {
   margin: 8px 12px 0;
@@ -510,19 +477,6 @@ button.p-all:hover:not(:disabled) { background: var(--ink); color: var(--paper);
 }
 .chip:hover { transform: scale(1.08); }
 .chip[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--paper); }
-.replay {
-  font-family: var(--font-body);
-  font-size: var(--step--1);
-  color: var(--muted);
-  background: none;
-  border: 0;
-  padding: 4px 0;
-  cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  text-decoration-color: var(--rule-2);
-}
-.replay:hover { color: var(--paper); text-decoration-color: var(--muted); }
 @media (max-width: 480px) { .p-size { display: none; } .p-file { grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; } button.p-dl { width: 114px; padding-inline: 4px; gap: 5px; } }
 
 /* ── Sections ──────────────────────────────────────── */
@@ -1109,7 +1063,7 @@ button.p-all:hover:not(:disabled) { background: var(--ink); color: var(--paper);
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>No credit card required</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>2 minutes to your first portal</li>
           </ul>
-          <p class="demo-hint">The portal on the right is the page your client opens. Watch them pay, unlock and download, or try it yourself: pick a brand color, press Pay, then click a file to preview it.</p>
+          <p class="demo-hint">The portal on the right is the page your client opens. Watch them pay, the files unlock, and download. Pick a brand color under it to see it in your client’s colors.</p>
         </div>
 
         <figure class="demo" id="demo" aria-label="Example client portal">
@@ -1118,7 +1072,7 @@ button.p-all:hover:not(:disabled) { background: var(--ink); color: var(--paper);
             <div class="browser-bar">
               <div class="url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg><span id="demoUrl">voxabase.com/studio-novo/harbor-coffee</span></div>
             </div>
-            <div class="portal" id="portal">
+            <div class="portal" id="portal" inert>
               <div class="p-top">
                 <div class="p-brand">
                   <span class="p-mark" id="demoInitial" aria-hidden="true">S</span>
@@ -1136,11 +1090,11 @@ button.p-all:hover:not(:disabled) { background: var(--ink); color: var(--paper);
                 <div><b>Files unlock after payment</b><span>Pay the invoice below to download all 3 files.</span></div>
               </div>
               <ul class="p-files">
-                <li class="p-file" style="--i:0" data-kind="image" data-name="Logo_Primary.png"><button class="p-thumb" type="button" tabindex="-1" aria-hidden="true" disabled><span class="p-type">PNG</span><span class="p-art"><svg class="p-art-svg" viewBox="0 0 120 120" aria-hidden="true"><rect width="120" height="120" style="fill:var(--brand)"/><circle cx="60" cy="62" r="36" fill="none" style="stroke:var(--on-brand)" stroke-opacity=".9" stroke-width="4"/><path d="M42 54h32v12a16 16 0 01-32 0z" style="fill:var(--on-brand)"/><path d="M74 58h5a7 7 0 010 14h-5" fill="none" style="stroke:var(--on-brand)" stroke-width="4"/><path d="M51 44c0-4 4-5 4-9M63 44c0-4 4-5 4-9" fill="none" style="stroke:var(--on-brand)" stroke-width="3" stroke-linecap="round"/></svg></span></button><button class="p-name" type="button" disabled>Logo_Primary.png</button><span class="p-size">1.2 MB</span><span class="p-act"><span class="p-locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>Locked</span><button class="p-dl" type="button" disabled><i class="p-fill" aria-hidden="true"></i><svg class="i-dl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg><svg class="i-done" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg><span class="p-dl-label">Download</span></button></span></li>
-                <li class="p-file" style="--i:1" data-kind="pdf" data-name="Brand_Guidelines_v2.pdf"><button class="p-thumb" type="button" tabindex="-1" aria-hidden="true" disabled><span class="p-type">PDF</span></button><button class="p-name" type="button" disabled>Brand_Guidelines_v2.pdf</button><span class="p-size">4.2 MB</span><span class="p-act"><span class="p-locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>Locked</span><button class="p-dl" type="button" disabled><i class="p-fill" aria-hidden="true"></i><svg class="i-dl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg><svg class="i-done" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg><span class="p-dl-label">Download</span></button></span></li>
-                <li class="p-file" style="--i:2" data-kind="video" data-name="Brand_Intro.mp4"><button class="p-thumb" type="button" tabindex="-1" aria-hidden="true" disabled><span class="p-type">MP4</span></button><button class="p-name" type="button" disabled>Brand_Intro.mp4</button><span class="p-size">46.8 MB</span><span class="p-act"><span class="p-locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>Locked</span><button class="p-dl" type="button" disabled><i class="p-fill" aria-hidden="true"></i><svg class="i-dl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg><svg class="i-done" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg><span class="p-dl-label">Download</span></button></span></li>
+                <li class="p-file" style="--i:0" data-kind="image" data-name="Logo_Primary.png"><button class="p-thumb" type="button" tabindex="-1" aria-hidden="true"><span class="p-type">PNG</span><span class="p-art"><svg class="p-art-svg" viewBox="0 0 120 120" aria-hidden="true"><rect width="120" height="120" style="fill:var(--brand)"/><circle cx="60" cy="62" r="36" fill="none" style="stroke:var(--on-brand)" stroke-opacity=".9" stroke-width="4"/><path d="M42 54h32v12a16 16 0 01-32 0z" style="fill:var(--on-brand)"/><path d="M74 58h5a7 7 0 010 14h-5" fill="none" style="stroke:var(--on-brand)" stroke-width="4"/><path d="M51 44c0-4 4-5 4-9M63 44c0-4 4-5 4-9" fill="none" style="stroke:var(--on-brand)" stroke-width="3" stroke-linecap="round"/></svg></span></button><button class="p-name" type="button">Logo_Primary.png</button><span class="p-size">1.2 MB</span><span class="p-act"><span class="p-locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>Locked</span><button class="p-dl" type="button"><i class="p-fill" aria-hidden="true"></i><svg class="i-dl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg><svg class="i-done" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg><span class="p-dl-label">Download</span></button></span></li>
+                <li class="p-file" style="--i:1" data-kind="pdf" data-name="Brand_Guidelines_v2.pdf"><button class="p-thumb" type="button" tabindex="-1" aria-hidden="true"><span class="p-type">PDF</span></button><button class="p-name" type="button">Brand_Guidelines_v2.pdf</button><span class="p-size">4.2 MB</span><span class="p-act"><span class="p-locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>Locked</span><button class="p-dl" type="button"><i class="p-fill" aria-hidden="true"></i><svg class="i-dl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg><svg class="i-done" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg><span class="p-dl-label">Download</span></button></span></li>
+                <li class="p-file" style="--i:2" data-kind="video" data-name="Brand_Intro.mp4"><button class="p-thumb" type="button" tabindex="-1" aria-hidden="true"><span class="p-type">MP4</span></button><button class="p-name" type="button">Brand_Intro.mp4</button><span class="p-size">46.8 MB</span><span class="p-act"><span class="p-locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>Locked</span><button class="p-dl" type="button"><i class="p-fill" aria-hidden="true"></i><svg class="i-dl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg><svg class="i-done" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg><span class="p-dl-label">Download</span></button></span></li>
               </ul>
-              <button class="p-all" id="dlAll" type="button" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Download all</button>
+              <button class="p-all" id="dlAll" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Download all</button>
               <div class="p-invoice">
                 <div class="p-inv-row">
                   <div>
@@ -1162,18 +1116,6 @@ button.p-all:hover:not(:disabled) { background: var(--ink); color: var(--paper);
                 </p>
                 <p class="p-stripe">Secure payment powered by Stripe</p>
               </div>
-              <div class="p-viewer" id="viewer" role="dialog" aria-modal="false" aria-labelledby="pvName" hidden>
-                <div class="pv-bar">
-                  <span class="pv-name" id="pvName"></span>
-                  <span class="pv-dl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Download</span>
-                  <button class="pv-close" id="pvClose" type="button" aria-label="Close preview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-                </div>
-                <div class="pv-body" id="pvBody" data-kind="image">
-                  <div class="pv-image"><svg class="p-art-svg" viewBox="0 0 120 120" aria-hidden="true"><rect width="120" height="120" style="fill:var(--brand)"/><circle cx="60" cy="62" r="36" fill="none" style="stroke:var(--on-brand)" stroke-opacity=".9" stroke-width="4"/><path d="M42 54h32v12a16 16 0 01-32 0z" style="fill:var(--on-brand)"/><path d="M74 58h5a7 7 0 010 14h-5" fill="none" style="stroke:var(--on-brand)" stroke-width="4"/><path d="M51 44c0-4 4-5 4-9M63 44c0-4 4-5 4-9" fill="none" style="stroke:var(--on-brand)" stroke-width="3" stroke-linecap="round"/></svg></div>
-                  <div class="pv-pdf" aria-hidden="true"><div class="pv-page"><i class="pv-h"></i><i></i><i></i><i class="pv-s"></i><i class="pv-block"></i><i></i><i class="pv-s"></i><i></i><i></i><i class="pv-s"></i></div></div>
-                  <div class="pv-video" aria-hidden="true"><span class="pv-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span><span class="pv-track"><i></i></span></div>
-                </div>
-              </div>
             </div>
             <div class="t-cursor" id="heroCursor" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 3l14 8.2-6.3 1.4-3.2 5.9z" fill="#fff" stroke="#0c0b10" stroke-width="1.4" stroke-linejoin="round"/></svg><i class="t-ripple"></i></div>
             <p class="p-foot"><span>Delivered via <svg viewBox="0 0 40 40" aria-hidden="true"><path fill="#eeeae3" d="M3.2 7H11.2L19.2 20V33Z"/><path fill="#9c7de8" d="M36.8 7H28.8L20.8 20V33Z"/></svg><b>Voxabase</b></span></p>
@@ -1187,7 +1129,6 @@ button.p-all:hover:not(:disabled) { background: var(--ink); color: var(--paper);
               <button class="chip" type="button" style="--c:#f59e0b" data-brand="3" aria-pressed="false" aria-label="Marlowe &amp; Co, amber"></button>
               <button class="chip" type="button" style="--c:#3b82f6" data-brand="4" aria-pressed="false" aria-label="Indigo Lab, blue"></button>
             </div>
-            <button class="replay" id="replay" type="button" hidden>Replay</button>
           </div>
         </figure>
       </div>
@@ -1568,71 +1509,73 @@ button.p-all:hover:not(:disabled) { background: var(--ink); color: var(--paper);
     c.addEventListener('click', function () { applyBrand(Number(c.getAttribute('data-brand'))); });
   });
 
-  /* Live portal: the invoice gets paid (mirrors the real portal's states) */
+  /* Live portal: a watch-only walkthrough of what the client does. A cursor
+     pays the invoice, the files unlock (same states as the real portal), and
+     it downloads them. Visitors can't click inside it (the portal is inert);
+     brand chips only re-theme it. Loops while on screen, like Teams. */
   var payBtn = document.getElementById('payBtn');
   var payLabel = document.getElementById('payLabel');
   var received = document.getElementById('received');
   var invNote = document.getElementById('invNote');
   var invPill = document.getElementById('invPill');
   var invAmount = document.getElementById('invAmount');
-  var replay = document.getElementById('replay');
-  var state = 'unpaid';
-  var payTimer = null;
-  var unlockTimers = [];
-
-  /* Lock files until paid: once the payment lands the lock opens, then the
-     files unlock one by one (same states as the real portal) */
   var portal = document.getElementById('portal');
   var pCount = document.getElementById('pCount');
-  var fileBtns = Array.prototype.slice.call(portal.querySelectorAll('.p-thumb, .p-name'));
   var dlBtns = Array.prototype.slice.call(portal.querySelectorAll('.p-dl'));
   var dlAll = document.getElementById('dlAll');
+  var state = 'unpaid';
+  var timers = [];  // the portal's own state changes
+  var pLater = function (fn, ms) { timers.push(window.setTimeout(fn, reduceMotion ? 0 : ms)); };
+
   function setLocked(locked) {
     portal.classList.toggle('is-unlocked', !locked);
     if (locked) portal.classList.remove('is-opening', 'is-settled');
-    else unlockTimers.push(window.setTimeout(function () { portal.classList.add('is-settled'); }, reduceMotion ? 0 : 1100));
-    dlBtns.concat(dlAll).forEach(function (b) { b.disabled = locked; });
+    else pLater(function () { portal.classList.add('is-settled'); }, 1100);
     if (locked) dlBtns.forEach(function (b) {
       b.classList.remove('is-loading', 'is-done');
       b.querySelector('.p-dl-label').textContent = 'Download';
     });
     pCount.textContent = '3 files · ' + (locked ? 'Unlock after payment' : 'Ready to download');
-    fileBtns.forEach(function (b) {
-      b.disabled = locked;
-      if (b.classList.contains('p-name')) b.setAttribute('aria-label', (locked ? 'Locked: ' : 'Preview ') + b.textContent);
-    });
   }
-  function unlock() {
-    if (reduceMotion) { setLocked(false); return; }
-    unlockTimers.push(window.setTimeout(function () { portal.classList.add('is-opening'); }, 250));
-    unlockTimers.push(window.setTimeout(function () { setLocked(false); }, 800));
-  }
-
   function setPaid() {
     state = 'paid';
     payBtn.hidden = true;
-    payBtn.removeAttribute('aria-busy');
     received.hidden = false;
     received.classList.add('is-in');
     invPill.setAttribute('data-state', 'paid');
     invPill.textContent = 'Paid';
     invNote.textContent = 'Payment complete';
     invAmount.classList.add('is-flash');
-    replay.hidden = false;
-    unlock();
+    // The lock opens, then the files unlock one by one
+    pLater(function () { portal.classList.add('is-opening'); }, 250);
+    pLater(function () { setLocked(false); }, 800);
   }
   function pay() {
     if (state !== 'unpaid') return;
     state = 'processing';
-    payBtn.setAttribute('aria-busy', 'true');
     payLabel.textContent = 'Redirecting to payment...';
-    payTimer = window.setTimeout(setPaid, reduceMotion ? 0 : 1100);
+    pLater(setPaid, 1100);
   }
+  function download(btn) {
+    if (!portal.classList.contains('is-unlocked') || btn.classList.contains('is-loading') || btn.classList.contains('is-done')) return;
+    var label = btn.querySelector('.p-dl-label');
+    btn.classList.add('is-loading');
+    label.textContent = 'Downloading';
+    pLater(function () {
+      btn.classList.remove('is-loading');
+      btn.classList.add('is-done');
+      label.textContent = 'Downloaded';
+    }, 950);
+  }
+  function downloadAll() {
+    dlBtns.forEach(function (b, i) { pLater(function () { download(b); }, i * 220); });
+  }
+  // Back to locked and unpaid in a single frame, so nothing is still moving
+  // when the cursor aims
   function reset() {
-    window.clearTimeout(payTimer);
+    timers.forEach(window.clearTimeout); timers = [];
     state = 'unpaid';
     payBtn.hidden = false;
-    payBtn.removeAttribute('aria-busy');
     payLabel.textContent = 'Pay Invoice — $2,400.00';
     received.hidden = true;
     received.classList.remove('is-in');
@@ -1640,40 +1583,17 @@ button.p-all:hover:not(:disabled) { background: var(--ink); color: var(--paper);
     invPill.textContent = 'Unpaid';
     invNote.textContent = 'Payment due upon receipt';
     invAmount.classList.remove('is-flash');
-    replay.hidden = true;
-    unlockTimers.forEach(window.clearTimeout); unlockTimers = [];
-    closeViewer();
     portal.classList.add('is-instant');
     setLocked(true);
-    void portal.offsetWidth; // apply the locked layout now
+    void portal.offsetWidth;
     window.requestAnimationFrame(function () { portal.classList.remove('is-instant'); });
-  }
-
-  /* Download: the button fills, then shows Downloaded */
-  function download(btn) {
-    if (btn.disabled || btn.classList.contains('is-loading') || btn.classList.contains('is-done')) return;
-    var label = btn.querySelector('.p-dl-label');
-    btn.classList.add('is-loading');
-    label.textContent = 'Downloading';
-    unlockTimers.push(window.setTimeout(function () {
-      btn.classList.remove('is-loading');
-      btn.classList.add('is-done');
-      label.textContent = 'Downloaded';
-    }, reduceMotion ? 0 : 950));
   }
   function press(el) {
     el.classList.add('is-press');
     window.setTimeout(function () { el.classList.remove('is-press'); }, 150);
   }
-  dlBtns.forEach(function (b) { b.addEventListener('click', function () { press(b); download(b); }); });
-  dlAll.addEventListener('click', function () {
-    press(dlAll);
-    dlBtns.forEach(function (b, i) { unlockTimers.push(window.setTimeout(function () { download(b); }, reduceMotion ? 0 : i * 220)); });
-  });
 
-  /* The walkthrough: a cursor pays the invoice, the files unlock, and it
-     downloads one. Plays once when the portal is in view; touching the demo
-     hands control to the visitor. Same cursor as the Teams walkthrough. */
+  /* The cursor (same as the Teams walkthrough) */
   var browser = demo.querySelector('.browser');
   var hCursor = document.getElementById('heroCursor');
   var wTimers = [];
@@ -1691,73 +1611,75 @@ button.p-all:hover:not(:disabled) { background: var(--ink); color: var(--paper);
     wLater(function () { hCursor.classList.remove('is-down'); }, 140);
     wLater(function () { hCursor.classList.remove('is-click'); }, 520);
   };
+  // Rest on an element while the layout around it moves (the banner collapsing,
+  // Pay turning into Payment received), so the cursor stays on it
+  var followRaf = null;
+  var hFollow = function (getEl, fx, fy, ms) {
+    var end = performance.now() + ms;
+    hCursor.style.transition = 'none';
+    var step = function () {
+      hPoint(getEl(), fx, fy);
+      if (performance.now() < end) followRaf = window.requestAnimationFrame(step);
+      else { followRaf = null; hCursor.style.transition = ''; }
+    };
+    step();
+  };
   function stopWalk() {
+    window.cancelAnimationFrame(followRaf); followRaf = null; hCursor.style.transition = '';
     wTimers.forEach(window.clearTimeout); wTimers = [];
-    hCursor.classList.remove('is-on');
+    hCursor.classList.remove('is-on', 'is-down', 'is-click');
     payBtn.classList.remove('is-hover');
   }
   function walk() {
     stopWalk();
-    var firstDl = dlBtns[0];
     // Start in place (no glide from wherever it last was), fade in, then move
     hCursor.style.transition = 'none';
     hRest(0.82, 0.97);
     void hCursor.offsetWidth;
     hCursor.style.transition = '';
     hCursor.classList.add('is-on');
+    // Pay, then wait on the button while the payment goes through
     wLater(function () { hPoint(payBtn, 0.62, 0.55); }, 380);
     wLater(function () { payBtn.classList.add('is-hover'); }, 1100);
     wLater(function () { hClick(); press(payBtn); payBtn.classList.remove('is-hover'); pay(); }, 1300);
-    wLater(function () { hRest(0.86, 0.8); }, 1750);
-    wLater(function () { hPoint(firstDl, 0.55, 0.6); }, 3950);
-    wLater(function () { hPoint(firstDl, 0.55, 0.6); }, 4550);
-    wLater(function () { hClick(); press(firstDl); download(firstDl); }, 4850);
-    wLater(function () { hRest(0.9, 0.62); }, 5600);
-    wLater(function () { hCursor.classList.remove('is-on'); }, 6700);
+    wLater(function () { hFollow(function () { return payBtn.hidden ? received : payBtn; }, 0.62, 0.55, 2350); }, 1500);
+    // The first file, then the rest with Download all
+    wLater(function () { hPoint(dlBtns[0], 0.55, 0.6); }, 3950);
+    wLater(function () { hPoint(dlBtns[0], 0.55, 0.6); }, 4550);
+    wLater(function () { hClick(); press(dlBtns[0]); download(dlBtns[0]); }, 4850);
+    wLater(function () { hPoint(dlAll, 0.5, 0.6); }, 5500);
+    wLater(function () { hPoint(dlAll, 0.5, 0.6); }, 6100);
+    wLater(function () { hClick(); press(dlAll); downloadAll(); }, 6400);
+    wLater(function () { hCursor.classList.remove('is-on'); }, 8000);
+    // Hold on the finished portal, fade it back to locked, and go again
+    wLater(function () { portal.classList.add('is-fading'); }, 10400);
+    wLater(function () { reset(); }, 10800);
+    wLater(function () { portal.classList.remove('is-fading'); }, 10900);
+    wLater(walk, 11700);
   }
-  demo.addEventListener('pointerdown', function (e) { if (!e.target.closest('.chips')) stopWalk(); });
 
-  payBtn.addEventListener('click', function () { stopWalk(); pay(); });
-  replay.addEventListener('click', function () {
-    reset();
-    if (reduceMotion) { pay(); payBtn.focus(); return; }
-    wLater(walk, 250);
-  });
-
-  /* Preview: clicking an unlocked file opens it in the portal, no download */
-  var viewer = document.getElementById('viewer');
-  var pvName = document.getElementById('pvName');
-  var pvBody = document.getElementById('pvBody');
-  var pvClose = document.getElementById('pvClose');
-  var lastOpener = null;
-  function openViewer(row, opener) {
-    pvName.textContent = row.getAttribute('data-name');
-    pvBody.setAttribute('data-kind', row.getAttribute('data-kind'));
-    viewer.hidden = false;
-    lastOpener = opener;
-    stopWalk();
-    pvClose.focus({ preventScroll: true });
-  }
-  function closeViewer() {
-    if (viewer.hidden) return;
-    viewer.hidden = true;
-    if (lastOpener && !lastOpener.disabled) lastOpener.focus({ preventScroll: true });
-  }
-  fileBtns.forEach(function (b) {
-    b.addEventListener('click', function () { openViewer(b.closest('.p-file'), b.closest('.p-file').querySelector('.p-name')); });
-  });
-  pvClose.addEventListener('click', closeViewer);
-  viewer.addEventListener('click', function (e) { if (e.target === viewer || e.target === pvBody) closeViewer(); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeViewer(); });
   setLocked(true);
-
-  /* Play the walkthrough once, when the Pay button is on screen */
-  if (!reduceMotion) {
+  if (reduceMotion) {
+    // No motion: show the finished state (paid, unlocked, downloaded)
+    setPaid(); setLocked(false); portal.classList.add('is-opening', 'is-settled');
+    dlBtns.forEach(function (b) { b.classList.add('is-done'); b.querySelector('.p-dl-label').textContent = 'Downloaded'; });
+  } else {
+    // Play while the invoice is fully on screen; pause when it scrolls away
+    var running = false;
+    var startWalk = function () {
+      if (running) return;
+      running = true;
+      if (state !== 'unpaid' || dlBtns.some(function (b) { return b.classList.contains('is-done'); })) reset();
+      wLater(walk, 900);
+    };
+    var heroStop = function () { running = false; stopWalk(); portal.classList.remove('is-fading'); };
     if ('IntersectionObserver' in window) {
-      new IntersectionObserver(function (entries, io) {
-        if (entries[0].isIntersecting) { io.disconnect(); wLater(walk, 1400); }
-      }, { threshold: 1 }).observe(payBtn);
-    } else wLater(walk, 3200);
+      new IntersectionObserver(function (entries) {
+        var e = entries[0];
+        if (e.intersectionRatio >= 0.95) startWalk();
+        else if (!e.isIntersecting) heroStop();
+      }, { threshold: [0, 0.95] }).observe(portal.querySelector('.p-invoice'));
+    } else startWalk();
   }
 
   /* Scroll-in moments. The page is written in its finished state; with motion
