@@ -1,0 +1,101 @@
+/* Comparison pages: same ink-and-paper look as the home page, built for reading. */
+:root {
+  color-scheme: dark;
+  --ink: #0c0b10; --ink-2: #131219; --ink-3: #1a1822;
+  --rule: #24212d; --rule-2: #353140;
+  --paper: #eeeae3; --muted: #a39eaf; --faint: #8a8595;
+  --violet-mark: #9c7de8; --violet-ink: #baa8f2;
+  --ok: #4ade80;
+  --measure: 1080px;
+  --gutter: clamp(1rem, .35rem + 3vw, 3rem);
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--ink); color: var(--paper); line-height: 1.6;
+  font-family: "Mona Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 1.0625rem; -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+::selection { background: rgba(134, 95, 217, .42); }
+.wrap { max-width: var(--measure); margin: 0 auto; padding-inline: var(--gutter); }
+
+/* Header */
+.top { border-bottom: 1px solid var(--rule); }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 16px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 750; font-stretch: 112%; font-size: 1.25rem; letter-spacing: -.03em; }
+.brand svg { width: 26px; height: 26px; }
+.top nav { display: flex; align-items: center; gap: 22px; font-size: .9375rem; }
+.top nav a:not(.btn) { color: var(--muted); text-decoration: none; }
+.top nav a:not(.btn):hover, .top nav a[aria-current] { color: var(--paper); }
+@media (max-width: 720px) { .top nav a.hide-sm { display: none; } .top nav { gap: 16px; } }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; padding: 11px 20px; border-radius: 6px; font-weight: 600; font-size: .9375rem; text-decoration: none; transition: background .15s, border-color .15s; white-space: nowrap; }
+.btn-primary { background: var(--paper); color: var(--ink); }
+.btn-primary:hover { background: #fff; }
+.btn-ghost { border: 1px solid var(--rule-2); }
+.btn-ghost:hover { border-color: var(--muted); }
+.btn-sm { padding: 8px 16px; font-size: .875rem; }
+
+/* Intro */
+.hero { padding: clamp(48px, 8vw, 96px) 0 clamp(32px, 5vw, 56px); }
+.kicker { font-size: .875rem; font-weight: 600; color: var(--faint); margin: 0 0 16px; }
+.kicker a { text-decoration: none; }
+.kicker a:hover { color: var(--paper); }
+h1 { margin: 0; font-weight: 740; font-stretch: 118%; font-size: clamp(2.4rem, 1rem + 5vw, 4.6rem); line-height: 1; letter-spacing: -.045em; text-wrap: balance; }
+h1 em { font-style: italic; font-weight: 700; color: var(--violet-ink); }
+.lede { color: var(--muted); max-width: 58ch; margin: 22px 0 0; font-size: 1.125rem; text-wrap: pretty; }
+@media (max-width: 640px) { h1 { font-stretch: 100%; letter-spacing: -.035em; } }
+
+section { padding: clamp(32px, 5vw, 56px) 0; border-top: 1px solid var(--rule); }
+h2 { margin: 0 0 20px; font-weight: 700; font-stretch: 110%; font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.1rem); letter-spacing: -.03em; line-height: 1.15; }
+p { text-wrap: pretty; }
+.muted { color: var(--muted); }
+
+/* Which one fits */
+.fit { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 760px) { .fit { grid-template-columns: 1fr; } }
+.fit > div { border: 1px solid var(--rule); background: var(--ink-2); border-radius: 10px; padding: 22px 24px; }
+.fit > div.us { border-color: rgba(186, 168, 242, .38); }
+.fit h3 { margin: 0 0 12px; font-size: 1.0625rem; font-weight: 650; }
+.fit ul { margin: 0; padding-left: 1.1em; color: var(--muted); }
+.fit li + li { margin-top: 6px; }
+
+/* The table */
+.table-scroll { overflow-x: auto; border: 1px solid var(--rule); border-radius: 10px; background: var(--ink-2); }
+table { width: 100%; border-collapse: collapse; font-size: .9688rem; min-width: 560px; }
+th, td { text-align: left; vertical-align: top; padding: 14px 18px; border-top: 1px solid var(--rule); }
+thead th { border-top: 0; font-size: .8125rem; font-weight: 650; color: var(--faint); text-transform: uppercase; letter-spacing: .06em; background: var(--ink-3); }
+thead th.us { color: var(--violet-ink); }
+tbody th { font-weight: 550; color: var(--paper); width: 30%; }
+td { color: var(--muted); }
+td.us { color: var(--paper); }
+.yes { color: var(--ok); font-weight: 600; }
+.note { margin-top: 14px; font-size: .875rem; color: var(--faint); }
+
+/* Comparison cards (overview page) */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.card { display: block; text-decoration: none; border: 1px solid var(--rule); background: var(--ink-2); border-radius: 10px; padding: 22px 24px; transition: border-color .15s; }
+.card:hover { border-color: var(--rule-2); }
+.card h3 { margin: 0 0 8px; font-size: 1.125rem; font-weight: 650; }
+.card p { margin: 0; color: var(--muted); font-size: .9688rem; }
+.card span { display: inline-block; margin-top: 14px; font-size: .875rem; font-weight: 600; color: var(--violet-ink); }
+
+/* Closing call to action */
+.cta { text-align: left; }
+.cta .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+
+footer { border-top: 1px solid var(--rule); padding: 28px 0 40px; color: var(--faint); font-size: .875rem; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 24px; justify-content: space-between; }
+footer nav { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+footer a { text-decoration: none; }
+footer a:hover { color: var(--paper); }
+
+/* Phones: each row becomes a small block, both answers labeled */
+@media (max-width: 640px) {
+  table { min-width: 0; }
+  thead { display: none; }
+  tbody tr { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; padding: 14px 16px; border-top: 1px solid var(--rule); }
+  tbody tr:first-child { border-top: 0; }
+  tbody th { grid-column: 1 / -1; width: auto; padding: 0 0 4px; border: 0; }
+  td { padding: 0; border: 0; font-size: .9375rem; }
+  td::before { content: attr(data-label); display: block; font-size: .75rem; font-weight: 650; letter-spacing: .05em; text-transform: uppercase; color: var(--faint); }
+  td.us::before { color: var(--violet-ink); }
+}
