@@ -1,6 +1,9 @@
 # Keep backups off the public site
 /_backup/*  /  302!
 
+# Retired comparison page
+/voxabase-vs-filedue  /compare  302
+
 # Portal links typed with the website's domain go to the app
 # (real files like /email/... are still served; only unknown paths match)
 /:user/:slug  https://app.voxabase.com/:user/:slug  301
