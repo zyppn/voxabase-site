@@ -611,6 +611,16 @@ button { font: inherit; }
   menuBtn.addEventListener('click', function () { setMenu(menu.hidden); });
   menu.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !menu.hidden) { setMenu(false); menuBtn.focus(); } });
+
+  /* Signed in to the app already (hint cookie set by app.voxabase.com):
+     Sign in goes away and Get started free becomes Dashboard */
+  if (/(?:^|; )vb_signed_in=1(?:;|$)/.test(document.cookie)) {
+    document.querySelectorAll('.nav a[href="https://app.voxabase.com/login"]').forEach(function (a) { a.remove(); });
+    document.querySelectorAll('.nav a.btn[href="https://app.voxabase.com/signup"]').forEach(function (a) {
+      a.href = 'https://app.voxabase.com/dashboard';
+      a.firstChild.textContent = a.querySelector('.arrow') ? 'Dashboard ' : 'Dashboard';
+    });
+  }
 })();
 </script>
 </body>
