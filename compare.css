@@ -99,3 +99,6 @@ footer a:hover { color: var(--paper); }
   td::before { content: attr(data-label); display: block; font-size: .75rem; font-weight: 650; letter-spacing: .05em; text-transform: uppercase; color: var(--faint); }
   td.us::before { color: var(--violet-ink); }
 }
+.fit > div.not { background: transparent; border-style: dashed; padding: 18px 22px; }
+.fit > div.not h3 { font-size: .9375rem; color: var(--muted); }
+.fit > div.not ul { font-size: .9375rem; }
